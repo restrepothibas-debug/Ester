@@ -63,6 +63,18 @@ for lic in public/fuentes/OFL-*.txt; do
   [ -e "$lic" ] || { mal "falta la licencia OFL de las fuentes"; break; }
 done
 
+echo "A1c · Procesador de fotografías"
+if python3 -c "import PIL" >/dev/null 2>&1; then
+  if python3 scripts/probar-procesar-fotos.py >/tmp/verificar-fotos.log 2>&1; then
+    ok "$(tail -1 /tmp/verificar-fotos.log)"
+  else
+    mal "la prueba del procesador de fotografías falla"
+    tail -8 /tmp/verificar-fotos.log
+  fi
+else
+  aviso "Pillow no está disponible: se omite la prueba del procesador"
+fi
+
 echo "A3 · Secretos en archivos versionados"
 # Regex extendida: macOS usa BSD grep, que no entiende \| en modo básico.
 patrones='(sb_secret_|sbp_|ghp_)[A-Za-z0-9_-]{15,}|eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{30,}'

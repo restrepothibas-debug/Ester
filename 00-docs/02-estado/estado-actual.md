@@ -28,6 +28,7 @@
 | Panel privado | ✅ Acceso, resumen, marcas, productos (alta y edición con tallas), inventario con historial **promociones** (manuales y programadas, con vencimiento en Bogotá) **destacados/oferta de la semana** (selección manual con orden) y **solicitudes de WhatsApp** (registro manual, confirmación con o sin descuento, cancelación con devolución). Guard por sesión **y** perfil de administrador |
 | `src/App.tsx` | ✅ Enrutador real. Las rutas del panel se cargan de forma diferida |
 | `src/lib/` | `supabase.ts`, `consultas.ts` (lectura pública), `admin.ts` (lectura del panel), `mutaciones.ts` (escritura con historial), `auth.ts`, `formato.ts`, `fechas.ts` (horas de Bogotá), `whatsapp.ts` |
+| Ingesta de fotos | ✅ `scripts/procesar-fotos.py`: procesa una exportación de WhatsApp (`.zip` o carpeta), deduplica por SHA-256, clasifica (pendiente / revisar / descartada / no_soportado), exporta WebP 1600 px + miniatura 480 px y lleva índice SQLite. Probado con exportación sintética: **30 comprobaciones** en `scripts/probar-procesar-fotos.py`. Salida en `fotos/`, fuera de git |
 | Pruebas | `scripts/probar-reglas-promociones.py` (16 casos, `rollback`), `scripts/probar-promociones-publico.py` (9 comprobaciones con rol `anon`) `scripts/probar-destacados.py` (11 comprobaciones) y `scripts/probar-solicitudes.py` (24 comprobaciones: descuento, falta de existencias, cancelación con devolución, escrituras directas prohibidas y `anon`) |
 | Tipos del dominio | ✅ `src/types/domain.ts`, derivados de §6, §8 y §14 |
 | Estilos | ✅ Reconstruidos sobre la referencia visual (D-41): `tokens.css` con la paleta y la escala nuevas, `global.css` con las primitivas, `catalogo.css` con cabecera, héroe, garantías, accesos por marca, relato, rejillas, ficha y pie; `admin.css` hereda la misma paleta y tipografía |
@@ -86,11 +87,11 @@ Activo desde el 28/10/2026. Ver `06-metodo/gauntlet.md`, el listón en `06-metod
 
 ## Siguiente paso
 
-**Ingesta de fotografías desde WhatsApp** (D-28): la comparación de opciones gratuitas está en `04-informes/whatsapp-imagenes.md` y espera la elección del propietario. Después, importación CSV/Excel y exportación (punto 49).
+**Procesar la primera exportación real** de WhatsApp con `scripts/procesar-fotos.py` y montar la pantalla de asignación foto → producto. Después, importación CSV/Excel y exportación (punto 49).
 
 ## Qué NO está hecho
 
-- Fotografías de producto: subida, foto principal y orden (§6, §10).
+- Fotografías de producto: subida a Storage, foto principal y orden (§6, §10). El procesador local ya existe; falta la pantalla que asigna cada foto a un producto.
 - Importación CSV/Excel y exportación (punto 49).
 - Alertas en el panel y por correo (punto 63).
 - Copias de seguridad y restauración (§12 y punto 66).

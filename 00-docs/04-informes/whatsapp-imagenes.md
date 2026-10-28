@@ -107,7 +107,7 @@ El coste no es una cuota, es el número: un bloqueo permanente deja al negocio s
    - descomprime y separa fotos de vídeos y audios;
    - calcula el **SHA-256** de cada archivo para descartar duplicados (el mismo producto suele llegar repetido en varios chats);
    - lee dimensiones, orientación y fecha; corrige la rotación por EXIF;
-   - **recorta a 4:5** y redimensiona a 1600 px de alto, exporta **WebP** (calidad ~82) y genera una miniatura;
+   - redimensiona a **1600 px de lado mayor**, exporta **WebP** (calidad 82) y genera una miniatura de 480 px. **No recorta**: el encuadre de la tarjeta lo resuelve el CSS, y recortar en el procesador destruiría píxeles que quizá hagan falta en la ficha;
    - detecta fotos inservibles (borrosas por tamaño, capturas de pantalla, menos de 800 px);
    - guarda un **índice SQLite** con ruta, hash, dimensiones, fecha, chat de origen y estado (`pendiente`, `asignada`, `descartada`, `publicada`).
 3. **Revisión humana:** se ve la tanda, se asigna cada foto a un producto por su código y se elige la principal. Nada se publica solo: el PDF prohíbe publicar con datos dudosos (§19.6).
@@ -117,14 +117,24 @@ Por qué SQLite y no otra cosa: el índice tiene que sobrevivir entre tandas, pe
 
 ---
 
-## 6. Lo que se puede construir ya, sin esperar las fotos
+## 6. El procesador ya existe y está probado
 
-El procesador de la ruta A no depende de que existan las fotos reales: se puede construir y probar con un lote de prueba que imite la estructura de una exportación (imágenes con nombres `IMG-AAAA...-WA####`, duplicados y una captura de pantalla). Así, cuando llegue el primer `.zip` real, el proceso ya está probado.
+`scripts/procesar-fotos.py` implementa la ruta A. Se probó con una exportación sintética que imita la real (carpeta con nombre de chat, `_chat.txt`, nombres `IMG-AAAA...-WA####`, un duplicado exacto, una captura de pantalla, una imagen diminuta y un vídeo): **30 comprobaciones en verde** con `scripts/probar-procesar-fotos.py`.
 
-Queda pendiente de decisión:
+```bash
+# procesar una exportación
+python3 scripts/procesar-fotos.py --entrada fotos/entrada/"WhatsApp Chat con Proveedores.zip"
 
-1. ¿Se adopta la ruta A (exportación manual + procesador local)?
-2. ¿El número del negocio está hoy en la **app de WhatsApp Business** o en WhatsApp normal? Cambia si la ruta C es siquiera posible en el futuro.
+# ver el estado del índice sin procesar nada
+python3 scripts/procesar-fotos.py --resumen
+
+# repetir la prueba del módulo
+python3 scripts/probar-procesar-fotos.py
+```
+
+Deja `fotos/grandes/<hash>.webp`, `fotos/miniaturas/<hash>.webp` y `fotos/indice.sqlite`. Todo eso está fuera de git. Nada se publica: cada foto entra como `pendiente`, `revisar` (captura o poca nitidez) o `descartada` (resolución insuficiente), y la asignación al producto es manual.
+
+**Decisión tomada:** el número del negocio está en la **app de WhatsApp Business**, así que la coexistencia es teóricamente posible en el futuro, pero sigue exigiendo un proveedor homologado y no vería los grupos. La ruta manual es la que se implementa.
 
 ---
 

@@ -117,14 +117,29 @@ Lo que sigue no es aspiracional: es lo que está probado hoy, con la evidencia q
 | WhatsApp | B19 ✔ | B16–B18 con número real |
 | Solicitudes | B23 ✔ | B20–B22 |
 | Importación / copias | — | Todo |
+| Ingesta de fotos (ruta A) | F1–F8 ✔ con `scripts/probar-procesar-fotos.py`: **30 comprobaciones** sobre una exportación sintética (duplicado exacto, captura, baja resolución, vídeo y archivo corrupto) | Con una exportación real del propietario; formatos HEIC reales de iPhone |
 
-**Avisos de `lint` justificados:** los 5 avisos son `set-state-in-effect` en las consultas de datos, que es el patrón intencional de `useConsulta` (efecto con dependencias declaradas). No se silencian para no ocultar futuros avisos reales.
+**Avisos de `lint` justificados:** los 4 avisos son `set-state-in-effect` en las consultas de datos, que es el patrón intencional de `useConsulta` (efecto con dependencias declaradas). No se silencian para no ocultar futuros avisos reales.
 
 **Pruebas ejecutadas y su evidencia:** build en 0, lint sin errores, RLS rechazando escritura anónima (`42501`), 6 restricciones de integridad rechazando datos inválidos, recorrido de extremo a extremo en navegador con 4 movimientos de inventario y 1 de precio, y cero errores de consola.
 
 **Promociones (28/10/2026):** `scripts/probar-reglas-promociones.py` → 16 casos contra la base, 0 fallos, sin dejar datos (`savepoint` + `rollback`). `scripts/probar-promociones-publico.py` → 9 comprobaciones por API con rol `anon`, 0 fallos, datos temporales borrados al final. Navegador real con sesión de administrador: crear, ver en el catálogo, terminar y comprobar que el catálogo vuelve al precio de lista. Dos defectos encontrados así —`step="100"` bloqueaba todo precio real y el catálogo no filtraba por vigencia— corregidos y re-probados.
 
 ---
+
+## Listón F · Ingesta de fotografías (ruta A: exportación + procesamiento local)
+
+Se marca **antes** de escribir el procesador. Todo lo de aquí se comprueba con
+`scripts/probar-procesar-fotos.py`, que construye una exportación sintética.
+
+- [ ] **F1** · El procesador acepta un `.zip` de exportación (o una carpeta) y **no modifica los originales**: se verifica comparando el hash del archivo de entrada antes y después.
+- [ ] **F2** · **Deduplicación por SHA-256**: el mismo archivo presente dos veces produce una sola salida y una sola fila.
+- [ ] **F3** · Las imágenes inservibles se **señalan, no se borran**: resolución mínima insuficiente → `descartada`; captura de pantalla o nitidez baja → `revisar` con el motivo escrito.
+- [ ] **F4** · Un formato no soportado (HEIC, por ejemplo) queda registrado como `no_soportado`, nunca desaparece en silencio.
+- [ ] **F5** · Salida en **WebP**: principal con el lado mayor ≤ 1600 px y miniatura ≤ 480 px. **Sin recorte destructivo**: el encuadre de la tarjeta lo resuelve el CSS, no el procesador.
+- [ ] **F6** · **Índice SQLite** con `sha256` único; volver a procesar la misma exportación no añade filas ni archivos.
+- [ ] **F7** · Nada se publica solo: todo entra en `pendiente` y la asignación a producto es manual.
+- [ ] **F8** · La salida vive fuera de git y los nombres son estables (derivados del hash), para que una reproceso no rompa enlaces.
 
 ## Listón D · Cierre de sesión
 

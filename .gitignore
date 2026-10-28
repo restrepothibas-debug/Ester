@@ -37,3 +37,9 @@ supabase/.temp/
 *.sln
 *.sw?
 revision/
+
+# Fotografías: las exportaciones de WhatsApp y el material procesado nunca
+# entran al repositorio (peso, datos de terceros y derechos de imagen).
+# El índice SQLite es estado local del procesador, no código.
+fotos/
+*.zip
