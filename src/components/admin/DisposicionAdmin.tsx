@@ -4,6 +4,8 @@ import { cerrarSesion } from "../../lib/auth";
 const ENLACES = [
   { a: "/admin", texto: "Resumen", fin: true },
   { a: "/admin/productos", texto: "Productos", fin: false },
+  { a: "/admin/marcas", texto: "Marcas", fin: false },
+  { a: "/admin/inventario", texto: "Inventario", fin: false },
 ];
 
 /** Marco del panel: navegación mínima y salida de sesión. */

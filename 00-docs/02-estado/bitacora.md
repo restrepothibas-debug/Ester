@@ -37,6 +37,9 @@ Registro cronológico. Una fila por sesión de trabajo. La columna **Escrituras*
 | 28/10/2026 12:10 | Accio | Creado el usuario administrador con la API de administración de Auth (correo ya confirmado). El trigger creó su perfil | Perfil: nombre `Dayara`, rol `administrador`, activo. Sesión obtenida por `grant_type=password` | **Supabase: usuario de Auth** |
 | 28/10/2026 12:15 | Accio | Prueba de escritura con la sesión de administrador: alta de una marca y borrado | 201 al crear (el slug se normalizó solo), 204 al borrar. `es_admin()` funciona a través de RLS | **Supabase: datos de prueba, ya eliminados** |
 | 28/10/2026 12:20 | Accio | Verificación en navegador del panel con sesión real: acceso, resumen, productos, recarga, cierre de sesión y reintento | Todo correcto. Sin errores de consola | ninguna |
+| 28/10/2026 13:05 | Accio | Módulos del panel: marcas, formulario de producto con tallas, inventario con historial; historial de precios automático al editar | `build` y `lint` sin errores (solo avisos de hooks) | workspace local |
+| 28/10/2026 13:20 | Accio | Prueba de extremo a extremo en navegador: crear marca, crear producto QA-001, editar precio y talla, vender una unidad | Todo correcto: 4 movimientos de inventario, 1 registro de precio, historial coherente. Datos temporales eliminados al terminar | **Supabase: datos de prueba, ya eliminados** |
+| 28/10/2026 13:35 | Accio | Carga diferida del panel y corrección de dos textos de estado vacío | Chunk del panel separado (`Acceso-*.js` 200). Portada y rutas públicas verificadas tras el cambio | workspace local |
 
 ## Notas de incidentes
 

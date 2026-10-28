@@ -30,16 +30,21 @@ export function ProductosPanel() {
           <h1>Productos</h1>
         </div>
 
-        <label className="rt-filtro-linea">
+        <div className="rt-acciones-cabecera">
+          <label className="rt-filtro-linea">
           <span>Estado</span>
-          <select value={estado} onChange={(e) => setEstado(e.target.value as EstadoProducto | "todos")}>
-            {ESTADOS.map((e) => (
-              <option key={e} value={e}>
-                {e === "todos" ? "Todos" : ETIQUETA_ESTADO[e]}
-              </option>
-            ))}
-          </select>
-        </label>
+            <select value={estado} onChange={(e) => setEstado(e.target.value as EstadoProducto | "todos")}>
+              {ESTADOS.map((e) => (
+                <option key={e} value={e}>
+                  {e === "todos" ? "Todos" : ETIQUETA_ESTADO[e]}
+                </option>
+              ))}
+            </select>
+          </label>
+          <Link className="rt-boton rt-boton--primario" to="/admin/productos/nuevo">
+            Nuevo producto
+          </Link>
+        </div>
       </header>
 
       {error && (
@@ -52,10 +57,14 @@ export function ProductosPanel() {
         <div className="rt-esqueleto rt-esqueleto--tabla" />
       ) : (datos ?? []).length === 0 ? (
         <div className="rt-vacio">
-          <p>No hay productos con este estado.</p>
-          <p className="rt-tenue">
-            El alta de productos se hace en el siguiente módulo del panel.
+          <p>
+            {estado === "todos"
+              ? "Todavía no hay productos."
+              : `No hay productos en estado «${ETIQUETA_ESTADO[estado]}».`}
           </p>
+          <Link className="rt-boton rt-boton--primario" to="/admin/productos/nuevo">
+            Crear el primero
+          </Link>
         </div>
       ) : (
         <div className="rt-tabla-envoltura">
@@ -86,7 +95,11 @@ export function ProductosPanel() {
                     {p.existencias} <span className="rt-tenue">/ {p.tallas} tallas</span>
                   </td>
                   <td className="rt-num">{p.imagenes}</td>
-                  <td>
+                  <td className="rt-num">
+                    <Link className="rt-enlace" to={`/admin/productos/${p.id}`}>
+                      Editar
+                    </Link>
+                    {" · "}
                     <Link className="rt-enlace" to={`/producto/${p.slug}`} target="_blank">
                       Ver
                     </Link>

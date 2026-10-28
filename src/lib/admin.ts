@@ -106,6 +106,63 @@ export async function listarProductosAdmin(
   });
 }
 
+export interface MarcaAdmin {
+  id: string;
+  nombre: string;
+  slug: string;
+  activa: boolean;
+  productos: number;
+}
+
+/** Marcas para el panel: incluye las inactivas, que el público no ve. */
+export async function listarMarcasAdmin(): Promise<MarcaAdmin[]> {
+  const { data, error } = await cliente()
+    .from("marcas")
+    .select("id, nombre, nombre_normalizado, activa, productos ( id )")
+    .order("nombre", { ascending: true });
+
+  if (error) throw error;
+
+  return (data ?? []).map((m) => ({
+    id: m.id,
+    nombre: m.nombre,
+    slug: m.nombre_normalizado,
+    activa: m.activa,
+    productos: ((m.productos ?? []) as unknown[]).length,
+  }));
+}
+
+export interface OpcionProducto {
+  id: string;
+  etiqueta: string;
+  existencias: number;
+  tallas: { talla: string; cantidad: number }[];
+}
+
+/** Lista compacta para selectores del panel. */
+export async function opcionesProductos(): Promise<OpcionProducto[]> {
+  const { data, error } = await cliente()
+    .from("productos")
+    .select("id, codigo_interno, modelo, marcas ( nombre ), producto_tallas ( talla, cantidad )")
+    .order("modelo", { ascending: true })
+    .limit(300);
+
+  if (error) throw error;
+
+  return (data ?? []).map((p) => {
+    const tallas = ((p.producto_tallas ?? []) as { talla: string; cantidad: number }[]).sort(
+      (a, b) => Number(a.talla) - Number(b.talla),
+    );
+    const marca = (p.marcas as unknown as { nombre: string } | null)?.nombre;
+    return {
+      id: p.id,
+      etiqueta: `${p.codigo_interno} · ${p.modelo}${marca ? ` (${marca})` : ""}`,
+      existencias: tallas.reduce((s, t) => s + t.cantidad, 0),
+      tallas,
+    };
+  });
+}
+
 export interface FilaSolicitudAdmin {
   id: string;
   referencia: string;

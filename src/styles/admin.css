@@ -272,3 +272,126 @@ a.rt-tarjeta-dato:hover {
     padding: var(--rt-esp-8);
   }
 }
+
+/* ------------------------------------------------------- formularios del panel */
+.rt-panel-dos-columnas {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--rt-esp-6);
+  align-items: start;
+}
+
+.rt-formulario-producto {
+  display: grid;
+  gap: var(--rt-esp-6);
+  max-width: 900px;
+}
+
+.rt-caja-formulario {
+  background: #fff;
+  border: 1px solid var(--rt-borde);
+  border-radius: var(--rt-radio-suave);
+  padding: var(--rt-esp-5);
+  display: grid;
+  gap: var(--rt-esp-4);
+  margin-bottom: var(--rt-esp-5);
+}
+
+.rt-caja-formulario h2 {
+  margin: 0;
+  font-size: 1.125rem;
+}
+
+.rt-caja-formulario label {
+  display: grid;
+  gap: var(--rt-esp-1);
+  font-size: var(--rt-etiqueta);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--rt-texto-suave);
+}
+
+.rt-caja-formulario input,
+.rt-caja-formulario select {
+  padding: 0.6rem 0.7rem;
+  border: 1px solid var(--rt-borde);
+  border-radius: var(--rt-radio);
+  background: var(--rt-marfil-suave);
+  font: inherit;
+  font-size: var(--rt-texto-base);
+  color: var(--rt-texto);
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.rt-casilla {
+  display: flex !important;
+  align-items: center;
+  gap: var(--rt-esp-2);
+  text-transform: none !important;
+  letter-spacing: normal !important;
+  font-size: var(--rt-texto-menor);
+  color: var(--rt-texto);
+}
+
+.rt-casilla input {
+  width: auto;
+}
+
+.rt-rejilla-campos {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--rt-esp-4);
+}
+
+.rt-acciones-formulario {
+  display: flex;
+  gap: var(--rt-esp-3);
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.rt-tallas-editor {
+  display: grid;
+  gap: var(--rt-esp-2);
+}
+
+.rt-talla-fila {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: var(--rt-esp-2);
+  align-items: end;
+}
+
+.rt-input-compacto {
+  width: 90px;
+  padding: 0.35rem 0.5rem !important;
+  text-align: right;
+}
+
+.rt-tabla--compacta {
+  min-width: 560px;
+}
+
+.rt-acciones-cabecera {
+  display: flex;
+  gap: var(--rt-esp-3);
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+@media (min-width: 768px) {
+  .rt-rejilla-campos {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .rt-panel-dos-columnas {
+    grid-template-columns: 380px 1fr;
+  }
+
+  .rt-formulario-producto .rt-rejilla-campos {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
