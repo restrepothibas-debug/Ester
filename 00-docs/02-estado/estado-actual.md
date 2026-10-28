@@ -23,7 +23,7 @@
 |---|---|
 | Stack | React 19 + Vite 8 + TypeScript 7 · `package.json` → `dayara-store` · título y `lang="es"` alineados |
 | `npm run build` | ✅ Termina en 0. Bundle principal 503 kB; el panel va en chunks aparte |
-| `npm run lint` | ✅ Sin errores; 5 avisos de hooks en consultas |
+| `npm run lint` | ✅ Sin errores; 4 avisos de hooks (`auth.ts`, `useConsulta.ts`, `ProductoForm.tsx`, `Inventario.tsx`) |
 | Catálogo público | ✅ 6 rutas (`/`, `/marcas`, `/marca/:slug`, `/buscar`, `/producto/:slug`, 404), 13 componentes, 12 páginas. Filtros y paginación en la URL, ventana rápida, selector de talla y mensaje de WhatsApp |
 | Panel privado | ✅ Acceso, resumen, marcas, productos (alta y edición con tallas), inventario con historial **promociones** (manuales y programadas, con vencimiento en Bogotá) **destacados/oferta de la semana** (selección manual con orden) y **solicitudes de WhatsApp** (registro manual, confirmación con o sin descuento, cancelación con devolución). Guard por sesión **y** perfil de administrador |
 | `src/App.tsx` | ✅ Enrutador real. Las rutas del panel se cargan de forma diferida |
@@ -31,6 +31,7 @@
 | Pruebas | `scripts/probar-reglas-promociones.py` (16 casos, `rollback`), `scripts/probar-promociones-publico.py` (9 comprobaciones con rol `anon`) `scripts/probar-destacados.py` (11 comprobaciones) y `scripts/probar-solicitudes.py` (24 comprobaciones: descuento, falta de existencias, cancelación con devolución, escrituras directas prohibidas y `anon`) |
 | Tipos del dominio | ✅ `src/types/domain.ts`, derivados de §6, §8 y §14 |
 | Estilos | ✅ Reconstruidos sobre la referencia visual (D-41): `tokens.css` con la paleta y la escala nuevas, `global.css` con las primitivas, `catalogo.css` con cabecera, héroe, garantías, accesos por marca, relato, rejillas, ficha y pie; `admin.css` hereda la misma paleta y tipografía |
+| Tipografía | ✅ **Autoalojada** (D-45): dos `.woff2` variables (Cormorant Garamond 37,8 kB · Inter 48,4 kB) en `public/fuentes/`, `@font-face` en `src/styles/fuentes.css`, precarga en `index.html` y caché inmutable en `vercel.json`. Sin peticiones a Google en ejecución; `verificar.sh` lo comprueba |
 | `.env.local` | ✅ Permisos `600`, ignorado por git, con URL, clave `anon`, clave secreta y cadena de conexión |
 | `.env.example` | ✅ Nombres de variables, sin valores |
 | Repositorio git | ✅ `main` con remoto `origin` → `restrepothibas-debug/Ester` (público), sin secretos. El historial completo está en `git log` |
@@ -77,7 +78,7 @@
 
 ## Diseño
 
-El catálogo sigue la referencia enviada por el propietario. Comprobado en navegador a 390, 768 y 1280 px: sin desbordes horizontales, 2 columnas de tarjetas en móvil, menú plegable, tipografías cargadas y 0 errores de consola. Las capturas de esa revisión están en `revision/` (fuera de git).
+El catálogo sigue la referencia enviada por el propietario. Comprobado en navegador a 390, 768 y 1280 px: sin desbordes horizontales, 2 columnas de tarjetas en móvil, menú plegable y 0 errores de consola. Las dos fuentes se cargan desde el mismo origen (`document.fonts` las reporta `loaded`, 0 peticiones a `fonts.gstatic.com`). Las capturas de esa revisión están en `revision/` (fuera de git).
 
 ## Método de trabajo
 
@@ -85,7 +86,7 @@ Activo desde el 28/10/2026. Ver `06-metodo/gauntlet.md`, el listón en `06-metod
 
 ## Siguiente paso
 
-**Importación CSV/Excel y exportación del catálogo** (punto 49). Las fotografías siguen esperando las imágenes de WhatsApp (D-28).
+**Ingesta de fotografías desde WhatsApp** (D-28): la comparación de opciones gratuitas está en `04-informes/whatsapp-imagenes.md` y espera la elección del propietario. Después, importación CSV/Excel y exportación (punto 49).
 
 ## Qué NO está hecho
 

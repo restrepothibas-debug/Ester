@@ -22,14 +22,46 @@ else
 fi
 
 echo "A2 · Lint"
+# El estado de salida de oxlint es la señal fiable: 0 con avisos, distinto de 0
+# con errores. Antes se buscaba la palabra «error» en la salida y cualquier
+# fragmento de código citado (por ejemplo `error: null`) daba un falso fallo.
 salida_lint="$(npm run lint 2>&1)"
-if echo "$salida_lint" | grep -qiE "error"; then
-  mal "npm run lint reporta errores"
-  echo "$salida_lint" | grep -iE "error" | head -10
+estado_lint=$?
+if [ "$estado_lint" -ne 0 ]; then
+  mal "npm run lint terminó en $estado_lint"
+  echo "$salida_lint" | tail -10
 else
-  avisos="$(echo "$salida_lint" | grep -c "warning" || true)"
-  ok "npm run lint sin errores (${avisos:-0} avisos)"
+  # Se cuentan las líneas de diagnóstico, no un resumen: oxlint no siempre
+  # imprime la línea «Found N warnings» cuando la salida va por una tubería.
+  avisos="$(printf '%s\n' "$salida_lint" | grep -c ': warning ' || true)"
+  ok "npm run lint terminó en 0 (${avisos:-0} avisos)"
 fi
+
+echo "A1b · Tipografía sin dependencia externa"
+# La tipografía se sirve desde el propio dominio. Si alguien vuelve a enlazar
+# Google Fonts, el catálogo deja de ser autónomo y esto lo detecta.
+if grep -rIn -E "fonts\.(googleapis|gstatic)\.com" index.html src 2>/dev/null; then
+  mal "el código vuelve a pedir tipografías a Google"
+else
+  ok "ninguna referencia a Google Fonts en index.html ni en src/"
+fi
+if [ -d dist ] && grep -rIl -E "fonts\.(googleapis|gstatic)\.com" dist 2>/dev/null | grep -q .; then
+  mal "el bundle compilado pide tipografías a Google"
+else
+  ok "el bundle compilado no pide tipografías a Google"
+fi
+faltan_fuentes=0
+for f in public/fuentes/*.woff2; do
+  [ -e "$f" ] || { mal "no hay archivos .woff2 en public/fuentes/"; faltan_fuentes=1; break; }
+  if [ "$(head -c 4 "$f")" != "wOF2" ]; then
+    mal "$f no es un WOFF2 válido"
+    faltan_fuentes=1
+  fi
+done
+[ "$faltan_fuentes" -eq 0 ] && ok "$(ls public/fuentes/*.woff2 | wc -l | tr -d ' ') fuentes locales en formato WOFF2"
+for lic in public/fuentes/OFL-*.txt; do
+  [ -e "$lic" ] || { mal "falta la licencia OFL de las fuentes"; break; }
+done
 
 echo "A3 · Secretos en archivos versionados"
 # Regex extendida: macOS usa BSD grep, que no entiende \| en modo básico.

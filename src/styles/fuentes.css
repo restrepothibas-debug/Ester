@@ -1,0 +1,38 @@
+/* Tipografía autoalojada — sin dependencia de Google Fonts en tiempo de ejecución.
+ *
+ * Las dos familias son variables: un solo archivo cubre todo el rango de pesos.
+ * Los archivos viven en `public/fuentes/` y se sirven desde el mismo origen que
+ * la aplicación, con caché inmutable (ver `vercel.json`). Si el propietario
+ * quiere cambiar de familia, se sustituyen los .woff2 y se actualiza este
+ * archivo; nada más del sistema visual depende del proveedor.
+ *
+ * Origen y versión de cada archivo: `public/fuentes/LEEME.md`.
+ * Licencia: SIL Open Font License 1.1 (se distribuye junto a los archivos).
+ *
+ * `font-display: swap` mantiene el texto legible mientras llega la fuente; la
+ * pila de respaldo de `tokens.css` garantiza que nunca se vea texto invisible.
+ */
+
+/* Cormorant Garamond · titulares · eje wght 300–700 */
+@font-face {
+  font-family: "Cormorant Garamond";
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url("/fuentes/cormorant-garamond-v21-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* Inter · texto y controles · eje wght 100–900 */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fuentes/inter-v20-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
