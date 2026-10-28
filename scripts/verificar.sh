@@ -1,0 +1,97 @@
+#!/usr/bin/env bash
+# Verificación automática del listón (00-docs/06-metodo/liston.md).
+# Cubre lo que una máquina puede comprobar: A1, A2, A3 y parte de A6.
+# Lo que exige un navegador o criterio humano lo hace el árbitro.
+#
+# Uso: ./scripts/verificar.sh
+set -uo pipefail
+
+cd "$(dirname "${BASH_SOURCE[0]}")/.." || exit 1
+
+fallos=0
+ok()    { printf '  \033[32m✔\033[0m %s\n' "$1"; }
+mal()   { printf '  \033[31m✘\033[0m %s\n' "$1"; fallos=$((fallos+1)); }
+aviso() { printf '  \033[33m!\033[0m %s\n' "$1"; }
+
+echo "A1 · Compilación y tipos"
+if npm run build >/tmp/verificar-build.log 2>&1; then
+  ok "npm run build terminó en 0"
+else
+  mal "npm run build falló (ver /tmp/verificar-build.log)"
+  tail -20 /tmp/verificar-build.log
+fi
+
+echo "A2 · Lint"
+salida_lint="$(npm run lint 2>&1)"
+if echo "$salida_lint" | grep -qiE "error"; then
+  mal "npm run lint reporta errores"
+  echo "$salida_lint" | grep -iE "error" | head -10
+else
+  avisos="$(echo "$salida_lint" | grep -c "warning" || true)"
+  ok "npm run lint sin errores (${avisos:-0} avisos)"
+fi
+
+echo "A3 · Secretos en archivos versionados"
+# Regex extendida: macOS usa BSD grep, que no entiende \| en modo básico.
+patrones='(sb_secret_|sbp_|ghp_)[A-Za-z0-9_-]{15,}|eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{30,}'
+# En el bundle la clave anon DEBE estar: es pública por diseño. Lo que no puede
+# estar es una clave de servidor.
+patrones_servidor='(sb_secret_|sbp_|ghp_)[A-Za-z0-9_-]{15,}'
+# Se recorre el árbol completo, no solo lo versionado: un archivo nuevo con
+# credenciales pasaría desapercibido con `git grep`.
+excluir="--exclude-dir=node_modules --exclude-dir=dist --exclude-dir=.git --exclude-dir=.venv-libs --exclude=.env.local --exclude=.env"
+if grep -rIq $excluir -E "$patrones" . 2>/dev/null; then
+  mal "hay credenciales en el proyecto"
+  grep -rIl $excluir -E "$patrones" . | head -5
+else
+  ok "ninguna credencial en el proyecto"
+fi
+
+if [ -d dist ]; then
+  # Se busca una clave real, no el prefijo: supabase-js menciona "sb_secret_"
+  # y "sb_publishable_" en su propio código, y eso no es una fuga.
+  if grep -rIq -E "$patrones_servidor" dist 2>/dev/null; then
+    mal "el bundle de dist contiene una credencial"
+    grep -rIloE "$patrones_servidor" dist | head -3
+  else
+    ok "el bundle de dist no contiene credenciales"
+  fi
+
+  # Comprobación directa: que el valor real de la clave secreta no esté en dist.
+  if [ -f .env.local ]; then
+    secreta="$(grep '^SUPABASE_SECRET_KEY=' .env.local | cut -d= -f2- || true)"
+    if [ -n "$secreta" ] && grep -rIq -- "$secreta" dist 2>/dev/null; then
+      mal "la clave secreta de Supabase está incrustada en el bundle"
+    else
+      ok "la clave secreta no está en el bundle"
+    fi
+  fi
+fi
+
+echo "A3b · .env.local fuera de git"
+if git check-ignore -q .env.local 2>/dev/null; then
+  ok ".env.local ignorado por git"
+else
+  aviso ".env.local no existe o no está ignorado"
+fi
+
+echo "A6 · Textos de relleno"
+# "TODO" y "FIXME" en mayúsculas y como palabra: en castellano "todo" y "todos"
+# son palabras normales y no deben disparar el aviso.
+relleno="$( { grep -rIn -i -E 'lorem ipsum|imagen aquí' src 2>/dev/null; \
+              grep -rIn -E '\bTODO\b|\bFIXME\b' src 2>/dev/null; } || true )"
+if [ -n "$relleno" ]; then
+  mal "hay textos de relleno en src/ (lorem, imagen aquí, TODO o FIXME)"
+  echo "$relleno" | head -5
+else
+  ok "sin textos de relleno"
+fi
+
+echo
+if [ "$fallos" -eq 0 ]; then
+  echo "Automatizable: todo pasa. Falta lo que exige navegador y criterio (listón A4-A9, B, C)."
+  exit 0
+else
+  echo "Fallos: $fallos. No se entrega."
+  exit 1
+fi

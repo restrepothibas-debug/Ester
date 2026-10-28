@@ -44,5 +44,5 @@
 
 - Costo real de los plugins de WordPress necesarios para historial de stock, historial de precios y auditoría.
 - Política comercial por escrito de un hosting estático gratuito alternativo a Vercel.
-- Límites del plan gratuito para correo transaccional (alertas de §7/§63).
+- Límites del plan gratuito para correo transaccional (alertas de §10 y punto 63).
 - Disponibilidad de 2FA (TOTP) en el plan Free de Supabase Auth: se confirma en Fase 4, antes de prometerlo.

@@ -41,7 +41,7 @@ Decidiste presupuesto **cero**. Con ese límite, tres requisitos escritos en la 
 | §12 Restauración desde el panel | No es una función de Supabase en Free; habría que construirla (descarga y reimportación) | Misma fuente |
 | §12/§15 Copia completa restaurable | Los backups de base de datos **no incluyen los objetos de Storage** (las fotos). Requiere exportación aparte | Misma fuente |
 | Despliegue comercial en Vercel Hobby | Hobby está limitado a **uso personal no comercial**. Un catálogo que promociona productos para vender entra en la definición comercial de sus guías | [vercel.com/docs/plans/hobby](https://vercel.com/docs/plans/hobby) · [Fair Use](https://vercel.com/docs/limits/fair-use-guidelines) |
-| §7/§63 Disponibilidad del sitio y alertas | Un proyecto Supabase Free **se pausa tras una semana sin actividad**: el catálogo dejaría de responder y las alertas por correo no saldrían | [Project Pausing](https://supabase.com/docs/guides/platform/free-project-pausing) |
+| §10 y punto 63 Disponibilidad del sitio y alertas | Un proyecto Supabase Free **se pausa tras una semana sin actividad**: el catálogo dejaría de responder y las alertas por correo no saldrían | [Project Pausing](https://supabase.com/docs/guides/platform/free-project-pausing) |
 
 **No estoy recomendando pagar.** Hay salidas honestas y sin costo:
 

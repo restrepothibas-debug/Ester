@@ -70,7 +70,7 @@ Estos no son opiniones: están en la documentación de los proveedores, consulta
 | Despliegue comercial en Vercel | «el plan Hobby restringe a los usuarios a **uso personal no comercial**» | [vercel.com/docs/plans/hobby](https://vercel.com/docs/plans/hobby) |
 | §16 «verificar planes y límites antes de comprometer la arquitectura» | Pendiente de tu decisión de plan/presupuesto | — |
 
-Queda **sin verificar** (no lo afirmo): disponibilidad de 2FA (TOTP) en Supabase Auth Free, y límites y costo del correo transaccional para alertas §7/§63. Se confirman antes de prometerlos.
+Queda **sin verificar** (no lo afirmo): disponibilidad de 2FA (TOTP) en Supabase Auth Free, y límites y costo del correo transaccional para alertas §10 y punto 63. Se confirman antes de prometerlos.
 
 ---
 

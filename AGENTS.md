@@ -4,6 +4,23 @@
 
 ---
 
+## 0. Método obligatorio en cada intervención
+
+El proyecto usa el **Gauntlet Prompt**: [`00-docs/06-metodo/gauntlet.md`](00-docs/06-metodo/gauntlet.md). No es una sugerencia de estilo; es la forma de trabajar.
+
+Toda intervención declara cuatro cajas, en dos líneas si hace falta:
+
+1. **TAREA** — qué se pide, en una frase.
+2. **MÉTODO** — autónomo, **en bucle** (no se entrega la primera versión) y con un **árbitro adversarial** que no participó y no puede elogiar.
+3. **LISTÓN** — los criterios comprobables de [`00-docs/06-metodo/liston.md`](00-docs/06-metodo/liston.md). **Sin casillas marcadas no hay entrega.**
+4. **ENTREGABLE** — archivos, pruebas ejecutadas, resultado real, **resumen de rondas** (qué se rechazó y qué se corrigió), limitaciones.
+
+El árbitro es el subagente `verification`, con mandato de encontrar fallos. **Quien construye no aprueba.** Cada ronda se registra en [`00-docs/06-metodo/rondas.md`](00-docs/06-metodo/rondas.md).
+
+Antes de entregar, ejecutar `./scripts/verificar.sh` (compilación, lint, credenciales, textos de relleno). Lo que exige navegador o criterio lo cubre el árbitro.
+
+---
+
 ## 1. Qué es este proyecto
 
 **Tienda: «Dayara store»** (nombre definido el 28/10/2026; logotipo pendiente).
@@ -27,6 +44,7 @@ Catálogo digital de calzado con estética de boutique premium, detalles navide�
 | `00-docs/03-tecnico/` | Entorno, variables de entorno, reglas de secretos |
 | `00-docs/04-informes/` | Informes largos ya emitidos (auditoría, comparación, verificación) |
 | `00-docs/05-diseno/` | Esquema de datos y mapa de páginas (Fase 3), pendientes de aprobación |
+| `00-docs/06-metodo/` | **Método Gauntlet, listón del proyecto y registro de rondas.** Se lee antes de trabajar |
 
 Regla: **el PDF manda.** Si el código hace algo que el PDF no autoriza, el código está mal.
 
@@ -42,7 +60,7 @@ Regla: **el PDF manda.** Si el código hace algo que el PDF no autoriza, el cód
 
 ## 4. En qué fase estamos
 
-**Fase 1 (auditoría) cerrada · Fase 2 (decisión de plataforma) cerrada a favor de React + Vite · Fase 3 y 4 sin empezar.**
+**Fase 1** ✅ cerrada · **Fase 2** ✅ cerrada a favor de React + Vite · **Fase 3** 🟨 documentada y en uso; la aprobación formal del propietario sigue pendiente · **Fase 4** 🟨 RLS aplicado y sesión verificada; faltan 2FA, límite de intentos e inactividad · **Fase 5** ✅ construida y verificada en navegador, con dos criterios del listón sin probar (B2 por falta de datos, B16–B18 por falta de número) · **Fase 6** 🟨 en curso: marcas, productos e inventario listos; faltan fotos, promociones, destacados y solicitudes.
 
 Detalle, bloqueos y siguiente paso: `00-docs/02-estado/estado-actual.md`. No lo deduzcas: léelo.
 
@@ -72,11 +90,12 @@ Ninguna sesión termina sin actualizar la documentación. Si no se hace, el sigu
 2. `00-docs/02-estado/bitacora.md` — una fila con fecha, acción, resultado y si hubo escritura en sistemas externos.
 3. `00-docs/01-decisiones/decisiones.md` — si el propietario decidió algo nuevo, se registra con fecha y estado.
 4. `00-docs/03-tecnico/` — si cambió el entorno, una variable o un procedimiento.
-5. Memoria del agente (`MEMORY.md`) — solo el resumen de alto valor, apuntando a estos archivos.
+5. `00-docs/06-metodo/rondas.md` — cuántas rondas hubo, qué rechazó el árbitro y qué se corrigió.
+6. Memoria del agente (`MEMORY.md`) — solo el resumen de alto valor, apuntando a estos archivos.
 
 ## 8. Cómo trabajar aquí
 
-- Antes de escribir código de producto: la especificación exige cerrar diseño funcional y esquema de datos primero.
+- El diseño funcional y el esquema de datos están documentados y **en uso** (Fase 3): la base ya tiene el esquema aplicado y cada módulo nuevo se construye contra él, **añadiendo su listón en `06-metodo/liston.md` antes de escribir código**.
 - Cada módulo se entrega con su prueba; **revisar visualmente no es verificar**.
 - Un módulo se considera terminado cuando compila, funciona, protege los datos y pasa sus pruebas mínimas (PDF §18).
 - Al cerrar un módulo: reportar archivos modificados, pruebas ejecutadas, resultados, limitaciones y pendientes.

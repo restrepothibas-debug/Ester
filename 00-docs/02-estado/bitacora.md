@@ -40,6 +40,8 @@ Registro cronológico. Una fila por sesión de trabajo. La columna **Escrituras*
 | 28/10/2026 13:05 | Accio | Módulos del panel: marcas, formulario de producto con tallas, inventario con historial; historial de precios automático al editar | `build` y `lint` sin errores (solo avisos de hooks) | workspace local |
 | 28/10/2026 13:20 | Accio | Prueba de extremo a extremo en navegador: crear marca, crear producto QA-001, editar precio y talla, vender una unidad | Todo correcto: 4 movimientos de inventario, 1 registro de precio, historial coherente. Datos temporales eliminados al terminar | **Supabase: datos de prueba, ya eliminados** |
 | 28/10/2026 13:35 | Accio | Carga diferida del panel y corrección de dos textos de estado vacío | Chunk del panel separado (`Acceso-*.js` 200). Portada y rutas públicas verificadas tras el cambio | workspace local |
+| 28/10/2026 14:10 | Accio | Adoptado el método Gauntlet: documento del método, listón derivado del §18, registro de rondas y script de verificación | `00-docs/06-metodo/` + `scripts/verificar.sh`. El script detecta y luego descarta un falso positivo de `supabase-js` | workspace local |
+| 28/10/2026 14:15 | Accio | `AGENTS.md` y la skill `catalogo-calzado` (que vive en el directorio de agentes, **fuera** del repositorio) exigen declarar las cuatro cajas y registrar rondas | El método queda activo en cada intervención, no solo en las grandes | workspace local y directorio de agentes |
 
 ## Notas de incidentes
 

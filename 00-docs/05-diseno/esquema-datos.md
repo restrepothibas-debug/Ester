@@ -64,7 +64,7 @@ No se guardan contraseñas: las administra Supabase Auth (§15).
 | `marca_id` | `uuid` FK → `marcas` | `on delete restrict` — no se borra una marca con productos |
 | `modelo` | `text` | obligatorio |
 | `referencia` | `text` | nullable; referencia comercial |
-| `color` | `text` | nullable; sugerido y confirmado por el administrador (§53) |
+| `color` | `text` | nullable; sugerido y confirmado por el administrador (punto 53) |
 | `precio_normal` | `numeric(12,2)` | `>= 0` |
 | `estado` | `estado_producto` | por defecto `pendiente_revision` |
 | `slug` | `text` UNIQUE | para la URL de la ficha |
@@ -171,10 +171,10 @@ CHECK: `termina_en is null or termina_en > inicia_en`.
 | `cliente_telefono` | `text` | — |
 | `observaciones` | `text` | nullable |
 | `motivo_cancelacion` | `text` | obligatorio si `estado = cancelada` |
-| `inventario_descontado` | `boolean` | `false`; pasa a `true` solo si el administrador confirma el descuento (§60) |
+| `inventario_descontado` | `boolean` | `false`; pasa a `true` solo si el administrador confirma el descuento (punto 60) |
 | `creado_en`, `actualizado_en`, `confirmada_en` | `timestamptz` | — |
 
-Los `_snapshot` existen porque un historial de ventas que cambia cuando el administrador edita un precio no sirve para nada. Se conservan indefinidamente hasta eliminación manual (§59).
+Los `_snapshot` existen porque un historial de ventas que cambia cuando el administrador edita un precio no sirve para nada. Se conservan indefinidamente hasta eliminación manual (punto 59).
 
 ### 3.11 `notificaciones`
 

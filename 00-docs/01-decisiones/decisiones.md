@@ -24,6 +24,8 @@ Estados: ✅ Aprobada · ⏳ Pendiente · ❓ Sin identificar · 🔁 Reemplazad
 | D-12 | 28/10/2026 | La clave secreta de Supabase (`sb_secret_…`) se guarda en `.env.local` **sin** prefijo `VITE_` y no se usa en el cliente | ✅ | Accio, conforme a PDF §15 |
 | D-15 | 28/10/2026 | Proyecto Supabase identificado: `pklqdjixkhpkmtrhtzsm` (`https://pklqdjixkhpkmtrhtzsm.supabase.co`), verificado vacío | ✅ | Accio, verificado por API |
 | D-16 | 28/10/2026 | Clave publicable (`anon`) recibida y verificada (JWT `role: anon`, `ref` correcto, expira 2036-10-27). Cliente Supabase operativo | ✅ | Accio, verificado por API |
+| D-29 | 28/10/2026 | Se adopta el **Gauntlet Prompt** como método obligatorio: bucle, árbitro adversarial y listón comprobable. Vive en `00-docs/06-metodo/` y es de lectura previa obligatoria | ✅ | Propietario + Accio |
+| D-30 | 28/10/2026 | El listón del proyecto se deriva del **§18** de la especificación y se amplía con casillas propias. Se actualiza con cada módulo, antes de construirlo | ✅ | Accio |
 | D-26 | 28/10/2026 | Cuenta administradora creada: **epieyualex01@gmail.com**, correo ya confirmado. El perfil lo creó el trigger automáticamente (rol `administrador`) | ✅ | Propietario + Accio |
 | D-27 | 28/10/2026 | La contraseña inicial la generó Accio; **debe cambiarla el propietario**. No se guarda en ningún archivo del proyecto | ⏳ Pendiente de cambio | Accio |
 | D-28 | 28/10/2026 | Origen de las imágenes de producto: **WhatsApp**. Medio de ingesta pendiente de definir (exportación del chat vs. Cloud API) | ⏳ Pendiente | Propietario |
@@ -97,6 +99,6 @@ Verificados en documentación oficial el 27/10/2026. **No son recomendaciones de
 | §12 copia completa restaurable | Los backups de base de datos no incluyen los objetos de Storage (fotos) |
 | §12 restauración desde el panel | No existe en Free; habría que construirla |
 | Despliegue del sitio | Vercel Hobby se limita a «uso personal no comercial» |
-| §7/§63 disponibilidad y alertas | Un proyecto Supabase Free se pausa por inactividad (por confirmar antes de prometer nada) |
+| §10 y punto 63 disponibilidad y alertas | Un proyecto Supabase Free se pausa por inactividad (por confirmar antes de prometer nada) |
 
 Fuentes: [Supabase Backups](https://supabase.com/docs/guides/platform/backups) · [Vercel Hobby](https://vercel.com/docs/plans/hobby)

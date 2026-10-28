@@ -1,7 +1,7 @@
 # Estado actual del proyecto
 
 **Última actualización:** 28/10/2026
-**Actualiza este archivo al final de cada sesión.** Es lo primero que debe leer cualquier agente.
+**Actualiza este archivo al final de cada sesión.** Es lo primero que debe leer cualquier agente. Si algo aquí contradice al código o a la base, este archivo está mal y se corrige.
 
 ---
 
@@ -9,73 +9,79 @@
 
 | Fase (PDF §17) | Estado |
 |---|---|
-| 1 — Auditoría del repositorio, despliegue, Supabase, dependencias y seguridad | ✅ **Cerrada** (27/10). Conclusión: no había nada que auditar, el proyecto hay que crearlo |
+| 1 — Auditoría del repositorio, despliegue, Supabase, dependencias y seguridad | ✅ **Cerrada** (27/10). No había nada que auditar: el proyecto hubo que crearlo |
 | 2 — Decisión de plataforma (React + Vite vs WordPress) | ✅ **Cerrada** a favor de React + Vite, con dos conflictos de plan gratuito sin resolver |
-| 3 — Diseño funcional: mapa de páginas, componentes, esquema de datos y flujos | 🟨 **Entregada para revisión** (28/10): `05-diseno/esquema-datos.md` y `05-diseno/mapa-paginas.md`. Nada ejecutado en la base |
-| 4 — Base de seguridad: auth, autorización, RLS, secretos, recuperación, 2FA | 🟨 **RLS aplicado y verificado** (28/10). Falta la cuenta administradora (requiere correo) y 2FA |
-| 5 — Catálogo público | 🟨 **Construido y verificado en navegador** (28/10). Sin datos reales ni despliegue |
-| 6 — Panel: productos, marcas, fotos, estados, inventario, precios y promociones | 🟨 **Casi completo** (28/10): marcas, alta/edición de producto con tallas, inventario con historial y registro de cambios de precio. Faltan fotos, promociones programadas, destacados y solicitudes |
+| 3 — Diseño funcional: mapa de páginas, componentes, esquema de datos y flujos | ✅ **Documentada y en uso**: `05-diseno/esquema-datos.md` y `05-diseno/mapa-paginas.md`. El esquema está aplicado en la base y el código se construye contra él. La aprobación formal del propietario sigue pendiente |
+| 4 — Base de seguridad: auth, autorización, RLS, secretos, recuperación, 2FA | 🟨 **RLS aplicado y sesión real verificada**. Faltan 2FA, límite de intentos, cierre por inactividad y recuperación de contraseña |
+| 5 — Catálogo público | ✅ **Construido y verificado en navegador**. Sin datos reales ni despliegue |
+| 6 — Panel: productos, marcas, fotos, estados, inventario, precios y promociones | 🟨 **En curso**: marcas, productos con tallas, inventario con historial y registro de cambios de precio. Faltan fotos, promociones, destacados y solicitudes |
 | 7 a 10 — WhatsApp/solicitudes · importaciones y copias · automatización de fotos · auditoría y lanzamiento | ⬜ **No iniciadas** |
 
-## Qué existe hoy en el repositorio local
+## Qué existe hoy
 
 | Elemento | Estado |
 |---|---|
-| Scaffold | React 19 + Vite 8 + TypeScript 7. `package.json` → `"ester"` |
-| `npm run build` | ✅ Compila sin errores (verificado 27/10) |
-| `src/App.tsx` | ⚠️ Sigue siendo **la plantilla de ejemplo de Vite** («Get started», contador). No hay producto |
-| `src/types/domain.ts` | ✅ Tipos del dominio derivados de §6/§8/§14 |
-| `src/lib/supabase.ts` | ✅ Cliente con solo clave `anon`; degrada a «modo sin datos» si faltan variables |
-| `src/styles/tokens.css` | ⚠️ **Propuesta** de tokens visuales, sin aprobar |
-| `src/styles/global.css` | ✅ Base tipográfica y de layout |
-| `.env.local` | ✅ Creado (permisos `600`, ignorado por git) con URL, clave `anon` y clave secreta. **Cliente Supabase probado de extremo a extremo**: consulta autenticada contra el proyecto real |
-| `.env.example` | ✅ Creado 27/10 con nombres de variables, sin valores |
-| Repositorio git | ✅ `main`, remoto `origin` → `restrepothibas-debug/Ester`. 3 commits subidos el 28/10. Verificado por API: 36 archivos, **sin `.env.local` ni secretos** |
+| Stack | React 19 + Vite 8 + TypeScript 7 · `package.json` → `dayara-store` · título y `lang="es"` alineados |
+| `npm run build` | ✅ Termina en 0. Bundle principal 503 kB; el panel va en chunks aparte |
+| `npm run lint` | ✅ Sin errores; 5 avisos de hooks en consultas |
+| Catálogo público | ✅ 6 rutas (`/`, `/marcas`, `/marca/:slug`, `/buscar`, `/producto/:slug`, 404), 13 componentes, 12 páginas. Filtros y paginación en la URL, ventana rápida, selector de talla y mensaje de WhatsApp |
+| Panel privado | ✅ Acceso, resumen, marcas, productos (alta y edición con tallas) e inventario con historial. Guard por sesión **y** perfil de administrador |
+| `src/App.tsx` | ✅ Enrutador real. Las rutas del panel se cargan de forma diferida |
+| `src/lib/` | `supabase.ts`, `consultas.ts` (lectura pública), `admin.ts` (lectura del panel), `mutaciones.ts` (escritura con historial), `auth.ts`, `formato.ts`, `whatsapp.ts` |
+| Tipos del dominio | ✅ `src/types/domain.ts`, derivados de §6, §8 y §14 |
+| Estilos | `tokens.css` (propuesta sin aprobar), `global.css`, `catalogo.css`, `admin.css` |
+| `.env.local` | ✅ Permisos `600`, ignorado por git, con URL, clave `anon`, clave secreta y cadena de conexión |
+| `.env.example` | ✅ Nombres de variables, sin valores |
+| Repositorio git | ✅ `main` con remoto `origin` → `restrepothibas-debug/Ester` (público). **12 commits, 89 archivos**, sin secretos. Verificado por API |
+| Base de datos | ✅ **14 tablas** en `public` (13 de dominio + `migraciones_aplicadas`), RLS en todas, **28 políticas** (23 sobre tablas y 5 sobre `storage.objects`), 3 buckets, 5 filas de configuración. **5 migraciones** aplicadas |
+| Cuenta administradora | ✅ `epieyualex01@gmail.com`, correo confirmado, perfil creado por trigger. Contraseña inicial generada por Accio: **debe cambiarla el propietario** (D-27) |
 | Nombre de la tienda | ✅ **Dayara store** (D-13). Logotipo pendiente |
-| Metadatos del proyecto | ✅ Alineados: `dayara-store`, título `Dayara store`, `lang="es"` |
-| Panel privado | ✅ Sesión real verificada: acceso, resumen, persistencia, cierre de sesión y bloqueo posterior |
-| Módulos del panel | ✅ `/admin/marcas` (alta y edición), `/admin/productos` + formulario con tallas, `/admin/inventario` con historial. Probado de extremo a extremo el 28/10 con datos temporales, ya eliminados |
-| Catálogo público | ✅ 6 rutas (`/`, `/marcas`, `/marca/:slug`, `/buscar`, `/producto/:slug`, 404) y 11 componentes. Consultas con RLS, filtros y paginación en la URL, ventana rápida, selector de talla y mensaje de WhatsApp |
-| Migraciones SQL | ✅ **Aplicadas y verificadas** (28/10): 13 tablas, RLS en las 13, 23 políticas, 3 buckets. Base sin datos de prueba |
-| Documentación | ✅ Estructurada en `00-docs/` (contexto, decisiones, estado, técnico, informes) |
+| Documentación | ✅ `00-docs/` en 7 áreas, incluida `06-metodo/` con método, listón y rondas |
 
-## Estado de los sistemas externos (verificado 27/10/2026)
+## Sistemas externos
 
-| Sistema | Estado real |
+| Sistema | Estado |
 |---|---|
-| GitHub — `restrepothibas-debug/Ester` | Existe, **público**, **0 commits**. La cuenta `epieyu1` (CLI) solo tiene lectura, pero el propietario entregó un **PAT de `restrepothibas-debug` con permisos `admin`** verificado por API. Guardado fuera del repo (ver `03-tecnico/variables-entorno.md`) |
-| Vercel | CLI instalado, **sin sesión** (`~/.vercel` no existe). Sin proyecto conocido |
-| Supabase | Proyecto `pklqdjixkhpkmtrhtzsm` **verificado el 28/10**: responde en `https://pklqdjixkhpkmtrhtzsm.supabase.co`, Postgres 14.18, GoTrue v2.197.0. **0 tablas, 0 vistas, 0 buckets** — confirma que está vacío, como decía el PDF. La clave secreta autentica correctamente. CLI sigue sin sesión. Cliente conectado y probado. **13 tablas y 3 buckets creados** |
-| Entorno local | Node 22.23.2 · npm 10.9.8 · git 2.39.3 · gh 2.45.0 (`epieyu1`) · CLIs de Supabase y Vercel |
+| GitHub — `restrepothibas-debug/Ester` | Público, 12 commits. PAT con permisos `admin` guardado fuera del repositorio (ver `03-tecnico/variables-entorno.md`) |
+| Supabase | Proyecto `pklqdjixkhpkmtrhtzsm` · Postgres 14.18 · GoTrue v2.197.0 · pooler `aws-0-us-east-2`. Esquema aplicado. CLI sin sesión, pero no hace falta: la conexión directa funciona |
+| Vercel | CLI instalado, **sin sesión** y **sin proyecto**. Único servicio sin tocar |
+| Entorno local | Node 22.23.2 · npm 10.9.8 · git 2.39.3 · gh 2.45.0 (`epieyu1`) |
 
-## Bloqueos abiertos, en orden
+## Bloqueos abiertos
 
 | # | Bloqueo | Quién lo resuelve |
 |---|---|---|
-| 1 | **Referencia del proyecto Supabase** (`https://<ref>.supabase.co`) y **clave publicable/`anon`**. La clave secreta ya llegó, pero sola no permite conectar ni verificar nada | Propietario |
-| 2 | Cuenta/equipo de Vercel y plan (Hobby o Pro) + token si se despliega por CLI | Propietario |
-| 3 | Aclarar «Gijo» | Propietario |
-| 4 | Datos de marca y contacto: nombre, logo, WhatsApp, correo admin, zona horaria | Propietario |
-| 5 | Rotar y reducir el token de GitHub (hoy sobredimensionado y expuesto en el chat) | Propietario |
-| 6 | Decidir si se hace push a `Ester` (repo descrito como «portafolio de Ester») o se crea otro repositorio | Propietario |
+| 1 | **Despliegue en Vercel**: cuenta/equipo, plan (Hobby o Pro) y, si se despliega por CLI, token | Propietario |
+| 2 | **Número de WhatsApp** para el mensaje prellenado | Propietario |
+| 3 | **Logotipo** de la tienda | Propietario |
+| 4 | **2FA, límite de intentos y cierre por inactividad** | Accio, cuando se aborde la Fase 10 |
+| 5 | **Recuperación de contraseña por correo**: el correo no se configura en este proceso (D-22) | Aplazado por decisión del propietario |
+| 6 | **Rotación del token de GitHub**: el propietario acepta el riesgo y pidió no rotarlo (D-11) | Cerrado por decisión |
 
-**Resuelto el 27/10/2026:** acceso de escritura a GitHub.
+**Resueltos:** acceso de escritura a GitHub · proyecto Supabase y sus claves · cuenta administradora · nombre de la tienda · «Gijo» = GitHub · destino del repositorio.
 
 ## Limitaciones conocidas
 
-- El bundle principal bajó a 503 kB tras separar el panel con carga diferida. Sigue en el umbral de aviso de Vite; el peso lo domina `supabase-js`, no el código propio.
-- Los precios dejan historial al editarse, pero **no hay pantalla para consultarlo**. Promociones, destacados y solicitudes aún no tienen interfaz.
+- El bundle principal pesa 503 kB. Lo domina `supabase-js`, no el código propio.
+- Los precios dejan historial al editarse, pero **no hay pantalla para consultarlo**.
+- La búsqueda (B2 del listón) solo se probó con la base vacía: falta con datos reales.
+- No hay copias de seguridad automáticas: el plan actual de Supabase no las incluye (§12 sin cumplir).
+
+## Método de trabajo
+
+Activo desde el 28/10/2026. Ver `06-metodo/gauntlet.md`, el listón en `06-metodo/liston.md` y el registro en `06-metodo/rondas.md`. Antes de entregar: `./scripts/verificar.sh` y revisión adversarial con el subagente `verification`.
 
 ## Siguiente paso
 
-**Con los bloqueos 1–3 resueltos:** cerrar Fase 3 (mapa de páginas + esquema de datos documentado) antes de escribir producto, como exige §19 del PDF («inspeccionar el repositorio y el proyecto Supabase antes de modificar archivos o crear tablas»).
+**Promociones.** El listón del módulo ya está escrito en `06-metodo/liston.md` (Listón E) con sus diez casillas y las cuatro decisiones que hay que resolver antes de escribir código: dos promociones vigentes a la vez, precio promocional mayor o igual al normal, zona horaria y la diferencia entre promoción y oferta de la semana.
 
-**Mientras llegan:** no se escribe código de producto. Se puede avanzar en el diseño del esquema de datos y el mapa de páginas sobre papel.
+## Qué NO está hecho
 
-## Qué NO está hecho (para evitar falsas expectativas)
-
-- No hay tablas, migraciones, RLS, buckets ni políticas de Storage.
-- No hay autenticación ni 2FA.
-- No hay despliegue en Vercel ni repositorio en GitHub.
-- No hay integración de WhatsApp, ni importación, ni copias de seguridad.
-- No hay nombre de tienda, logo, teléfono ni correo confirmados.
+- Fotografías de producto: subida, foto principal y orden (§6, §10).
+- Promociones, destacados y ofertas de la semana: la interfaz.
+- Solicitudes de WhatsApp: registro manual, estados y descuento con confirmación (§8).
+- Importación CSV/Excel y exportación (punto 49).
+- Alertas en el panel y por correo (punto 63).
+- Copias de seguridad y restauración (§12 y punto 66).
+- 2FA, límite de intentos, cierre por inactividad y recuperación de contraseña (punto 62).
+- Despliegue en Vercel.
