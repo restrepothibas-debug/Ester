@@ -57,6 +57,25 @@
 | Token de Vercel | Despliegue desde CLI si no se conecta el repo | Llavero |
 | Token de GitHub con push | Subir el repositorio | Llavero |
 
+## Credenciales ya recibidas
+
+| Credencial | Cuenta | Dónde está guardada | Estado |
+|---|---|---|---|
+| Token de GitHub (PAT clásico) | `restrepothibas-debug` | `~/.accio/accounts/<cuenta>/secrets/github-restrepothibas-debug.token` (permisos `600`, directorio `700`, **fuera del workspace**) | ⚠️ Recibido 27/10/2026 |
+
+**Por qué no está en el proyecto ni en el llavero del sistema:** el intento de escribirlo en el llavero de macOS y en la configuración de `gh` (`~/.config/gh/hosts.yml`) fue **rechazado por el entorno** («operation not permitted»). Se guardó en un archivo local con permisos restringidos, fuera del repositorio, que es la alternativa segura disponible.
+
+**Cómo se usa sin exponerlo:**
+
+```bash
+TOKEN=$(cat ~/.accio/accounts/<cuenta>/secrets/github-restrepothibas-debug.token)
+git push https://x-access-token:$TOKEN@github.com/restrepothibas-debug/Ester.git main
+```
+
+Nunca escribir el valor dentro de `.git/config`, de un script versionado ni de un documento.
+
+**Advertencia registrada el 27/10/2026:** este token fue pegado en el chat, por lo que debe considerarse **expuesto**. Además trae permisos muy superiores a los necesarios (`admin:org`, `delete_repo`, `workflow`, `admin:enterprise`). Recomendación: **rotarlo** y sustituirlo por un token de granularidad fina limitado al repositorio `Ester` con permiso `Contents: Read and write`.
+
 ## Procedimiento cuando lleguen los valores
 
 1. Escribirlos en `.env.local` (creado en ese momento, ya ignorado por git).

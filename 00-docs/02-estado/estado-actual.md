@@ -28,14 +28,14 @@
 | `src/styles/global.css` | ✅ Base tipográfica y de layout |
 | `.env` / `.env.local` | ❌ No existen. `SUPABASE` no está configurado |
 | `.env.example` | ✅ Creado 27/10 con nombres de variables, sin valores |
-| Repositorio git local | ❌ **No inicializado.** Sin historial, sin remoto |
+| Repositorio git local | ✅ **Inicializado** 27/10/2026, rama `main`, primer commit `cc8a0a7` (36 archivos, sin secretos). Sin remoto configurado |
 | Documentación | ✅ Estructurada en `00-docs/` (contexto, decisiones, estado, técnico, informes) |
 
 ## Estado de los sistemas externos (verificado 27/10/2026)
 
 | Sistema | Estado real |
 |---|---|
-| GitHub — `restrepothibas-debug/Ester` | Existe, **público**, **0 commits**. Cuenta autenticada `epieyu1` con `pull: true`, **`push: false`** |
+| GitHub — `restrepothibas-debug/Ester` | Existe, **público**, **0 commits**. La cuenta `epieyu1` (CLI) solo tiene lectura, pero el propietario entregó un **PAT de `restrepothibas-debug` con permisos `admin`** verificado por API. Guardado fuera del repo (ver `03-tecnico/variables-entorno.md`) |
 | Vercel | CLI instalado, **sin sesión** (`~/.vercel` no existe). Sin proyecto conocido |
 | Supabase | CLI instalado, **sin sesión** (`~/.supabase/access-token` no existe). **Sin referencia de proyecto** → no verificable |
 | Entorno local | Node 22.23.2 · npm 10.9.8 · git 2.39.3 · gh 2.45.0 (`epieyu1`) · CLIs de Supabase y Vercel |
@@ -44,12 +44,14 @@
 
 | # | Bloqueo | Quién lo resuelve |
 |---|---|---|
-| 1 | Permiso de escritura en GitHub (colaborador con escritura, repo nuevo bajo `epieyu1`, o token con push) | Propietario |
-| 2 | Referencia del proyecto Supabase + forma de acceso | Propietario |
-| 3 | Cuenta/equipo de Vercel y plan (Hobby o Pro) | Propietario |
-| 4 | Aclarar «Gijo» | Propietario |
-| 5 | Datos de marca y contacto: nombre, logo, WhatsApp, correo admin, zona horaria | Propietario |
-| 6 | Créditos de Supabase cargados en `.env.local` | Agente, en cuanto lleguen |
+| 1 | **Referencia del proyecto Supabase + forma de acceso** (`VITE_SUPABASE_URL`, clave `anon`, contraseña de base, token de CLI) | Propietario |
+| 2 | Cuenta/equipo de Vercel y plan (Hobby o Pro) + token si se despliega por CLI | Propietario |
+| 3 | Aclarar «Gijo» | Propietario |
+| 4 | Datos de marca y contacto: nombre, logo, WhatsApp, correo admin, zona horaria | Propietario |
+| 5 | Rotar y reducir el token de GitHub (hoy sobredimensionado y expuesto en el chat) | Propietario |
+| 6 | Decidir si se hace push a `Ester` (repo descrito como «portafolio de Ester») o se crea otro repositorio | Propietario |
+
+**Resuelto el 27/10/2026:** acceso de escritura a GitHub.
 
 ## Siguiente paso
 

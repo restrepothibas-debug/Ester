@@ -17,7 +17,9 @@ Estados: ✅ Aprobada · ⏳ Pendiente · ❓ Sin identificar · 🔁 Reemplazad
 | D-05 | — | «**Gijo**» mencionado por el propietario | ❓ **Sin identificar.** No se asume que sea GitHub | Propietario |
 | D-06 | 27/10/2026 | Cliente Supabase solo con clave `anon`; `service_role` fuera del frontend | ✅ | PDF §15 |
 | D-07 | — | Planes de Vercel y Supabase (Hobby/Free vs Pro) | ⏳ Pendiente | PDF §16 exige verificar costos |
-| D-08 | — | Repositorio destino y permiso de escritura en GitHub | ⏳ Pendiente | Auditoría 27/10 |
+| D-08 | 27/10/2026 | Repositorio **`restrepothibas-debug/Ester`** y acceso de escritura resuelto con un PAT del propietario del repo (permisos `admin` verificados por API) | ✅ | Propietario |
+| D-09 | 27/10/2026 | Repositorio git **inicializado en local** (rama `main`), primer commit `cc8a0a7` | ✅ | Accio, sin push |
+| D-10 | 27/10/2026 | Ramas y flujo de trabajo (main directo vs. ramas por módulo) | ⏳ Pendiente | — |
 
 ## Decisiones de producto ya cerradas en la especificación
 

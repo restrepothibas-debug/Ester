@@ -12,6 +12,8 @@ Registro cronológico. Una fila por sesión de trabajo. La columna **Escrituras*
 | 27/10/2026 23:00 | Accio | Verificación de traspaso: memoria, estado real, GitHub, Vercel, Supabase, PDF vs stack | `04-informes/verificacion-traspaso-2026-10-27.md`. Confirmados conflicto de backups y cláusula no comercial de Vercel Hobby | ninguna |
 | 27/10/2026 23:05 | Accio | Reestructuración documental: `AGENTS.md`, `00-docs/` por áreas, registro de decisiones, estado y bitácora | Contexto del proyecto persistido para cualquier agente | workspace local |
 | 27/10/2026 23:07 | Accio | Endurecimiento de `.gitignore` y creación de `.env.example` | Secretos excluidos del control de versiones antes de inicializar git | workspace local |
+| 27/10/2026 23:20 | Accio | Recibido un PAT de GitHub de `restrepothibas-debug`; verificado por API (identidad, scopes y `permissions.admin: true` en `Ester`) | Token guardado fuera del workspace con permisos `600`. El llavero de macOS y `~/.config/gh` rechazaron la escritura | ninguna (solo lectura de API) |
+| 27/10/2026 23:24 | Accio | Inicialización del repositorio git local (rama `main`) y primer commit | Commit `cc8a0a7`, 36 archivos, sin secretos ni `node_modules`/`dist` en el índice | workspace local |
 
 ## Notas de incidentes
 
