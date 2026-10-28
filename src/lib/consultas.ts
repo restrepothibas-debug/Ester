@@ -208,10 +208,14 @@ export async function listarSeleccion(
 ): Promise<ProductoVista[]> {
   const { data, error } = await cliente()
     .from("selecciones")
-    .select(`orden, productos ( ${CAMPOS} )`)
+    .select(`orden, productos!inner ( ${CAMPOS} )`)
     .eq("tipo", tipo)
     .eq("activo", true)
+    // El filtro va en la consulta, no después: si se descarta en memoria, el
+    // límite se gasta en filas que luego no se pintan.
+    .in("productos.estado", ["publicado", "agotado"])
     .order("orden", { ascending: true })
+    .order("id", { ascending: true })
     .limit(limite);
 
   if (error) throw error;

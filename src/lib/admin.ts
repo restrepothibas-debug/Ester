@@ -177,7 +177,6 @@ export interface FilaSeleccionAdmin {
   producto: string;
   estado: EstadoProducto;
   orden: number;
-  activo: boolean;
 }
 
 /** Punto 54 — destacados y oferta de la semana se eligen a mano, no por fórmula. */
@@ -185,11 +184,13 @@ export async function listarSeleccionesAdmin(tipo: TipoSeleccion): Promise<FilaS
   const { data, error } = await cliente()
     .from("selecciones")
     .select(
-      `id, producto_id, orden, activo,
+      `id, producto_id, orden,
        productos ( codigo_interno, modelo, estado, marcas ( nombre ) )`,
     )
     .eq("tipo", tipo)
-    .order("orden", { ascending: true });
+    .eq("activo", true)
+    .order("orden", { ascending: true })
+    .order("id", { ascending: true });
 
   if (error) throw error;
 
@@ -209,7 +210,6 @@ export async function listarSeleccionesAdmin(tipo: TipoSeleccion): Promise<FilaS
         : "Producto eliminado",
       estado: (producto?.estado ?? "archivado") as EstadoProducto,
       orden: fila.orden,
-      activo: fila.activo,
     };
   });
 }

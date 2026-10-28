@@ -7,6 +7,7 @@ import {
 } from "../../lib/admin";
 import { agregarSeleccion, moverSeleccion, quitarSeleccion } from "../../lib/mutaciones";
 import { useConsulta } from "../../lib/useConsulta";
+import { ETIQUETA_ESTADO } from "../../types/domain";
 
 /** Cuántos muestra el inicio de cada sección (`Inicio.tsx`). */
 const VISIBLES: Record<TipoSeleccion, number> = { destacado: 8, oferta_semana: 4 };
@@ -276,9 +277,23 @@ function Fila({
       <td className="rt-num rt-tenue">{indice + 1}</td>
       <td>{fila.producto}</td>
       <td>
-        <span className={`rt-chip ${fila.estado === "agotado" ? "rt-chip--agotado" : "rt-chip--publicado"}`}>
-          {fila.estado === "agotado" ? "Agotado" : "Publicado"}
+        <span
+          className={`rt-chip ${
+            fila.estado === "agotado"
+              ? "rt-chip--agotado"
+              : fila.estado === "publicado"
+                ? "rt-chip--publicado"
+                : "rt-chip--vencida"
+          }`}
+        >
+          {ETIQUETA_ESTADO[fila.estado]}
         </span>
+        {fila.estado !== "publicado" && fila.estado !== "agotado" && (
+          <>
+            <br />
+            <span className="rt-tenue">No se verá en el inicio mientras siga en este estado.</span>
+          </>
+        )}
       </td>
       <td className="rt-acciones-fila">
         <button

@@ -28,13 +28,13 @@
 | Panel privado | ✅ Acceso, resumen, marcas, productos (alta y edición con tallas), inventario con historial **promociones** (manuales y programadas, con vencimiento en Bogotá) y **destacados/oferta de la semana** (selección manual con orden). Guard por sesión **y** perfil de administrador |
 | `src/App.tsx` | ✅ Enrutador real. Las rutas del panel se cargan de forma diferida |
 | `src/lib/` | `supabase.ts`, `consultas.ts` (lectura pública), `admin.ts` (lectura del panel), `mutaciones.ts` (escritura con historial), `auth.ts`, `formato.ts`, `fechas.ts` (horas de Bogotá), `whatsapp.ts` |
-| Pruebas | `scripts/probar-reglas-promociones.py` (16 casos, `rollback`) y `scripts/probar-promociones-publico.py` (9 comprobaciones con rol `anon`) |
+| Pruebas | `scripts/probar-reglas-promociones.py` (16 casos, `rollback`), `scripts/probar-promociones-publico.py` (9 comprobaciones con rol `anon`) y `scripts/probar-destacados.py` (11 comprobaciones: orden, duplicados, intruso sin rol y `anon`) |
 | Tipos del dominio | ✅ `src/types/domain.ts`, derivados de §6, §8 y §14 |
 | Estilos | `tokens.css` (propuesta sin aprobar), `global.css`, `catalogo.css`, `admin.css` |
 | `.env.local` | ✅ Permisos `600`, ignorado por git, con URL, clave `anon`, clave secreta y cadena de conexión |
 | `.env.example` | ✅ Nombres de variables, sin valores |
 | Repositorio git | ✅ `main` con remoto `origin` → `restrepothibas-debug/Ester` (público), sin secretos. El historial completo está en `git log` |
-| Base de datos | ✅ **14 tablas** en `public` (13 de dominio + `migraciones_aplicadas`), RLS en todas, **28 políticas** (23 sobre tablas y 5 sobre `storage.objects`), 3 buckets, 5 filas de configuración. **8 migraciones** aplicadas. Reglas de promoción en la base: 1 restricción de exclusión y 2 disparadores |
+| Base de datos | ✅ **14 tablas** en `public` (13 de dominio + `migraciones_aplicadas`), RLS en todas, **28 políticas** (23 sobre tablas y 5 sobre `storage.objects`), 3 buckets, 5 filas de configuración. **9 migraciones** aplicadas. Reglas de promoción en la base: 1 restricción de exclusión y 2 disparadores |
 | Cuenta administradora | ✅ `epieyualex01@gmail.com`, correo confirmado, perfil creado por trigger. Contraseña inicial generada por Accio: **debe cambiarla el propietario** (D-27) |
 | Nombre de la tienda | ✅ **Dayara store** (D-13). Logotipo pendiente |
 | Documentación | ✅ `00-docs/` en 7 áreas, incluida `06-metodo/` con método, listón y rondas |
@@ -69,7 +69,7 @@
 - La foto de un producto destacado no existe todavía: las tarjetas del inicio se ven sin imagen hasta que llegue el módulo de fotografías.
 - No hay pantalla de historial de precios ni aviso de promoción por vencer.
 - El filtro de precio del catálogo usa el **precio normal**, no el vigente: un producto con 200.000 y promoción de 150.000 no aparece al filtrar «hasta 160.000». Pendiente de decidir cómo filtrar por precio promocional.
-- Borrar un producto arrastra sus promociones (`on delete cascade`). Hoy no hay borrado en la interfaz, pero contradice el «nada se borra» del punto 45 si algún día se añade.
+- Borrar un producto arrastra en cascada sus promociones y sus selecciones, y no deja evento en `auditoria`. Hoy no hay borrado en la interfaz (`historial_precios` lo impide con una clave foránea restrictiva), pero si algún día se añade hay que decidir qué pasa con ese historial.
 - El panel calcula vigencia con el reloj del equipo; el catálogo anónimo no depende de él porque RLS ya filtró en el servidor.
 - La base acepta una promoción sobre un producto en borrador o pendiente (la interfaz ya no los ofrece). No es visible al público, pero la regla solo vive en la interfaz.
 - La fecha de inicio de una promoción programada se propone al abrir la página: si el panel queda abierto mucho rato, la hora sugerida envejece.
