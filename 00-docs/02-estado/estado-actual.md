@@ -14,7 +14,7 @@
 | 3 — Diseño funcional: mapa de páginas, componentes, esquema de datos y flujos | ✅ **Documentada y en uso**: `05-diseno/esquema-datos.md` y `05-diseno/mapa-paginas.md`. El esquema está aplicado en la base y el código se construye contra él. La aprobación formal del propietario sigue pendiente |
 | 4 — Base de seguridad: auth, autorización, RLS, secretos, recuperación, 2FA | 🟨 **RLS aplicado y sesión real verificada**. Faltan 2FA, límite de intentos, cierre por inactividad y recuperación de contraseña |
 | 5 — Catálogo público | ✅ **Construido y verificado en navegador**. Sin datos reales ni despliegue |
-| 6 — Panel: productos, marcas, fotos, estados, inventario, precios y promociones | 🟨 **En curso**: marcas, productos con tallas, inventario con historial, registro de cambios de precio y **promociones** y **destacados/oferta de la semana**. Faltan fotos y solicitudes |
+| 6 — Panel: productos, marcas, fotos, estados, inventario, precios y promociones | 🟨 **En curso**: marcas, productos con tallas, inventario con historial, registro de cambios de precio y **promociones**, **destacados/oferta de la semana** y **solicitudes**. Faltan fotos |
 | 7 a 10 — WhatsApp/solicitudes · importaciones y copias · automatización de fotos · auditoría y lanzamiento | ⬜ **No iniciadas** |
 
 ## Qué existe hoy
@@ -25,16 +25,16 @@
 | `npm run build` | ✅ Termina en 0. Bundle principal 503 kB; el panel va en chunks aparte |
 | `npm run lint` | ✅ Sin errores; 5 avisos de hooks en consultas |
 | Catálogo público | ✅ 6 rutas (`/`, `/marcas`, `/marca/:slug`, `/buscar`, `/producto/:slug`, 404), 13 componentes, 12 páginas. Filtros y paginación en la URL, ventana rápida, selector de talla y mensaje de WhatsApp |
-| Panel privado | ✅ Acceso, resumen, marcas, productos (alta y edición con tallas), inventario con historial **promociones** (manuales y programadas, con vencimiento en Bogotá) y **destacados/oferta de la semana** (selección manual con orden). Guard por sesión **y** perfil de administrador |
+| Panel privado | ✅ Acceso, resumen, marcas, productos (alta y edición con tallas), inventario con historial **promociones** (manuales y programadas, con vencimiento en Bogotá) **destacados/oferta de la semana** (selección manual con orden) y **solicitudes de WhatsApp** (registro manual, confirmación con o sin descuento, cancelación con devolución). Guard por sesión **y** perfil de administrador |
 | `src/App.tsx` | ✅ Enrutador real. Las rutas del panel se cargan de forma diferida |
 | `src/lib/` | `supabase.ts`, `consultas.ts` (lectura pública), `admin.ts` (lectura del panel), `mutaciones.ts` (escritura con historial), `auth.ts`, `formato.ts`, `fechas.ts` (horas de Bogotá), `whatsapp.ts` |
-| Pruebas | `scripts/probar-reglas-promociones.py` (16 casos, `rollback`), `scripts/probar-promociones-publico.py` (9 comprobaciones con rol `anon`) y `scripts/probar-destacados.py` (11 comprobaciones: orden, duplicados, intruso sin rol y `anon`) |
+| Pruebas | `scripts/probar-reglas-promociones.py` (16 casos, `rollback`), `scripts/probar-promociones-publico.py` (9 comprobaciones con rol `anon`) `scripts/probar-destacados.py` (11 comprobaciones) y `scripts/probar-solicitudes.py` (24 comprobaciones: descuento, falta de existencias, cancelación con devolución, escrituras directas prohibidas y `anon`) |
 | Tipos del dominio | ✅ `src/types/domain.ts`, derivados de §6, §8 y §14 |
 | Estilos | `tokens.css` (propuesta sin aprobar), `global.css`, `catalogo.css`, `admin.css` |
 | `.env.local` | ✅ Permisos `600`, ignorado por git, con URL, clave `anon`, clave secreta y cadena de conexión |
 | `.env.example` | ✅ Nombres de variables, sin valores |
 | Repositorio git | ✅ `main` con remoto `origin` → `restrepothibas-debug/Ester` (público), sin secretos. El historial completo está en `git log` |
-| Base de datos | ✅ **14 tablas** en `public` (13 de dominio + `migraciones_aplicadas`), RLS en todas, **28 políticas** (23 sobre tablas y 5 sobre `storage.objects`), 3 buckets, 5 filas de configuración. **9 migraciones** aplicadas. Reglas de promoción en la base: 1 restricción de exclusión y 2 disparadores |
+| Base de datos | ✅ **14 tablas** en `public` (13 de dominio + `migraciones_aplicadas`), RLS en todas, **28 políticas** (23 sobre tablas y 5 sobre `storage.objects`), 3 buckets, 5 filas de configuración. **11 migraciones** aplicadas. Reglas de promoción en la base: 1 restricción de exclusión y 2 disparadores; las solicitudes solo se escriben por funciones |
 | Cuenta administradora | ✅ `epieyualex01@gmail.com`, correo confirmado, perfil creado por trigger. Contraseña inicial generada por Accio: **debe cambiarla el propietario** (D-27) |
 | Nombre de la tienda | ✅ **Dayara store** (D-13). Logotipo pendiente |
 | Documentación | ✅ `00-docs/` en 7 áreas, incluida `06-metodo/` con método, listón y rondas |
@@ -81,12 +81,11 @@ Activo desde el 28/10/2026. Ver `06-metodo/gauntlet.md`, el listón en `06-metod
 
 ## Siguiente paso
 
-**Solicitudes de WhatsApp** (puntos 57–61): registro manual en el panel, estados pendiente/confirmada/cancelada, datos del cliente y descuento de inventario con confirmación. Después, **fotografías de producto**.
+**Importación CSV/Excel y exportación del catálogo** (punto 49). Las fotografías siguen esperando las imágenes de WhatsApp (D-28).
 
 ## Qué NO está hecho
 
 - Fotografías de producto: subida, foto principal y orden (§6, §10).
-- Solicitudes de WhatsApp: registro manual, estados y descuento con confirmación (§8).
 - Importación CSV/Excel y exportación (punto 49).
 - Alertas en el panel y por correo (punto 63).
 - Copias de seguridad y restauración (§12 y punto 66).

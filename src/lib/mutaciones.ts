@@ -487,6 +487,82 @@ export async function moverSeleccion(
   await auditar("seleccion.reordenada", "selecciones", id, { direccion, tipo });
 }
 
+/* -------------------------------------------------------------------------- */
+/* Solicitudes de WhatsApp                                                     */
+/* -------------------------------------------------------------------------- */
+
+export interface EntradaSolicitud {
+  productoId: string;
+  referencia: string;
+  talla: string;
+  precio: number;
+  clienteNombre: string;
+  clienteTelefono: string;
+  observaciones: string | null;
+}
+
+/**
+ * Puntos 57 y 58 — registro manual. El precio y la referencia se guardan como
+ * copia: si mañana cambia el producto, la solicitud conserva lo que se habló con
+ * el cliente. Abrir WhatsApp antes de esto no crea nada.
+ */
+export async function crearSolicitud(entrada: EntradaSolicitud): Promise<void> {
+  const { data, error } = await cliente().rpc("registrar_solicitud", {
+    p_producto_id: entrada.productoId,
+    p_talla: entrada.talla,
+    p_precio: entrada.precio,
+    p_cliente: entrada.clienteNombre,
+    p_telefono: entrada.clienteTelefono,
+    p_observaciones: entrada.observaciones,
+  });
+
+  if (error) throw new Error(traducir(error.message));
+  await auditar("solicitud.registrada", "solicitudes", data as string | null, {
+    talla: entrada.talla,
+    precio: entrada.precio,
+  });
+}
+
+/**
+ * Punto 60 — al confirmar, el administrador decide si se descuenta la unidad.
+ * La base hace las dos cosas a la vez (migración 10): o queda confirmada con el
+ * inventario descontado, o no cambia nada.
+ */
+export async function confirmarSolicitud(id: string, descontar: boolean): Promise<void> {
+  const { error } = await cliente().rpc("confirmar_solicitud", {
+    p_id: id,
+    p_descontar: descontar,
+  });
+
+  if (error) throw new Error(traducir(error.message));
+  await auditar("solicitud.confirmada", "solicitudes", id, { descontar });
+}
+
+/** Punto 58 — la cancelación exige motivo; si se descontó, se puede devolver. */
+export async function cancelarSolicitud(
+  id: string,
+  motivo: string,
+  devolver: boolean,
+): Promise<void> {
+  if (!motivo.trim()) throw new Error("La cancelación necesita un motivo.");
+
+  const { error } = await cliente().rpc("cancelar_solicitud", {
+    p_id: id,
+    p_motivo: motivo,
+    p_devolver: devolver,
+  });
+
+  if (error) throw new Error(traducir(error.message));
+  await auditar("solicitud.cancelada", "solicitudes", id, { motivo, devolver });
+}
+
+/** Punto 59 — se conservan hasta que el administrador las borre. */
+export async function eliminarSolicitud(id: string): Promise<void> {
+  const { error } = await cliente().rpc("eliminar_solicitud", { p_id: id });
+  if (error) throw new Error(traducir(error.message));
+  await auditar("solicitud.eliminada", "solicitudes", id);
+}
+
 /** Mensajes de PostgreSQL traducidos a algo que el administrador entienda. */
 function traducir(mensaje: string): string {
   if (/ex_promocion_sin_solape/i.test(mensaje)) {
@@ -510,6 +586,17 @@ function traducir(mensaje: string): string {
   if (/duplicate key.*producto_id.*tipo|selecciones_producto_id_tipo_key/i.test(mensaje)) {
     return "Ese producto ya está en esta selección.";
   }
+  if (/No quedan unidades de la talla/i.test(mensaje)) return mensaje;
+  if (/Solo el administrador puede (confirmar|cancelar) solicitudes/i.test(mensaje)) {
+    return "Tu cuenta no tiene permisos para cambiar solicitudes.";
+  }
+  if (/motivo_obligatorio_al_cancelar|La cancelación necesita un motivo/i.test(mensaje)) {
+    return "La cancelación necesita un motivo.";
+  }
+  if (/permission denied for table solicitudes/i.test(mensaje)) {
+    return "Esa operación no está permitida sobre las solicitudes.";
+  }
+  if (/Solo se puede confirmar una solicitud pendiente/i.test(mensaje)) return mensaje;
   if (/Solo el administrador puede cambiar las selecciones/i.test(mensaje)) {
     return "Tu cuenta no tiene permisos para cambiar las selecciones.";
   }

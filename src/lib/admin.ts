@@ -4,7 +4,7 @@
  */
 
 import { supabase } from "./supabase";
-import type { EstadoProducto } from "../types/domain";
+import type { EstadoProducto, EstadoSolicitud } from "../types/domain";
 
 function cliente() {
   if (!supabase) throw new Error("Supabase no está configurado.");
@@ -134,11 +134,30 @@ export async function listarMarcasAdmin(): Promise<MarcaAdmin[]> {
 
 export interface OpcionProducto {
   id: string;
+  codigo: string;
   etiqueta: string;
   existencias: number;
   precioNormal: number;
+  /** Lo que pagaría hoy el cliente: el de la promoción vigente si la hay. */
+  precioVigente: number;
   estado: EstadoProducto;
   tallas: { talla: string; cantidad: number }[];
+}
+
+/** El precio que rige hoy: el de la promoción vigente, si la hay y rebaja. */
+function precioEnVigor(p: {
+  precio_normal: number;
+  promociones?: { precio_promocional: number; inicia_en: string; termina_en: string | null; activa: boolean }[];
+}): number {
+  const ahora = Date.now();
+  const promo = (p.promociones ?? []).find(
+    (x) =>
+      x.activa &&
+      new Date(x.inicia_en).getTime() <= ahora &&
+      (!x.termina_en || new Date(x.termina_en).getTime() > ahora),
+  );
+  const normal = Number(p.precio_normal);
+  return promo && promo.precio_promocional < normal ? Number(promo.precio_promocional) : normal;
 }
 
 /** Lista compacta para selectores del panel. */
@@ -146,7 +165,9 @@ export async function opcionesProductos(): Promise<OpcionProducto[]> {
   const { data, error } = await cliente()
     .from("productos")
     .select(
-      "id, codigo_interno, modelo, precio_normal, estado, marcas ( nombre ), producto_tallas ( talla, cantidad )",
+      `id, codigo_interno, modelo, precio_normal, estado, marcas ( nombre ),
+       producto_tallas ( talla, cantidad ),
+       promociones ( precio_promocional, inicia_en, termina_en, activa )`,
     )
     .order("modelo", { ascending: true })
     .limit(300);
@@ -160,9 +181,11 @@ export async function opcionesProductos(): Promise<OpcionProducto[]> {
     const marca = (p.marcas as unknown as { nombre: string } | null)?.nombre;
     return {
       id: p.id,
+      codigo: p.codigo_interno,
       etiqueta: `${p.codigo_interno} · ${p.modelo}${marca ? ` (${marca})` : ""}`,
       existencias: tallas.reduce((s, t) => s + t.cantidad, 0),
       precioNormal: Number(p.precio_normal),
+      precioVigente: precioEnVigor(p),
       estado: p.estado as EstadoProducto,
       tallas,
     };
@@ -291,34 +314,73 @@ export async function listarPromocionesAdmin(): Promise<FilaPromocionAdmin[]> {
 
 export interface FilaSolicitudAdmin {
   id: string;
+  productoId: string | null;
+  producto: string;
   referencia: string;
   talla: string;
   precio: number;
-  estado: "pendiente" | "confirmada" | "cancelada";
+  estado: EstadoSolicitud;
   cliente: string;
   telefono: string;
+  observaciones: string | null;
+  motivoCancelacion: string | null;
+  inventarioDescontado: boolean;
   creado: string;
+  confirmadaEn: string | null;
+  /** Unidades que hay hoy en esa talla. Sirve para decidir antes de confirmar. */
+  existencias: number;
 }
 
-export async function listarSolicitudesAdmin(): Promise<FilaSolicitudAdmin[]> {
-  const { data, error } = await cliente()
+/**
+ * Punto 57 — las solicitudes se registran a mano y se conservan hasta que el
+ * administrador las borre (punto 59). Se leen con el estado actual del stock
+ * para poder avisar antes de descontar (punto 61).
+ */
+export async function listarSolicitudesAdmin(
+  estado?: EstadoSolicitud | "todas",
+): Promise<FilaSolicitudAdmin[]> {
+  let consulta = cliente()
     .from("solicitudes")
     .select(
-      "id, referencia_snapshot, talla, precio_snapshot, estado, cliente_nombre, cliente_telefono, creado_en",
+      `id, producto_id, referencia_snapshot, talla, precio_snapshot, estado,
+       cliente_nombre, cliente_telefono, observaciones, motivo_cancelacion,
+       inventario_descontado, creado_en, confirmada_en,
+       productos ( codigo_interno, modelo, producto_tallas ( talla, cantidad ) )`,
     )
     .order("creado_en", { ascending: false })
-    .limit(100);
+    .limit(200);
 
+  if (estado && estado !== "todas") consulta = consulta.eq("estado", estado);
+
+  const { data, error } = await consulta;
   if (error) throw error;
 
-  return (data ?? []).map((s) => ({
-    id: s.id,
-    referencia: s.referencia_snapshot,
-    talla: s.talla,
-    precio: s.precio_snapshot,
-    estado: s.estado,
-    cliente: s.cliente_nombre,
-    telefono: s.cliente_telefono,
-    creado: s.creado_en,
-  }));
+  return (data ?? []).map((s) => {
+    const producto = s.productos as unknown as {
+      codigo_interno: string;
+      modelo: string;
+      producto_tallas: { talla: string; cantidad: number }[];
+    } | null;
+    const existencias =
+      producto?.producto_tallas?.find((t) => t.talla === s.talla)?.cantidad ?? 0;
+
+    return {
+      id: s.id,
+      productoId: s.producto_id,
+      producto: producto ? `${producto.codigo_interno} · ${producto.modelo}` : "Producto eliminado",
+      referencia: s.referencia_snapshot,
+      talla: s.talla,
+      precio: Number(s.precio_snapshot),
+      estado: s.estado as EstadoSolicitud,
+      cliente: s.cliente_nombre,
+      telefono: s.cliente_telefono,
+      observaciones: s.observaciones,
+      motivoCancelacion: s.motivo_cancelacion,
+      inventarioDescontado: s.inventario_descontado,
+      creado: s.creado_en,
+      confirmadaEn: s.confirmada_en,
+      existencias,
+    };
+  });
 }
+

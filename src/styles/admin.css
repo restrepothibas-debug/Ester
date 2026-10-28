@@ -447,3 +447,23 @@ a.rt-tarjeta-dato:hover {
   opacity: 0.4;
   cursor: not-allowed;
 }
+
+/* Solicitudes */
+.rt-chip--pendiente {
+  border-color: var(--rt-dorado);
+  color: var(--rt-aviso);
+}
+
+.rt-chip--confirmada {
+  border-color: var(--rt-verde-bosque);
+  color: var(--rt-verde-bosque);
+}
+
+.rt-chip--cancelada {
+  border-color: var(--rt-borde);
+  color: var(--rt-texto-suave);
+}
+
+.rt-fila-formulario--filtro {
+  align-items: flex-start;
+}

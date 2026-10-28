@@ -30,6 +30,9 @@ const Promociones = lazy(() =>
 const Destacados = lazy(() =>
   import("./pages/admin/Destacados").then((m) => ({ default: m.Destacados })),
 );
+const Solicitudes = lazy(() =>
+  import("./pages/admin/Solicitudes").then((m) => ({ default: m.Solicitudes })),
+);
 
 export default function App() {
   return (
@@ -120,6 +123,14 @@ export default function App() {
           element={
             <RutaPrivada>
               <Destacados />
+            </RutaPrivada>
+          }
+        />
+        <Route
+          path="/admin/solicitudes"
+          element={
+            <RutaPrivada>
+              <Solicitudes />
             </RutaPrivada>
           }
         />

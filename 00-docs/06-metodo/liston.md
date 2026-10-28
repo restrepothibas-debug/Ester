@@ -112,6 +112,7 @@ Lo que sigue no es aspiracional: es lo que está probado hoy, con la evidencia q
 | Panel · productos | B7 ✔, B8 ✔, B9 ✔, B11 ✔, A9 ✔ (1 fila en `historial_precios`) | B10 |
 | Panel · inventario | B12 ✔, B13 ✔, A9 ✔ (4 movimientos) | B14 con producto real en catálogo |
 | Panel · promociones | E1–E10 ✔ · D-31, D-32 ✔ · **E8 ✔** comprobado en navegador y en la base (200.000 → 210.000 con promoción vigente deja fila en `historial_precios` con responsable) | Pendientes: aviso de promoción por vencer, historial de precios en pantalla y filtro del catálogo por precio vigente |
+| Panel · solicitudes | Puntos 57–61 ✔: registro, confirmación con descuento y sin él, falta de existencias avisada, cancelación con motivo y devolución, borrado en dos pasos · `scripts/probar-solicitudes.py` (24 comprobaciones) · B37 ✔ (0 errores de consola) | **B6 ?** sin probar a 768 px · **B38 ?** sin revisar contraste ni foco en esta pantalla |
 | Panel · destacados | B37 ✔ (0 errores de consola) · orden, duplicados y permisos con `scripts/probar-destacados.py` (11 comprobaciones) · el inicio respeta el orden | **B6 ?** sin probar a 768 px · **B38 ?** sin revisar teclado ni contraste en esta pantalla · sin fotografías todavía |
 | WhatsApp | B19 ✔ | B16–B18 con número real |
 | Solicitudes | B23 ✔ | B20–B22 |
