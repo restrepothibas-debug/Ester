@@ -1,0 +1,99 @@
+@import "./tokens.css";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--rt-marfil-suave);
+  color: var(--rt-texto);
+  font-family: var(--rt-font-texto);
+  font-size: var(--rt-texto-base);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--rt-font-titulo);
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  margin: 0 0 var(--rt-esp-3);
+}
+
+h1 {
+  font-size: var(--rt-titulo-1);
+}
+
+h2 {
+  font-size: var(--rt-titulo-2);
+}
+
+h3 {
+  font-size: var(--rt-titulo-3);
+}
+
+p {
+  margin: 0 0 var(--rt-esp-4);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+:focus-visible {
+  outline: 2px solid var(--rt-verde-bosque);
+  outline-offset: 2px;
+}
+
+.rt-contenedor {
+  width: 100%;
+  max-width: var(--rt-contenedor);
+  margin: 0 auto;
+  padding: 0 var(--rt-esp-4);
+}
+
+.rt-etiqueta {
+  font-size: var(--rt-etiqueta);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--rt-texto-suave);
+}
+
+/* Estado vacío honesto: no se inventan productos ni marcas. */
+.rt-vacio {
+  border: 1px dashed var(--rt-borde);
+  border-radius: var(--rt-radio-suave);
+  padding: var(--rt-esp-8) var(--rt-esp-4);
+  text-align: center;
+  color: var(--rt-texto-suave);
+  background: var(--rt-marfil);
+}
+
+.rt-aviso-config {
+  background: var(--rt-arena);
+  color: var(--rt-aviso);
+  border-bottom: 1px solid var(--rt-borde);
+  padding: var(--rt-esp-2) var(--rt-esp-4);
+  font-size: var(--rt-texto-menor);
+  text-align: center;
+}

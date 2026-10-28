@@ -1,0 +1,54 @@
+/* Tokens del sistema visual.
+ * PROPUESTA — los valores exactos son una decisión pendiente del propietario
+ * (especificación §5: "los valores exactos deben definirse durante el sistema visual").
+ * Nada de aquí debe tratarse como aprobado hasta que el propietario lo confirme.
+ */
+
+:root {
+  /* Paleta de referencia §5: marfil, tonos tierra, verde bosque, dorado discreto */
+  --rt-marfil: #f7f3ec;
+  --rt-marfil-suave: #fbf8f3;
+  --rt-arena: #efe7da;
+  --rt-tierra: #6e5646;
+  --rt-verde-bosque: #1f3d2b;
+  --rt-verde-bosque-claro: #2c5340;
+  --rt-dorado: #b08d57;
+  --rt-texto: #241f1b;
+  --rt-texto-suave: #6b6259;
+  --rt-borde: #e2d9cb;
+  --rt-error: #8c2f24;
+  --rt-aviso: #8a6b1f;
+
+  /* Tipografía: pilas del sistema, sin fuentes externas mientras no se elija
+   * la tipografía definitiva (decisión pendiente §16). */
+  --rt-font-titulo: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --rt-font-texto: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  --rt-titulo-1: clamp(2rem, 4vw, 3.25rem);
+  --rt-titulo-2: clamp(1.5rem, 2.6vw, 2.125rem);
+  --rt-titulo-3: 1.25rem;
+  --rt-texto-base: 1rem;
+  --rt-texto-menor: 0.875rem;
+  --rt-etiqueta: 0.75rem;
+
+  /* Espaciado en escala de 4 */
+  --rt-esp-1: 0.25rem;
+  --rt-esp-2: 0.5rem;
+  --rt-esp-3: 0.75rem;
+  --rt-esp-4: 1rem;
+  --rt-esp-6: 1.5rem;
+  --rt-esp-8: 2rem;
+  --rt-esp-12: 3rem;
+  --rt-esp-16: 4rem;
+
+  --rt-radio: 2px;
+  --rt-radio-suave: 6px;
+  --rt-sombra: 0 1px 2px rgba(36, 31, 27, 0.06), 0 8px 24px rgba(36, 31, 27, 0.06);
+
+  --rt-contenedor: 1200px;
+  --rt-contenedor-angosto: 720px;
+
+  --rt-bp-movil: 480px;
+  --rt-bp-tableta: 768px;
+  --rt-bp-escritorio: 1024px;
+}

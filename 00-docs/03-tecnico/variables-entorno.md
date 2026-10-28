@@ -1,0 +1,66 @@
+# Variables de entorno y manejo de secretos
+
+**Este archivo documenta NOMBRES y procedimientos. Nunca contiene valores.**
+
+---
+
+## Dónde vive cada cosa
+
+| Tipo de valor | Dónde se guarda | ¿Versionado? |
+|---|---|---|
+| Credenciales reales de desarrollo | `.env.local` en la raíz del proyecto | ❌ Nunca (ignorado por git) |
+| Credenciales de producción | Vercel → Settings → Environment Variables | ❌ Nunca |
+| Nombres de variables sin valores | `.env.example` | ✅ Sí |
+| Tokens de CLI (Supabase, Vercel, GitHub) | Llavero del sistema o `~/.config` del CLI correspondiente | ❌ Nunca |
+
+`vite` carga `.env.local` automáticamente en desarrollo. **Solo las variables con prefijo `VITE_` llegan al navegador**: se incrustan en el bundle y cualquiera puede leerlas con las herramientas del navegador. Por eso ese prefijo se trata como «público por diseño».
+
+## Variables del cliente (públicas)
+
+| Variable | Qué es | Sensibilidad |
+|---|---|---|
+| `VITE_SUPABASE_URL` | URL del proyecto Supabase (`https://<ref>.supabase.co`) | Baja. Pública por diseño |
+| `VITE_SUPABASE_ANON_KEY` | Clave `anon` / publishable de Supabase | Baja. Pública por diseño; su poder real lo limitan las políticas RLS |
+| `VITE_WHATSAPP_NUMERO` | Número de WhatsApp del negocio | Pública. **Valor pendiente** |
+| `VITE_CORREO_ADMIN` | Correo administrativo visible | Baja. **Valor pendiente** |
+
+## Variables de servidor (nunca en el cliente)
+
+| Variable | Qué es | Regla |
+|---|---|---|
+| `SUPABASE_SERVICE_ROLE_KEY` | Clave que **salta RLS**. Acceso total a la base | **Prohibida en el frontend y prohibida con prefijo `VITE_`.** Solo para scripts locales de administración o funciones server-side |
+| `SUPABASE_ACCESS_TOKEN` | Token personal de la CLI de Supabase | Solo en el llavero o en `.env.local` de uso local |
+| `SUPABASE_DB_PASSWORD` | Contraseña de la base | Solo en el gestor de secretos |
+| `VERCEL_TOKEN` | Token de despliegue | Solo en el llavero del CLI o en CI |
+| `GITHUB_TOKEN` | Token con permiso de push | Solo en el llavero del CLI |
+
+**Consecuencia práctica:** este proyecto es una SPA de Vite sin servidor propio. Si en algún momento hace falta una operación privilegiada, se resuelve con **funciones server-side de Supabase (Edge Functions) o RLS bien diseñado**, no metiendo la `service_role` en el navegador.
+
+## Reglas de seguridad
+
+1. Ningún secreto se pega en documentos de `00-docs/`, en el código, en un commit, en una captura ni en un chat.
+2. `.gitignore` excluye `.env`, `.env.*`, `!.env.example`, `*.local`, `*.pem`, `*.key`, `supabase/.temp/` y `.vercel`.
+3. Si un secreto se expone (commit, captura, chat, log): **se rota**, no se «borra». Un secreto filtrado se considera comprometido aunque se elimine del archivo.
+4. La clave `anon` no es un secreto, pero **su poder debe estar limitado por RLS**. Sin RLS, la `anon` key equivale a acceso abierto.
+5. Antes de cada push: `git status` para confirmar que ningún `.env*` entró al índice.
+6. En Vercel, las variables se cargan por entorno (Production / Preview / Development). No reutilizar la de producción en Preview.
+
+## Qué necesito del propietario (y para qué sirve cada cosa)
+
+| Dato | Para qué | Dónde se guarda |
+|---|---|---|
+| URL del proyecto Supabase | Conectar el cliente | `.env.local` + Vercel |
+| Clave `anon` / publishable | Conectar el cliente (limitada por RLS) | `.env.local` + Vercel |
+| Clave `service_role` | **Solo si** hace falta administración local/Edge Functions | `.env.local`, jamás en el cliente |
+| Contraseña de la base | Migraciones con la CLI | Gestor de secretos, no en el repo |
+| Token de acceso Supabase | `supabase link` / `db push` / backups con CLI | Llavero o `.env.local` |
+| Token de Vercel | Despliegue desde CLI si no se conecta el repo | Llavero |
+| Token de GitHub con push | Subir el repositorio | Llavero |
+
+## Procedimiento cuando lleguen los valores
+
+1. Escribirlos en `.env.local` (creado en ese momento, ya ignorado por git).
+2. Verificar que `git check-ignore .env.local` responde con el nombre del archivo.
+3. Levantar el proyecto y confirmar que no hay errores de conexión.
+4. Cargar los mismos valores en Vercel, una vez exista el proyecto.
+5. Registrar en la bitácora qué se configuró — **sin los valores**.
