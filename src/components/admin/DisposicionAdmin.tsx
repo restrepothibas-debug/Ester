@@ -7,6 +7,7 @@ const ENLACES = [
   { a: "/admin/marcas", texto: "Marcas", fin: false },
   { a: "/admin/inventario", texto: "Inventario", fin: false },
   { a: "/admin/promociones", texto: "Promociones", fin: false },
+  { a: "/admin/destacados", texto: "Destacados", fin: false },
 ];
 
 /** Marco del panel: navegación mínima y salida de sesión. */

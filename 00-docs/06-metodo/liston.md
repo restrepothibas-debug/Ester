@@ -111,7 +111,8 @@ Lo que sigue no es aspiracional: es lo que está probado hoy, con la evidencia q
 | Panel · marcas | A1, A4, A5, A8, A10 ✔ | B10 (logo) |
 | Panel · productos | B7 ✔, B8 ✔, B9 ✔, B11 ✔, A9 ✔ (1 fila en `historial_precios`) | B10 |
 | Panel · inventario | B12 ✔, B13 ✔, A9 ✔ (4 movimientos) | B14 con producto real en catálogo |
-| Panel · promociones | E1–E7, E9, E10 ✔ · D-31, D-32 ✔ (16 casos SQL con `rollback`, 9 comprobaciones por API con `anon`, dos recorridos en navegador; la auditoría obligó a cerrar dos huecos y se re-probó) | **E8 ?** — un cambio de precio normal durante una promoción no se probó de extremo a extremo: falta verificar la fila en `historial_precios`. Pendientes además: aviso de promoción por vencer, historial de precios en pantalla y filtro del catálogo por precio vigente |
+| Panel · promociones | E1–E10 ✔ · D-31, D-32 ✔ · **E8 ✔** comprobado en navegador y en la base (200.000 → 210.000 con promoción vigente deja fila en `historial_precios` con responsable) | Pendientes: aviso de promoción por vencer, historial de precios en pantalla y filtro del catálogo por precio vigente |
+| Panel · destacados | B37 ✔ (0 errores de consola) · orden manual verificado en la base y en el inicio, y el inicio respeta ese orden | **B6 ?** sin probar a 768 px · **B38 ?** sin revisar teclado ni contraste en esta pantalla · sin fotografías todavía |
 | WhatsApp | B19 ✔ | B16–B18 con número real |
 | Solicitudes | B23 ✔ | B20–B22 |
 | Importación / copias | — | Todo |

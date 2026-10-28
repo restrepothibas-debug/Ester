@@ -14,7 +14,7 @@
 | 3 — Diseño funcional: mapa de páginas, componentes, esquema de datos y flujos | ✅ **Documentada y en uso**: `05-diseno/esquema-datos.md` y `05-diseno/mapa-paginas.md`. El esquema está aplicado en la base y el código se construye contra él. La aprobación formal del propietario sigue pendiente |
 | 4 — Base de seguridad: auth, autorización, RLS, secretos, recuperación, 2FA | 🟨 **RLS aplicado y sesión real verificada**. Faltan 2FA, límite de intentos, cierre por inactividad y recuperación de contraseña |
 | 5 — Catálogo público | ✅ **Construido y verificado en navegador**. Sin datos reales ni despliegue |
-| 6 — Panel: productos, marcas, fotos, estados, inventario, precios y promociones | 🟨 **En curso**: marcas, productos con tallas, inventario con historial, registro de cambios de precio y **promociones**. Faltan fotos, destacados/oferta de la semana y solicitudes |
+| 6 — Panel: productos, marcas, fotos, estados, inventario, precios y promociones | 🟨 **En curso**: marcas, productos con tallas, inventario con historial, registro de cambios de precio y **promociones** y **destacados/oferta de la semana**. Faltan fotos y solicitudes |
 | 7 a 10 — WhatsApp/solicitudes · importaciones y copias · automatización de fotos · auditoría y lanzamiento | ⬜ **No iniciadas** |
 
 ## Qué existe hoy
@@ -25,7 +25,7 @@
 | `npm run build` | ✅ Termina en 0. Bundle principal 503 kB; el panel va en chunks aparte |
 | `npm run lint` | ✅ Sin errores; 5 avisos de hooks en consultas |
 | Catálogo público | ✅ 6 rutas (`/`, `/marcas`, `/marca/:slug`, `/buscar`, `/producto/:slug`, 404), 13 componentes, 12 páginas. Filtros y paginación en la URL, ventana rápida, selector de talla y mensaje de WhatsApp |
-| Panel privado | ✅ Acceso, resumen, marcas, productos (alta y edición con tallas), inventario con historial y **promociones** (manuales y programadas, con vencimiento en Bogotá). Guard por sesión **y** perfil de administrador |
+| Panel privado | ✅ Acceso, resumen, marcas, productos (alta y edición con tallas), inventario con historial **promociones** (manuales y programadas, con vencimiento en Bogotá) y **destacados/oferta de la semana** (selección manual con orden). Guard por sesión **y** perfil de administrador |
 | `src/App.tsx` | ✅ Enrutador real. Las rutas del panel se cargan de forma diferida |
 | `src/lib/` | `supabase.ts`, `consultas.ts` (lectura pública), `admin.ts` (lectura del panel), `mutaciones.ts` (escritura con historial), `auth.ts`, `formato.ts`, `fechas.ts` (horas de Bogotá), `whatsapp.ts` |
 | Pruebas | `scripts/probar-reglas-promociones.py` (16 casos, `rollback`) y `scripts/probar-promociones-publico.py` (9 comprobaciones con rol `anon`) |
@@ -66,7 +66,7 @@
 - El bundle principal pesa 503 kB. Lo domina `supabase-js`, no el código propio.
 - Los precios dejan historial al editarse, pero **no hay pantalla para consultarlo**.
 - La búsqueda (B2 del listón) solo se probó con la base vacía: falta con datos reales.
-- **E8 sin probar:** no se verificó de extremo a extremo que un cambio de precio normal durante una promoción quede en `historial_precios`. El código lo hace; falta la prueba.
+- La foto de un producto destacado no existe todavía: las tarjetas del inicio se ven sin imagen hasta que llegue el módulo de fotografías.
 - No hay pantalla de historial de precios ni aviso de promoción por vencer.
 - El filtro de precio del catálogo usa el **precio normal**, no el vigente: un producto con 200.000 y promoción de 150.000 no aparece al filtrar «hasta 160.000». Pendiente de decidir cómo filtrar por precio promocional.
 - Borrar un producto arrastra sus promociones (`on delete cascade`). Hoy no hay borrado en la interfaz, pero contradice el «nada se borra» del punto 45 si algún día se añade.
@@ -81,12 +81,11 @@ Activo desde el 28/10/2026. Ver `06-metodo/gauntlet.md`, el listón en `06-metod
 
 ## Siguiente paso
 
-**Destacados y oferta de la semana** (tabla `selecciones`, D-33): elegir a mano qué productos aparecen como destacados y cuál es la oferta de la semana, sin precio propio. Después, **solicitudes de WhatsApp** (puntos 57–61).
+**Solicitudes de WhatsApp** (puntos 57–61): registro manual en el panel, estados pendiente/confirmada/cancelada, datos del cliente y descuento de inventario con confirmación. Después, **fotografías de producto**.
 
 ## Qué NO está hecho
 
 - Fotografías de producto: subida, foto principal y orden (§6, §10).
-- Destacados y oferta de la semana: la interfaz (la tabla existe; no es una promoción, D-33).
 - Solicitudes de WhatsApp: registro manual, estados y descuento con confirmación (§8).
 - Importación CSV/Excel y exportación (punto 49).
 - Alertas en el panel y por correo (punto 63).

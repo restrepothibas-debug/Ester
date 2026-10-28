@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { listarProductosAdmin } from "../../lib/admin";
 import { useConsulta } from "../../lib/useConsulta";
 import { ETIQUETA_ESTADO, type EstadoProducto } from "../../types/domain";
@@ -21,9 +21,26 @@ const ESTADOS: (EstadoProducto | "todos")[] = [
 export function ProductosPanel() {
   const [estado, setEstado] = useState<EstadoProducto | "todos">("todos");
   const { cargando, datos, error } = useConsulta(() => listarProductosAdmin(estado), [estado]);
+  const ubicacion = useLocation();
+  const [aviso] = useState<string | null>(
+    (ubicacion.state as { guardado?: boolean } | null)?.guardado
+      ? "Producto guardado. Los cambios de precio y de cantidades quedaron registrados con fecha y responsable."
+      : null,
+  );
+
+  // El aviso es de un solo uso: si se recarga la página no debe reaparecer.
+  useEffect(() => {
+    if (aviso) window.history.replaceState({}, "");
+  }, [aviso]);
 
   return (
     <>
+      {aviso && (
+        <p className="rt-aviso" role="status">
+          {aviso}
+        </p>
+      )}
+
       <header className="rt-encabezado-pagina rt-encabezado-pagina--fila">
         <div>
           <p className="rt-etiqueta">Catálogo</p>

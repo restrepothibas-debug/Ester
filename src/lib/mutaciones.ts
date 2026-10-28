@@ -436,6 +436,90 @@ export async function finalizarPromocion(id: string): Promise<void> {
   });
 }
 
+/* -------------------------------------------------------------------------- */
+/* Destacados y oferta de la semana                                            */
+/* -------------------------------------------------------------------------- */
+
+export type TipoSeleccion = "destacado" | "oferta_semana";
+
+/** Añade al final de la selección. El `unique (producto_id, tipo)` evita duplicados. */
+export async function agregarSeleccion(
+  productoId: string,
+  tipo: TipoSeleccion,
+): Promise<void> {
+  const db = cliente();
+  const { data: ultimo, error: errorUltimo } = await db
+    .from("selecciones")
+    .select("orden")
+    .eq("tipo", tipo)
+    .order("orden", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (errorUltimo) throw new Error(traducir(errorUltimo.message));
+
+  const { data, error } = await db
+    .from("selecciones")
+    .insert({
+      producto_id: productoId,
+      tipo,
+      orden: (ultimo?.orden ?? 0) + 1,
+      activo: true,
+    })
+    .select("id")
+    .single();
+
+  if (error) throw new Error(traducir(error.message));
+  await auditar("seleccion.agregada", "selecciones", data.id, { producto: productoId, tipo });
+}
+
+export async function quitarSeleccion(id: string): Promise<void> {
+  const { data, error } = await cliente().from("selecciones").delete().eq("id", id).select("id");
+  if (error) throw new Error(traducir(error.message));
+  if (!data || data.length === 0) throw new Error("La selección ya no existe.");
+  await auditar("seleccion.quitada", "selecciones", id);
+}
+
+/**
+ * Sube o baja una fila un puesto, intercambiando el orden con su vecina.
+ * Son dos escrituras; si la segunda falla, el orden queda igual que antes
+ * porque los valores se intercambian, no se renumeran.
+ */
+export async function moverSeleccion(
+  tipo: TipoSeleccion,
+  id: string,
+  direccion: -1 | 1,
+): Promise<void> {
+  const db = cliente();
+  const { data, error } = await db
+    .from("selecciones")
+    .select("id, orden")
+    .eq("tipo", tipo)
+    .order("orden", { ascending: true });
+
+  if (error) throw new Error(traducir(error.message));
+
+  const filas = data ?? [];
+  const indice = filas.findIndex((f) => f.id === id);
+  const vecino = filas[indice + direccion];
+  if (indice < 0 || !vecino) return;
+
+  const actual = filas[indice];
+  const { error: errorActual } = await db
+    .from("selecciones")
+    .update({ orden: vecino.orden })
+    .eq("id", actual.id);
+  if (errorActual) throw new Error(traducir(errorActual.message));
+
+  const { error: errorVecino } = await db
+    .from("selecciones")
+    .update({ orden: actual.orden })
+    .eq("id", vecino.id);
+  if (errorVecino) throw new Error(traducir(errorVecino.message));
+
+  await auditar("seleccion.reordenada", "selecciones", id, { direccion, tipo });
+}
+
 /** Mensajes de PostgreSQL traducidos a algo que el administrador entienda. */
 function traducir(mensaje: string): string {
   if (/ex_promocion_sin_solape/i.test(mensaje)) {
@@ -455,6 +539,9 @@ function traducir(mensaje: string): string {
   }
   if (/promoción vigente a/i.test(mensaje)) {
     return mensaje;
+  }
+  if (/duplicate key.*producto_id.*tipo|selecciones_producto_id_tipo_key/i.test(mensaje)) {
+    return "Ese producto ya está en esta selección.";
   }
   if (/duplicate key.*codigo_interno/i.test(mensaje)) return "Ese código interno ya existe.";
   if (/duplicate key.*slug/i.test(mensaje)) return "Ya hay un producto con ese modelo y código.";

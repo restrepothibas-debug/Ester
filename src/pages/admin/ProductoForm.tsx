@@ -109,7 +109,7 @@ export function ProductoForm() {
       const entrada: EntradaProducto = { ...form, tallas };
       if (esEdicion && id) await actualizarProducto(id, entrada);
       else await crearProducto(entrada);
-      navegar("/admin/productos", { replace: true });
+      navegar("/admin/productos", { replace: true, state: { guardado: true } });
     } catch (problema) {
       setFallo(problema instanceof Error ? problema.message : String(problema));
     } finally {

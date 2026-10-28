@@ -169,6 +169,51 @@ export async function opcionesProductos(): Promise<OpcionProducto[]> {
   });
 }
 
+export type TipoSeleccion = "destacado" | "oferta_semana";
+
+export interface FilaSeleccionAdmin {
+  id: string;
+  productoId: string;
+  producto: string;
+  estado: EstadoProducto;
+  orden: number;
+  activo: boolean;
+}
+
+/** Punto 54 — destacados y oferta de la semana se eligen a mano, no por fórmula. */
+export async function listarSeleccionesAdmin(tipo: TipoSeleccion): Promise<FilaSeleccionAdmin[]> {
+  const { data, error } = await cliente()
+    .from("selecciones")
+    .select(
+      `id, producto_id, orden, activo,
+       productos ( codigo_interno, modelo, estado, marcas ( nombre ) )`,
+    )
+    .eq("tipo", tipo)
+    .order("orden", { ascending: true });
+
+  if (error) throw error;
+
+  return (data ?? []).map((fila) => {
+    const producto = fila.productos as unknown as {
+      codigo_interno: string;
+      modelo: string;
+      estado: EstadoProducto;
+      marcas: { nombre: string } | null;
+    } | null;
+    const marca = producto?.marcas?.nombre;
+    return {
+      id: fila.id,
+      productoId: fila.producto_id,
+      producto: producto
+        ? `${producto.codigo_interno} · ${producto.modelo}${marca ? ` (${marca})` : ""}`
+        : "Producto eliminado",
+      estado: (producto?.estado ?? "archivado") as EstadoProducto,
+      orden: fila.orden,
+      activo: fila.activo,
+    };
+  });
+}
+
 export type EstadoPromocion = "programada" | "vigente" | "vencida" | "terminada";
 
 export interface FilaPromocionAdmin {

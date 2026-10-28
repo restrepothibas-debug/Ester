@@ -218,7 +218,10 @@ export async function listarSeleccion(
 
   return (data ?? [])
     .map((fila) => fila.productos as unknown as ProductoCatalogo | null)
-    .filter((p): p is ProductoCatalogo => Boolean(p))
+    // RLS ya lo impide al visitante; se repite aquí porque un administrador con
+    // sesión abierta también navega el catálogo y su política deja ver todo.
+    .filter((p): p is ProductoCatalogo => p !== null)
+    .filter((p) => p.estado === "publicado" || p.estado === "agotado")
     .map(normalizar);
 }
 

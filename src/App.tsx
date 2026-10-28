@@ -27,6 +27,9 @@ const Inventario = lazy(() =>
 const Promociones = lazy(() =>
   import("./pages/admin/Promociones").then((m) => ({ default: m.Promociones })),
 );
+const Destacados = lazy(() =>
+  import("./pages/admin/Destacados").then((m) => ({ default: m.Destacados })),
+);
 
 export default function App() {
   return (
@@ -109,6 +112,14 @@ export default function App() {
           element={
             <RutaPrivada>
               <Promociones />
+            </RutaPrivada>
+          }
+        />
+        <Route
+          path="/admin/destacados"
+          element={
+            <RutaPrivada>
+              <Destacados />
             </RutaPrivada>
           }
         />

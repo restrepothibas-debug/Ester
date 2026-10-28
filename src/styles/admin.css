@@ -417,3 +417,33 @@ a.rt-tarjeta-dato:hover {
   font-size: var(--rt-texto-menor);
   color: var(--rt-verde-bosque);
 }
+
+/* Destacados y oferta de la semana */
+.rt-seccion-panel {
+  margin-block-end: var(--rt-espacio-grande);
+}
+
+.rt-fila-formulario {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--rt-espacio-pequeno);
+  margin-block: var(--rt-espacio-medio);
+}
+
+.rt-crece {
+  flex: 1 1 18rem;
+  min-width: 0;
+}
+
+.rt-acciones-fila {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rt-espacio-pequeno);
+  justify-content: flex-end;
+}
+
+.rt-acciones-fila .rt-enlace-boton[disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
