@@ -24,6 +24,8 @@ Estados: ✅ Aprobada · ⏳ Pendiente · ❓ Sin identificar · 🔁 Reemplazad
 | D-12 | 28/10/2026 | La clave secreta de Supabase (`sb_secret_…`) se guarda en `.env.local` **sin** prefijo `VITE_` y no se usa en el cliente | ✅ | Accio, conforme a PDF §15 |
 | D-15 | 28/10/2026 | Proyecto Supabase identificado: `pklqdjixkhpkmtrhtzsm` (`https://pklqdjixkhpkmtrhtzsm.supabase.co`), verificado vacío | ✅ | Accio, verificado por API |
 | D-16 | 28/10/2026 | Clave publicable (`anon`) recibida y verificada (JWT `role: anon`, `ref` correcto, expira 2036-10-27). Cliente Supabase operativo | ✅ | Accio, verificado por API |
+| D-22 | 28/10/2026 | **El correo administrativo no se configura en este proceso.** Queda pendiente por decisión del propietario; sin él no se crea la cuenta de acceso ni se activa 2FA | ⏳ Pendiente por decisión | Propietario |
+| D-23 | 28/10/2026 | Se adoptan los tokens visuales de `src/styles/tokens.css` para construir el catálogo: marfil, tierra, verde bosque y dorado; serif para titulares. Siguen siendo **propuesta** hasta aprobación | ⏳ Provisional | Accio, por delegación |
 | D-20 | 28/10/2026 | El valor de 16 caracteres **era la contraseña de la base**. Región del proyecto: **us-east-2**. Conexión validada por el pooler | ✅ | Accio, verificado por conexión |
 | D-21 | 28/10/2026 | Migraciones aplicadas directamente por conexión Postgres, con tabla `migraciones_aplicadas` para ejecución idempotente | ✅ | Accio |
 | D-17 | 28/10/2026 | Valores operativos **provisionales**: moneda COP, zona `America/Bogota`, umbral de stock bajo 2, orden de tallas numérico, retención de auditoría 365 días. Viven en la tabla `configuracion`, no en el código, para cambiarlos sin desplegar | ⏳ Provisional | Accio, por delegación del propietario |

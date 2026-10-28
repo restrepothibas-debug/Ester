@@ -20,6 +20,9 @@ export const ETIQUETA_ESTADO: Record<EstadoProducto, string> = {
   archivado: "Archivado",
 };
 
+/** Estados que el público puede ver (§6) */
+export const ESTADOS_VISIBLES: EstadoProducto[] = ["publicado", "agotado"];
+
 /** §6 — Tallas y cantidades: inventario por talla con cantidad exacta */
 export interface TallaInventario {
   talla: string;
@@ -52,6 +55,8 @@ export interface ImagenProducto {
 export interface Marca {
   id: string;
   nombre: string;
+  /** `nombre_normalizado`: la base lo calcula y es el slug de la URL pública. */
+  slug: string;
   logoRuta: string | null;
   activa: boolean;
 }
@@ -64,3 +69,59 @@ export const ETIQUETA_SOLICITUD: Record<EstadoSolicitud, string> = {
   confirmada: "Confirmada",
   cancelada: "Cancelada",
 };
+
+/* -------------------------------------------------------------------------- */
+/* Tipos de lectura del catálogo público                                       */
+/* -------------------------------------------------------------------------- */
+
+/** Forma que devuelve la consulta de catálogo con los recursos incrustados. */
+export interface ProductoCatalogo {
+  id: string;
+  codigo_interno: string;
+  modelo: string;
+  referencia: string | null;
+  color: string | null;
+  precio_normal: number;
+  estado: EstadoProducto;
+  slug: string;
+  marcas: { nombre: string; nombre_normalizado: string } | null;
+  producto_imagenes: { ruta: string; principal: boolean; orden: number }[];
+  producto_tallas: { talla: string; cantidad: number }[];
+  promociones: {
+    precio_promocional: number;
+    inicia_en: string;
+    termina_en: string | null;
+    activa: boolean;
+    tipo: "manual" | "programada";
+  }[];
+}
+
+/** Producto ya normalizado para la interfaz. */
+export interface ProductoVista {
+  id: string;
+  slug: string;
+  codigoInterno: string;
+  marca: string;
+  marcaSlug: string;
+  modelo: string;
+  referencia: string | null;
+  color: string | null;
+  precioNormal: number;
+  precioVigente: number;
+  enPromocion: boolean;
+  estado: EstadoProducto;
+  imagenPrincipal: string | null;
+  imagenes: string[];
+  tallas: TallaInventario[];
+  agotado: boolean;
+}
+
+/** Filtros del catálogo, todos opcionales y viajando en la URL. */
+export interface FiltrosCatalogo {
+  marca?: string;
+  q?: string;
+  talla?: string;
+  precioMax?: number;
+  modelo?: string;
+  pagina?: number;
+}

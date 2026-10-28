@@ -27,6 +27,10 @@ Registro cronológico. Una fila por sesión de trabajo. La columna **Escrituras*
 | 28/10/2026 09:15 | Accio | Aplicadas las dos migraciones: esquema y RLS | 13 tablas, 13 con RLS, 23 políticas, 3 buckets, 5 filas de configuración | **Supabase: esquema creado** |
 | 28/10/2026 09:20 | Accio | Verificación funcional: RLS como `anon`, lectura con clave de servidor y 6 restricciones de integridad en transacción con rollback | Todo conforme. Base sin datos de prueba | ninguna |
 | 28/10/2026 09:25 | Accio | Tercera migración de control y script idempotente en Python | `migraciones_aplicadas` operativa; segunda ejecución reporta 0 pendientes | **Supabase: esquema** |
+| 28/10/2026 10:05 | Accio | Cuarta migración: normalización de texto y slugs automáticos para marcas y productos | Reglas probadas: «Botas de Cuero Ámbar» → `botas de cuero ambar`; producto → `bota-ambar-sku-1` | **Supabase: esquema** |
+| 28/10/2026 10:40 | Accio | Catálogo público: capa de consultas, 11 componentes, 6 rutas y hoja de estilos | `npm run build` y `lint` sin errores; solo 2 avisos de hooks | workspace local |
+| 28/10/2026 10:50 | Accio | Verificación en navegador de las 4 rutas principales, en móvil y escritorio | Renderiza sin errores de consola ni de red. Estados vacíos correctos. Capturas revisadas | ninguna |
+| 28/10/2026 10:58 | Accio | Corrección de alineación del hero y de la cabecera; nueva verificación | Hero alineado con las secciones, sin desbordamiento en 390px ni en 1280px | workspace local |
 
 ## Notas de incidentes
 
