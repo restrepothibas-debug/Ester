@@ -75,6 +75,22 @@ else
   aviso "Pillow no está disponible: se omite la prueba del procesador"
 fi
 
+echo "A1d · Fotografías de producto (base)"
+if PYTHONPATH=.venv-libs python3 -c "import psycopg" >/dev/null 2>&1; then
+  if PYTHONPATH=.venv-libs python3 scripts/probar-fotos.py >/tmp/verificar-fotos-db.log 2>&1; then
+    ok "reglas de fotos en verde ($(grep -c '✔' /tmp/verificar-fotos-db.log) comprobaciones)"
+  elif grep -qE "OperationalError|could not receive data|Connection refused|timeout expired" /tmp/verificar-fotos-db.log; then
+    # Un corte de red no es un fallo del código: se avisa y se sigue. Un fallo
+    # de aserción sí es un fallo.
+    aviso "sin conexión con la base: no se pudieron comprobar las reglas de fotos"
+  else
+    mal "las reglas de fotos fallan"
+    tail -8 /tmp/verificar-fotos-db.log
+  fi
+else
+  aviso "psycopg no está disponible: se omiten las pruebas de base"
+fi
+
 echo "A3 · Secretos en archivos versionados"
 # Regex extendida: macOS usa BSD grep, que no entiende \| en modo básico.
 patrones='(sb_secret_|sbp_|ghp_)[A-Za-z0-9_-]{15,}|eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{30,}'

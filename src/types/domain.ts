@@ -85,7 +85,7 @@ export interface ProductoCatalogo {
   estado: EstadoProducto;
   slug: string;
   marcas: { nombre: string; nombre_normalizado: string } | null;
-  producto_imagenes: { ruta: string; principal: boolean; orden: number }[];
+  producto_imagenes: { ruta: string; ruta_min: string | null; principal: boolean; orden: number }[];
   producto_tallas: { talla: string; cantidad: number }[];
   promociones: {
     precio_promocional: number;
@@ -111,6 +111,8 @@ export interface ProductoVista {
   enPromocion: boolean;
   estado: EstadoProducto;
   imagenPrincipal: string | null;
+  /** Versión de 480 px para tarjetas y listados. */
+  imagenMini: string | null;
   imagenes: string[];
   tallas: TallaInventario[];
   agotado: boolean;

@@ -8,6 +8,7 @@
  */
 
 import { supabase } from "./supabase";
+import { urlPublica } from "./almacen";
 import type {
   FiltrosCatalogo,
   ProductoCatalogo,
@@ -32,7 +33,7 @@ function cliente() {
 const CAMPOS = `
   id, codigo_interno, modelo, referencia, color, precio_normal, estado, slug,
   marcas ( nombre, nombre_normalizado ),
-  producto_imagenes ( ruta, principal, orden ),
+  producto_imagenes ( ruta, ruta_min, principal, orden ),
   producto_tallas ( talla, cantidad ),
   promociones ( precio_promocional, inicia_en, termina_en, activa, tipo )
 `;
@@ -87,8 +88,9 @@ function normalizar(fila: ProductoCatalogo): ProductoVista {
     precioVigente: valor,
     enPromocion,
     estado: fila.estado,
-    imagenPrincipal: imagenes[0]?.ruta ?? null,
-    imagenes: imagenes.map((i) => i.ruta),
+    imagenPrincipal: urlPublica(imagenes[0]?.ruta),
+    imagenMini: urlPublica(imagenes[0]?.ruta_min),
+    imagenes: imagenes.map((i) => urlPublica(i.ruta)).filter((u): u is string => Boolean(u)),
     tallas,
     agotado: fila.estado === "agotado" || tallas.length === 0,
   };

@@ -17,7 +17,7 @@ export function TarjetaProducto({ producto, onVistaRapida }: Props) {
     <article className="rt-tarjeta">
       <Link to={`/producto/${producto.slug}`} className="rt-tarjeta__media">
         {producto.imagenPrincipal ? (
-          <img src={producto.imagenPrincipal} alt={producto.modelo} loading="lazy" />
+          <img src={producto.imagenMini ?? producto.imagenPrincipal} alt={producto.modelo} loading="lazy" />
         ) : (
           <div className="rt-tarjeta__marcador" aria-hidden="true">
             {iniciales(producto.marca)}

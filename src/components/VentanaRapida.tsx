@@ -44,7 +44,7 @@ export function VentanaRapida({ producto, onCerrar }: Props) {
 
         <div className="rt-dialogo__media">
           {producto.imagenPrincipal ? (
-            <img src={producto.imagenPrincipal} alt={producto.modelo} />
+            <img src={producto.imagenMini ?? producto.imagenPrincipal} alt={producto.modelo} />
           ) : (
             <div className="rt-tarjeta__marcador rt-tarjeta__marcador--grande" aria-hidden="true">
               {iniciales(producto.marca)}

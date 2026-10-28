@@ -7,6 +7,7 @@ const ENLACES = [
   { a: "/admin/marcas", texto: "Marcas", fin: false },
   { a: "/admin/inventario", texto: "Inventario", fin: false },
   { a: "/admin/promociones", texto: "Promociones", fin: false },
+  { a: "/admin/fotos", texto: "Fotos", fin: false },
   { a: "/admin/destacados", texto: "Destacados", fin: false },
   { a: "/admin/solicitudes", texto: "Solicitudes", fin: false },
 ];

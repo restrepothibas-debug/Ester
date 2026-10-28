@@ -117,6 +117,7 @@ Lo que sigue no es aspiracional: es lo que está probado hoy, con la evidencia q
 | WhatsApp | B19 ✔ | B16–B18 con número real |
 | Solicitudes | B23 ✔ | B20–B22 |
 | Importación / copias | — | Todo |
+| Fotografías de producto | G1–G8 ✔ con `scripts/probar-fotos.py` (20 comprobaciones) y navegador real | Con fotos reales del propietario: nitidez, encuadre y variedad de formatos |
 | Ingesta de fotos (ruta A) | F1–F8 ✔ con `scripts/probar-procesar-fotos.py`: **30 comprobaciones** sobre una exportación sintética (duplicado exacto, captura, baja resolución, vídeo y archivo corrupto) | Con una exportación real del propietario; formatos HEIC reales de iPhone |
 
 **Avisos de `lint` justificados:** los 4 avisos son `set-state-in-effect` en las consultas de datos, que es el patrón intencional de `useConsulta` (efecto con dependencias declaradas). No se silencian para no ocultar futuros avisos reales.
@@ -140,6 +141,17 @@ Se marca **antes** de escribir el procesador. Todo lo de aquí se comprueba con
 - [ ] **F6** · **Índice SQLite** con `sha256` único; volver a procesar la misma exportación no añade filas ni archivos.
 - [ ] **F7** · Nada se publica solo: todo entra en `pendiente` y la asignación a producto es manual.
 - [ ] **F8** · La salida vive fuera de git y los nombres son estables (derivados del hash), para que una reproceso no rompa enlaces.
+
+## Listón G · Fotografías de producto
+
+- [x] **G1** · La foto se reduce antes de subir (WebP 1600 px) y se genera miniatura de 480 px; las tarjetas usan la miniatura.
+- [x] **G2** · La misma foto no entra dos veces en la bandeja ni dos veces en el mismo producto (SHA-256).
+- [x] **G3** · Un producto con fotos tiene **exactamente una** principal, también después de quitar la principal.
+- [x] **G4** · El orden se cambia en una sola transacción: subir la primera no rompe nada y el mensaje no miente.
+- [x] **G5** · `producto_imagenes` y `fotos_sin_asignar` **no aceptan escrituras directas**, ni del administrador.
+- [x] **G6** · Un usuario autenticado sin perfil de administrador es rechazado; `anon` no ve ni escribe la bandeja.
+- [x] **G7** · La ficha pública muestra la foto cuando existe y el marcador de marca cuando no.
+- [x] **G8** · El panel no desborda a 390, 768 ni 1280 px.
 
 ## Listón D · Cierre de sesión
 

@@ -480,3 +480,153 @@ a.rt-tarjeta-dato:hover {
 .rt-fila-formulario--filtro {
   align-items: flex-start;
 }
+
+/* ---------------------------------------------------------------------------
+ * Fotografías (punto 52)
+ * Zona de carga, bandeja de fotos sin asignar y orden dentro de un producto.
+ * --------------------------------------------------------------------------- */
+
+.rt-soltar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 7rem;
+  padding: var(--rt-esp-6);
+  border: 1px dashed var(--rt-linea);
+  border-radius: var(--rt-radio);
+  background: var(--rt-marfil-suave);
+  color: var(--rt-tinta-suave);
+  font-size: var(--rt-texto-base);
+  cursor: pointer;
+  text-align: center;
+}
+
+.rt-soltar:hover,
+.rt-soltar:focus-within {
+  border-color: var(--rt-verde);
+  color: var(--rt-verde);
+}
+
+/* El input nativo sigue existiendo para el teclado y los lectores de pantalla,
+   pero se ve la caja entera como control. */
+.rt-soltar input[type="file"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.rt-registro {
+  margin: var(--rt-esp-4) 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--rt-texto-menor);
+  color: var(--rt-tinta-suave);
+  max-height: 12rem;
+  overflow-y: auto;
+}
+
+.rt-registro li {
+  padding: 0.15rem 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.rt-fotos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  gap: var(--rt-esp-4);
+  margin: var(--rt-esp-5) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rt-foto {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rt-esp-2);
+  border: 1px solid var(--rt-linea);
+  border-radius: var(--rt-radio);
+  background: #fff;
+  padding: var(--rt-esp-3);
+}
+
+.rt-foto__marco {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  background: var(--rt-hueso);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.rt-foto__marco img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.rt-foto__marco span {
+  color: var(--rt-gris);
+  font-size: var(--rt-texto-menor);
+}
+
+.rt-foto__sello {
+  position: absolute;
+  top: var(--rt-esp-2);
+  left: var(--rt-esp-2);
+  padding: 0.15rem 0.45rem;
+  background: var(--rt-verde);
+  color: #fff;
+  font-size: var(--rt-etiqueta);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.rt-foto__datos {
+  margin: 0;
+  font-size: var(--rt-texto-menor);
+  font-variant-numeric: tabular-nums;
+}
+
+.rt-foto select {
+  width: 100%;
+}
+
+.rt-foto .rt-acciones-fila {
+  flex-wrap: wrap;
+  gap: var(--rt-esp-2);
+}
+
+.rt-foto .rt-boton {
+  padding: 0.3rem 0.55rem;
+  font-size: var(--rt-texto-menor);
+}
+
+/* En pantallas estrechas el panel se apilaba mal: los ocho enlaces de la
+   navegación no cabían en una fila y empujaban el contenido 357 px a la
+   derecha (scrollWidth 747 en una ventana de 390). La navegación pasa a dos o
+   tres filas y los hijos de la rejilla pueden encogerse. */
+@media (max-width: 767px) {
+  .rt-admin__lateral {
+    align-items: flex-start;
+    gap: var(--rt-esp-2);
+  }
+
+  .rt-admin__nav {
+    flex-wrap: wrap;
+    margin-left: 0;
+    width: 100%;
+    row-gap: var(--rt-esp-1);
+  }
+
+  .rt-admin__enlace {
+    padding: 0.35rem 0.5rem;
+  }
+
+  .rt-admin > *,
+  .rt-admin__contenido {
+    min-width: 0;
+  }
+}

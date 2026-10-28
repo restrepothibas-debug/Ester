@@ -29,6 +29,7 @@
 | `src/App.tsx` | ✅ Enrutador real. Las rutas del panel se cargan de forma diferida |
 | `src/lib/` | `supabase.ts`, `consultas.ts` (lectura pública), `admin.ts` (lectura del panel), `mutaciones.ts` (escritura con historial), `auth.ts`, `formato.ts`, `fechas.ts` (horas de Bogotá), `whatsapp.ts` |
 | Ingesta de fotos | ✅ `scripts/procesar-fotos.py`: procesa una exportación de WhatsApp (`.zip` o carpeta), deduplica por SHA-256, clasifica (pendiente / revisar / descartada / no_soportado), exporta WebP 1600 px + miniatura 480 px y lleva índice SQLite. Probado con exportación sintética: **30 comprobaciones** en `scripts/probar-procesar-fotos.py`. Salida en `fotos/`, fuera de git |
+| Fotos de producto | ✅ `/admin/fotos`: subida con reducción en el navegador, bandeja de sin asignar, asignación a producto, principal y orden. Base: migración 12 con `fotos_sin_asignar` y seis funciones; escrituras directas bloqueadas. Probado: 20 comprobaciones en `scripts/probar-fotos.py` y navegador real (duplicado, asignación, principal, orden y ficha con foto) |
 | Pruebas | `scripts/probar-reglas-promociones.py` (16 casos, `rollback`), `scripts/probar-promociones-publico.py` (9 comprobaciones con rol `anon`) `scripts/probar-destacados.py` (11 comprobaciones) y `scripts/probar-solicitudes.py` (24 comprobaciones: descuento, falta de existencias, cancelación con devolución, escrituras directas prohibidas y `anon`) |
 | Tipos del dominio | ✅ `src/types/domain.ts`, derivados de §6, §8 y §14 |
 | Estilos | ✅ Reconstruidos sobre la referencia visual (D-41): `tokens.css` con la paleta y la escala nuevas, `global.css` con las primitivas, `catalogo.css` con cabecera, héroe, garantías, accesos por marca, relato, rejillas, ficha y pie; `admin.css` hereda la misma paleta y tipografía |
@@ -36,7 +37,7 @@
 | `.env.local` | ✅ Permisos `600`, ignorado por git, con URL, clave `anon`, clave secreta y cadena de conexión |
 | `.env.example` | ✅ Nombres de variables, sin valores |
 | Repositorio git | ✅ `main` con remoto `origin` → `restrepothibas-debug/Ester` (público), sin secretos. El historial completo está en `git log` |
-| Base de datos | ✅ **14 tablas** en `public` (13 de dominio + `migraciones_aplicadas`), RLS en todas, **28 políticas** (23 sobre tablas y 5 sobre `storage.objects`), 3 buckets, 5 filas de configuración. **11 migraciones** aplicadas. Reglas de promoción en la base: 1 restricción de exclusión y 2 disparadores; las solicitudes solo se escriben por funciones |
+| Base de datos | ✅ **15 tablas** en `public` (14 de dominio + `migraciones_aplicadas`), RLS en todas, **28 políticas** (23 sobre tablas y 5 sobre `storage.objects`), 3 buckets, 5 filas de configuración. **11 migraciones** aplicadas. Reglas de promoción en la base: 1 restricción de exclusión y 2 disparadores; las solicitudes solo se escriben por funciones |
 | Cuenta administradora | ✅ `epieyualex01@gmail.com`, correo confirmado, perfil creado por trigger. Contraseña inicial generada por Accio: **debe cambiarla el propietario** (D-27) |
 | Nombre de la tienda | ✅ **Dayara store** (D-13). Logotipo pendiente |
 | Documentación | ✅ `00-docs/` en 7 áreas, incluida `06-metodo/` con método, listón y rondas |
@@ -87,7 +88,7 @@ Activo desde el 28/10/2026. Ver `06-metodo/gauntlet.md`, el listón en `06-metod
 
 ## Siguiente paso
 
-**Procesar la primera exportación real** de WhatsApp con `scripts/procesar-fotos.py` y montar la pantalla de asignación foto → producto. Después, importación CSV/Excel y exportación (punto 49).
+**Importación CSV/Excel y exportación** (punto 49). La ingesta de fotos ya está cerrada de punta a punta: procesador local para lotes y pantalla de asignación en el panel.
 
 ## Qué NO está hecho
 

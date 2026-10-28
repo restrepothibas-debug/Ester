@@ -33,6 +33,7 @@ const Destacados = lazy(() =>
 const Solicitudes = lazy(() =>
   import("./pages/admin/Solicitudes").then((m) => ({ default: m.Solicitudes })),
 );
+const Fotos = lazy(() => import("./pages/admin/Fotos").then((m) => ({ default: m.Fotos })));
 
 export default function App() {
   return (
@@ -131,6 +132,14 @@ export default function App() {
           element={
             <RutaPrivada>
               <Solicitudes />
+            </RutaPrivada>
+          }
+        />
+        <Route
+          path="/admin/fotos"
+          element={
+            <RutaPrivada>
+              <Fotos />
             </RutaPrivada>
           }
         />
