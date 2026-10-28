@@ -24,6 +24,9 @@ Estados: ✅ Aprobada · ⏳ Pendiente · ❓ Sin identificar · 🔁 Reemplazad
 | D-12 | 28/10/2026 | La clave secreta de Supabase (`sb_secret_…`) se guarda en `.env.local` **sin** prefijo `VITE_` y no se usa en el cliente | ✅ | Accio, conforme a PDF §15 |
 | D-15 | 28/10/2026 | Proyecto Supabase identificado: `pklqdjixkhpkmtrhtzsm` (`https://pklqdjixkhpkmtrhtzsm.supabase.co`), verificado vacío | ✅ | Accio, verificado por API |
 | D-16 | 28/10/2026 | Clave publicable (`anon`) recibida y verificada (JWT `role: anon`, `ref` correcto, expira 2036-10-27). Cliente Supabase operativo | ✅ | Accio, verificado por API |
+| D-26 | 28/10/2026 | Cuenta administradora creada: **epieyualex01@gmail.com**, correo ya confirmado. El perfil lo creó el trigger automáticamente (rol `administrador`) | ✅ | Propietario + Accio |
+| D-27 | 28/10/2026 | La contraseña inicial la generó Accio; **debe cambiarla el propietario**. No se guarda en ningún archivo del proyecto | ⏳ Pendiente de cambio | Accio |
+| D-28 | 28/10/2026 | Origen de las imágenes de producto: **WhatsApp**. Medio de ingesta pendiente de definir (exportación del chat vs. Cloud API) | ⏳ Pendiente | Propietario |
 | D-24 | 28/10/2026 | La cuenta administradora se crea **a mano** en Supabase Auth; un trigger crea el perfil con rol administrador al insertarse el usuario | ✅ | Propietario + Accio |
 | D-25 | 28/10/2026 | La verificación de sesión se hace con la autenticación real de Supabase, sin simulaciones ni usuarios de prueba inventados | ✅ | Propietario |
 | D-22 | 28/10/2026 | **El correo administrativo no se configura en este proceso.** Queda pendiente por decisión del propietario; sin él no se crea la cuenta de acceso ni se activa 2FA | ⏳ Pendiente por decisión | Propietario |

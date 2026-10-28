@@ -34,6 +34,9 @@ Registro cronológico. Una fila por sesión de trabajo. La columna **Escrituras*
 | 28/10/2026 11:20 | Accio | Quinta migración: trigger `perfil_al_crear_usuario` sobre `auth.users` + relleno de perfiles faltantes | Instalado y verificado. 0 usuarios y 0 perfiles: la cuenta aún no existe | **Supabase: esquema** |
 | 28/10/2026 11:45 | Accio | Panel: capa de auth, guard por perfil, acceso, resumen y listado de productos | `build` y `lint` sin errores. Bundle 507 kB (aviso de tamaño) | workspace local |
 | 28/10/2026 11:55 | Accio | Verificación en navegador del panel: redirección sin sesión, formulario, rechazo de credenciales, ausencia de registro | `/admin` y `/admin/productos` redirigen a `/admin/login`. Error mostrado: «Correo o contraseña incorrectos.» Sin errores de consola | ninguna |
+| 28/10/2026 12:10 | Accio | Creado el usuario administrador con la API de administración de Auth (correo ya confirmado). El trigger creó su perfil | Perfil: nombre `Dayara`, rol `administrador`, activo. Sesión obtenida por `grant_type=password` | **Supabase: usuario de Auth** |
+| 28/10/2026 12:15 | Accio | Prueba de escritura con la sesión de administrador: alta de una marca y borrado | 201 al crear (el slug se normalizó solo), 204 al borrar. `es_admin()` funciona a través de RLS | **Supabase: datos de prueba, ya eliminados** |
+| 28/10/2026 12:20 | Accio | Verificación en navegador del panel con sesión real: acceso, resumen, productos, recarga, cierre de sesión y reintento | Todo correcto. Sin errores de consola | ninguna |
 
 ## Notas de incidentes
 

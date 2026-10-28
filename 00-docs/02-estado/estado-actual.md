@@ -33,7 +33,7 @@
 | Repositorio git | ✅ `main`, remoto `origin` → `restrepothibas-debug/Ester`. 3 commits subidos el 28/10. Verificado por API: 36 archivos, **sin `.env.local` ni secretos** |
 | Nombre de la tienda | ✅ **Dayara store** (D-13). Logotipo pendiente |
 | Metadatos del proyecto | ✅ Alineados: `dayara-store`, título `Dayara store`, `lang="es"` |
-| Panel privado | 🟨 `/admin/login`, `/admin` y `/admin/productos`. Guard por sesión + perfil; redirección verificada. **Sin cuenta creada todavía**: el propietario la creará a mano |
+| Panel privado | ✅ Sesión real verificada (28/10): acceso, resumen con cifras, listado, persistencia tras recarga, cierre de sesión y bloqueo posterior. Cuenta: `epieyualex01@gmail.com` |
 | Catálogo público | ✅ 6 rutas (`/`, `/marcas`, `/marca/:slug`, `/buscar`, `/producto/:slug`, 404) y 11 componentes. Consultas con RLS, filtros y paginación en la URL, ventana rápida, selector de talla y mensaje de WhatsApp |
 | Migraciones SQL | ✅ **Aplicadas y verificadas** (28/10): 13 tablas, RLS en las 13, 23 políticas, 3 buckets. Base sin datos de prueba |
 | Documentación | ✅ Estructurada en `00-docs/` (contexto, decisiones, estado, técnico, informes) |
