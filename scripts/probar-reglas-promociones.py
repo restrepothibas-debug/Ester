@@ -229,6 +229,24 @@ def main() -> None:
                 (apagada,),
             )
 
+            vencida = nuevo_producto("PRUEBA-VENCIDA", 100000)
+            cur.execute(
+                "insert into public.promociones (producto_id, precio_promocional, tipo) values (%s, 90000, 'manual') returning id",
+                (vencida,),
+            )
+            apagable = cur.fetchone()[0]
+            cur.execute(
+                "update public.promociones set inicia_en = now() - interval '2 days', termina_en = now() - interval '1 day' where id = %s",
+                (apagable,),
+            )
+            cur.execute("update public.productos set precio_normal = 85000 where id = %s", (vencida,))
+            ejecutar(
+                "Una promoción vencida se puede apagar aunque su precio ya sea mayor",
+                False,
+                "update public.promociones set activa = false where id = %s",
+                (apagable,),
+            )
+
             conexion.rollback()
 
     print(f"\n{len(casos)} casos · {fallos} fallos")

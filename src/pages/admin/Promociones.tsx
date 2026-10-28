@@ -280,7 +280,7 @@ export function Promociones() {
             crea esta como programada con fecha final.
           </p>
 
-          {opciones.length === 0 && !productos.cargando && (
+          {opciones.length === 0 && !productos.cargando && !productos.error && (
             <p className="rt-tenue">
               No hay productos publicados. Publica uno para poder promocionarlo.
             </p>
@@ -358,11 +358,9 @@ export function Promociones() {
                         </span>
                       </td>
                       <td>
-                        {p.estado !== "terminada" && (
-                          <button type="button" className="rt-enlace-boton" onClick={() => editar(p)}>
-                            Editar
-                          </button>
-                        )}{" "}
+                        <button type="button" className="rt-enlace-boton" onClick={() => editar(p)}>
+                          Editar
+                        </button>{" "}
                         {(p.estado === "vigente" || p.estado === "programada") && (
                           <button type="button" className="rt-enlace-boton" onClick={() => terminar(p)}>
                             Terminar
