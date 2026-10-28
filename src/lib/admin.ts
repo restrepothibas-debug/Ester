@@ -137,6 +137,7 @@ export interface OpcionProducto {
   etiqueta: string;
   existencias: number;
   precioNormal: number;
+  estado: EstadoProducto;
   tallas: { talla: string; cantidad: number }[];
 }
 
@@ -145,7 +146,7 @@ export async function opcionesProductos(): Promise<OpcionProducto[]> {
   const { data, error } = await cliente()
     .from("productos")
     .select(
-      "id, codigo_interno, modelo, precio_normal, marcas ( nombre ), producto_tallas ( talla, cantidad )",
+      "id, codigo_interno, modelo, precio_normal, estado, marcas ( nombre ), producto_tallas ( talla, cantidad )",
     )
     .order("modelo", { ascending: true })
     .limit(300);
@@ -162,6 +163,7 @@ export async function opcionesProductos(): Promise<OpcionProducto[]> {
       etiqueta: `${p.codigo_interno} · ${p.modelo}${marca ? ` (${marca})` : ""}`,
       existencias: tallas.reduce((s, t) => s + t.cantidad, 0),
       precioNormal: Number(p.precio_normal),
+      estado: p.estado as EstadoProducto,
       tallas,
     };
   });

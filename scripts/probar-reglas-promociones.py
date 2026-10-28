@@ -179,6 +179,56 @@ def main() -> None:
                 (producto,),
             )
 
+            # --- Huecos que encontró la auditoría del 28/10 (migración 7) -----
+            print("\nHuecos cerrados después de la auditoría:")
+
+            def nuevo_producto(codigo: str, precio: int):
+                cur.execute(
+                    """
+                    insert into public.productos (codigo_interno, marca_id, modelo, precio_normal)
+                    values (%s, %s, 'Modelo de prueba', %s) returning id
+                    """,
+                    (codigo, marca, precio),
+                )
+                return cur.fetchone()[0]
+
+            futuro = nuevo_producto("PRUEBA-FUTURO", 100000)
+            cur.execute(
+                """
+                insert into public.promociones
+                  (producto_id, precio_promocional, tipo, inicia_en, termina_en)
+                values (%s, 90000, 'programada', now() + interval '10 days', now() + interval '20 days')
+                """,
+                (futuro,),
+            )
+            ejecutar(
+                "D-32 · bajar el precio normal durante una promoción programada",
+                True,
+                "update public.productos set precio_normal = 70000 where id = %s",
+                (futuro,),
+            )
+            ejecutar(
+                "E7 · precio promocional de cero",
+                True,
+                "insert into public.promociones (producto_id, precio_promocional, tipo) values (%s, 0, 'manual')",
+                (futuro,),
+            )
+
+            viejo = nuevo_producto("PRUEBA-REACTIVAR", 100000)
+            cur.execute(
+                "insert into public.promociones (producto_id, precio_promocional, tipo) values (%s, 95000, 'manual') returning id",
+                (viejo,),
+            )
+            apagada = cur.fetchone()[0]
+            cur.execute("update public.promociones set activa = false where id = %s", (apagada,))
+            cur.execute("update public.productos set precio_normal = 80000 where id = %s", (viejo,))
+            ejecutar(
+                "D-32 · reactivar una promoción más cara que el precio de lista actual",
+                True,
+                "update public.promociones set activa = true where id = %s",
+                (apagada,),
+            )
+
             conexion.rollback()
 
     print(f"\n{len(casos)} casos · {fallos} fallos")

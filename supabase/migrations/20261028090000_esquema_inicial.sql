@@ -125,7 +125,7 @@ create table public.producto_imagenes (
   creado_en   timestamptz not null default now()
 );
 
--- Una sola imagen principal por producto (§6, §52)
+-- Una sola imagen principal por producto (§6, punto 52)
 create unique index uq_imagen_principal
   on public.producto_imagenes (producto_id)
   where principal;
@@ -153,7 +153,7 @@ create trigger trg_tallas_actualizado
   for each row execute function public.tocar_actualizado_en();
 
 -- -----------------------------------------------------------------------------
--- movimientos_inventario — historial inmutable (§7, §56)
+-- movimientos_inventario — historial inmutable (§7, punto 56)
 -- -----------------------------------------------------------------------------
 create table public.movimientos_inventario (
   id               uuid primary key default gen_random_uuid(),
@@ -173,7 +173,7 @@ create index idx_movimientos_producto
   on public.movimientos_inventario (producto_id, creado_en desc);
 
 -- -----------------------------------------------------------------------------
--- historial_precios — historial inmutable (§9, §65)
+-- historial_precios — historial inmutable (§9, punto 65)
 -- -----------------------------------------------------------------------------
 create table public.historial_precios (
   id              uuid primary key default gen_random_uuid(),
@@ -189,7 +189,7 @@ create index idx_precios_producto
   on public.historial_precios (producto_id, creado_en desc);
 
 -- -----------------------------------------------------------------------------
--- promociones — el vencimiento no borra nada (§9, §45)
+-- promociones — el vencimiento no borra nada (§9, punto 45)
 -- -----------------------------------------------------------------------------
 create table public.promociones (
   id                 uuid primary key default gen_random_uuid(),
@@ -212,7 +212,7 @@ create index idx_promociones_vigentes
   where activa;
 
 -- -----------------------------------------------------------------------------
--- selecciones — destacados y ofertas de la semana (§54)
+-- selecciones — destacados y ofertas de la semana (punto 54)
 -- -----------------------------------------------------------------------------
 create table public.selecciones (
   id          uuid primary key default gen_random_uuid(),
@@ -225,7 +225,7 @@ create table public.selecciones (
 );
 
 -- -----------------------------------------------------------------------------
--- solicitudes — registro manual de WhatsApp (§8, §57–§60)
+-- solicitudes — registro manual de WhatsApp (§8, puntos 57–60)
 -- -----------------------------------------------------------------------------
 create table public.solicitudes (
   id                  uuid primary key default gen_random_uuid(),
@@ -249,7 +249,7 @@ create table public.solicitudes (
 comment on column public.solicitudes.precio_snapshot is
   'Precio cotizado al momento del registro. No cambia si el producto cambia de precio.';
 comment on column public.solicitudes.inventario_descontado is
-  'Solo pasa a true si el administrador confirma el descuento (§60).';
+  'Solo pasa a true si el administrador confirma el descuento (punto 60).';
 
 create trigger trg_solicitudes_actualizado
   before update on public.solicitudes
@@ -259,7 +259,7 @@ create index idx_solicitudes_estado
   on public.solicitudes (estado, creado_en desc);
 
 -- -----------------------------------------------------------------------------
--- notificaciones (§63, §64)
+-- notificaciones (puntos 63 y 64)
 -- -----------------------------------------------------------------------------
 create table public.notificaciones (
   id               uuid primary key default gen_random_uuid(),

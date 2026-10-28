@@ -357,7 +357,7 @@ export async function crearPromocion(entrada: EntradaPromocion): Promise<void> {
       precio_promocional: entrada.precioPromocional,
       tipo: entrada.tipo,
       inicia_en: entrada.iniciaEn,
-      termina_en: entrada.tipo === "programada" ? entrada.terminaEn : null,
+      termina_en: entrada.terminaEn,
       creado_por: await usuarioActual(),
     })
     .select("id")
@@ -370,6 +370,23 @@ export async function crearPromocion(entrada: EntradaPromocion): Promise<void> {
     tipo: entrada.tipo,
     termina: entrada.terminaEn,
   });
+}
+
+/**
+ * Volver a encender una promoción terminada. La base comprueba otra vez que no
+ * se solape con otra vigente y que su precio siga por debajo del de lista.
+ */
+export async function reactivarPromocion(id: string): Promise<void> {
+  const { data, error } = await cliente()
+    .from("promociones")
+    .update({ activa: true })
+    .eq("id", id)
+    .select("id");
+
+  if (error) throw new Error(traducir(error.message));
+  if (!data || data.length === 0) throw new Error("La promoción ya no existe.");
+
+  await auditar("promocion.reactivada", "promociones", id);
 }
 
 export async function actualizarPromocion(id: string, entrada: EntradaPromocion): Promise<void> {

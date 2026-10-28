@@ -60,7 +60,7 @@ Regla: **el PDF manda.** Si el código hace algo que el PDF no autoriza, el cód
 
 ## 4. En qué fase estamos
 
-**Fase 1** ✅ cerrada · **Fase 2** ✅ cerrada a favor de React + Vite · **Fase 3** 🟨 documentada y en uso; la aprobación formal del propietario sigue pendiente · **Fase 4** 🟨 RLS aplicado y sesión verificada; faltan 2FA, límite de intentos e inactividad · **Fase 5** ✅ construida y verificada en navegador, con dos criterios del listón sin probar (B2 por falta de datos, B16–B18 por falta de número) · **Fase 6** 🟨 en curso: marcas, productos e inventario listos; faltan fotos, promociones, destacados y solicitudes.
+**Fase 1** ✅ cerrada · **Fase 2** ✅ cerrada a favor de React + Vite · **Fase 3** 🟨 documentada y en uso; la aprobación formal del propietario sigue pendiente · **Fase 4** 🟨 RLS aplicado y sesión verificada; faltan 2FA, límite de intentos e inactividad · **Fase 5** ✅ construida y verificada en navegador, con dos criterios del listón sin probar (B2 por falta de datos, B16–B18 por falta de número) · **Fase 6** 🟨 en curso: marcas, productos, inventario y promociones listos; faltan fotos, destacados y oferta de la semana (selecciones) y solicitudes.
 
 Detalle, bloqueos y siguiente paso: `00-docs/02-estado/estado-actual.md`. No lo deduzcas: léelo.
 

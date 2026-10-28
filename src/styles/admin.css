@@ -411,7 +411,6 @@ a.rt-tarjeta-dato:hover {
 .rt-chip--terminada {
   border-color: var(--rt-borde);
   color: var(--rt-texto-suave);
-  text-decoration: line-through;
 }
 
 .rt-aviso {

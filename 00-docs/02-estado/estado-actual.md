@@ -28,12 +28,13 @@
 | Panel privado | ✅ Acceso, resumen, marcas, productos (alta y edición con tallas), inventario con historial y **promociones** (manuales y programadas, con vencimiento en Bogotá). Guard por sesión **y** perfil de administrador |
 | `src/App.tsx` | ✅ Enrutador real. Las rutas del panel se cargan de forma diferida |
 | `src/lib/` | `supabase.ts`, `consultas.ts` (lectura pública), `admin.ts` (lectura del panel), `mutaciones.ts` (escritura con historial), `auth.ts`, `formato.ts`, `fechas.ts` (horas de Bogotá), `whatsapp.ts` |
+| Pruebas | `scripts/probar-reglas-promociones.py` (15 casos, `rollback`) y `scripts/probar-promociones-publico.py` (9 comprobaciones con rol `anon`) |
 | Tipos del dominio | ✅ `src/types/domain.ts`, derivados de §6, §8 y §14 |
 | Estilos | `tokens.css` (propuesta sin aprobar), `global.css`, `catalogo.css`, `admin.css` |
 | `.env.local` | ✅ Permisos `600`, ignorado por git, con URL, clave `anon`, clave secreta y cadena de conexión |
 | `.env.example` | ✅ Nombres de variables, sin valores |
 | Repositorio git | ✅ `main` con remoto `origin` → `restrepothibas-debug/Ester` (público). **13 commits, 93 archivos**, sin secretos. Verificado por API |
-| Base de datos | ✅ **14 tablas** en `public` (13 de dominio + `migraciones_aplicadas`), RLS en todas, **28 políticas** (23 sobre tablas y 5 sobre `storage.objects`), 3 buckets, 5 filas de configuración. **6 migraciones** aplicadas. Reglas de promoción en la base: 1 restricción de exclusión y 2 disparadores |
+| Base de datos | ✅ **14 tablas** en `public` (13 de dominio + `migraciones_aplicadas`), RLS en todas, **28 políticas** (23 sobre tablas y 5 sobre `storage.objects`), 3 buckets, 5 filas de configuración. **7 migraciones** aplicadas. Reglas de promoción en la base: 1 restricción de exclusión y 2 disparadores |
 | Cuenta administradora | ✅ `epieyualex01@gmail.com`, correo confirmado, perfil creado por trigger. Contraseña inicial generada por Accio: **debe cambiarla el propietario** (D-27) |
 | Nombre de la tienda | ✅ **Dayara store** (D-13). Logotipo pendiente |
 | Documentación | ✅ `00-docs/` en 7 áreas, incluida `06-metodo/` con método, listón y rondas |
@@ -67,6 +68,9 @@
 - La búsqueda (B2 del listón) solo se probó con la base vacía: falta con datos reales.
 - **E8 sin probar:** no se verificó de extremo a extremo que un cambio de precio normal durante una promoción quede en `historial_precios`. El código lo hace; falta la prueba.
 - No hay pantalla de historial de precios ni aviso de promoción por vencer.
+- El filtro de precio del catálogo usa el **precio normal**, no el vigente: un producto con 200.000 y promoción de 150.000 no aparece al filtrar «hasta 160.000». Pendiente de decidir cómo filtrar por precio promocional.
+- Borrar un producto arrastra sus promociones (`on delete cascade`). Hoy no hay borrado en la interfaz, pero contradice el «nada se borra» del punto 45 si algún día se añade.
+- El panel calcula vigencia con el reloj del equipo; el catálogo anónimo no depende de él porque RLS ya filtró en el servidor.
 - No hay copias de seguridad automáticas: el plan actual de Supabase no las incluye (§12 sin cumplir).
 
 ## Método de trabajo

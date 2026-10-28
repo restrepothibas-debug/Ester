@@ -201,7 +201,7 @@ export async function obtenerProducto(slug: string): Promise<ProductoVista | nul
   return data ? normalizar(data as unknown as ProductoCatalogo) : null;
 }
 
-/** §54 — destacados y ofertas de la semana, seleccionados a mano. */
+/** Punto 54 — destacados y ofertas de la semana, seleccionados a mano. */
 export async function listarSeleccion(
   tipo: "destacado" | "oferta_semana",
   limite = 8,

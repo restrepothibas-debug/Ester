@@ -9,6 +9,7 @@ import {
   actualizarPromocion,
   crearPromocion,
   finalizarPromocion,
+  reactivarPromocion,
   type EntradaPromocion,
 } from "../../lib/mutaciones";
 import { useConsulta } from "../../lib/useConsulta";
@@ -54,9 +55,13 @@ export function Promociones() {
   const [aviso, setAviso] = useState<string | null>(null);
 
   const lista = promociones.datos ?? [];
-  const opciones = productos.datos ?? [];
+  // Solo lo que el público puede ver: una promoción sobre un borrador no se
+  // mostraría nunca (punto 45, §6).
+  const opciones = (productos.datos ?? []).filter(
+    (p) => p.estado === "publicado" || p.estado === "agotado",
+  );
   const seleccionado = opciones.find((p) => p.id === productoId) ?? null;
-  const numeroPrecio = Number(precio.replace(/[^\d]/g, ""));
+  const numeroPrecio = Number(precio);
   const descuento =
     seleccionado && numeroPrecio > 0
       ? calcularDescuento(seleccionado.precioNormal, numeroPrecio)
@@ -98,7 +103,15 @@ export function Promociones() {
       );
     }
 
-    const iniciaEn = tipo === "manual" && !editando ? ahoraISO() : fechaLocalABogota(inicio);
+    let iniciaEn: string | null;
+    if (tipo === "manual" && !editando) {
+      iniciaEn = ahoraISO();
+    } else if (editando && inicio === fechaBogotaAInput(editando.iniciaEn)) {
+      // No se tocó la fecha: se conserva tal cual, con sus segundos.
+      iniciaEn = editando.iniciaEn;
+    } else {
+      iniciaEn = fechaLocalABogota(inicio);
+    }
     if (!iniciaEn) return setFallo("La fecha de inicio no es válida.");
 
     let terminaEn: string | null = null;
@@ -130,6 +143,18 @@ export function Promociones() {
       setFallo(problema instanceof Error ? problema.message : String(problema));
     } finally {
       setGuardando(false);
+    }
+  }
+
+  async function reactivar(fila: FilaPromocionAdmin) {
+    setFallo(null);
+    setAviso(null);
+    try {
+      await reactivarPromocion(fila.id);
+      setRefresco((n) => n + 1);
+      setAviso("Promoción reactivada.");
+    } catch (problema) {
+      setFallo(problema instanceof Error ? problema.message : String(problema));
     }
   }
 
@@ -234,16 +259,32 @@ export function Promociones() {
               <p className="rt-tenue">Empieza en cuanto la crees.</p>
             )}
 
-            <label>
-              <span>Fin {tipo === "programada" ? "" : "(opcional)"}</span>
-              <input type="datetime-local" value={fin} onChange={(e) => setFin(e.target.value)} />
-            </label>
+            {tipo === "programada" ? (
+              <label>
+                <span>Fin</span>
+                <input
+                  type="datetime-local"
+                  value={fin}
+                  onChange={(e) => setFin(e.target.value)}
+                  required
+                />
+              </label>
+            ) : (
+              <p className="rt-tenue">Sin fecha final: dura hasta que la termines.</p>
+            )}
           </div>
 
           <p className="rt-tenue">
-            Sin fecha final, la promoción sigue hasta que la termines y bloquea programar otra
-            encima. Ponle una fecha si quieres dejar la siguiente preparada.
+            Una promoción manual sigue hasta que la termines y, mientras esté abierta, impide
+            programar otra sobre el mismo producto. Si quieres dejar la siguiente preparada,
+            crea esta como programada con fecha final.
           </p>
+
+          {opciones.length === 0 && !productos.cargando && (
+            <p className="rt-tenue">
+              No hay productos publicados. Publica uno para poder promocionarlo.
+            </p>
+          )}
 
           {fallo && (
             <p className="rt-error" role="alert">
@@ -265,13 +306,17 @@ export function Promociones() {
         </form>
 
         <div>
-          {promociones.error && (
+          {productos.error && (
             <p className="rt-error" role="alert">
-              No se pudieron cargar las promociones: {promociones.error.message}
+              No se pudo cargar la lista de productos: {productos.error.message}
             </p>
           )}
 
-          {promociones.cargando ? (
+          {promociones.error ? (
+            <p className="rt-error" role="alert">
+              No se pudieron cargar las promociones: {promociones.error.message}
+            </p>
+          ) : promociones.cargando ? (
             <div className="rt-esqueleto rt-esqueleto--tabla" />
           ) : lista.length === 0 ? (
             <div className="rt-vacio">
@@ -321,6 +366,11 @@ export function Promociones() {
                         {(p.estado === "vigente" || p.estado === "programada") && (
                           <button type="button" className="rt-enlace-boton" onClick={() => terminar(p)}>
                             Terminar
+                          </button>
+                        )}
+                        {p.estado === "terminada" && (
+                          <button type="button" className="rt-enlace-boton" onClick={() => reactivar(p)}>
+                            Reactivar
                           </button>
                         )}
                       </td>
