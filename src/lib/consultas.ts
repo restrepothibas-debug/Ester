@@ -37,9 +37,27 @@ const CAMPOS = `
   promociones ( precio_promocional, inicia_en, termina_en, activa, tipo )
 `;
 
+/**
+ * La promoción que de verdad está corriendo ahora.
+ *
+ * RLS ya oculta las terminadas y vencidas a un visitante, pero un administrador
+ * con sesión abierta también navega el catálogo y su política le deja leer todo.
+ * Por eso la vigencia se comprueba aquí y no se confía solo en la base: una
+ * promoción apagada no debe pintar precio tachado ni descuento (D-31).
+ */
+function promocionVigente(fila: ProductoCatalogo) {
+  const ahora = Date.now();
+  return (fila.promociones ?? []).find(
+    (p) =>
+      p.activa &&
+      new Date(p.inicia_en).getTime() <= ahora &&
+      (!p.termina_en || new Date(p.termina_en).getTime() > ahora),
+  );
+}
+
 /** Precio vigente: el de la promoción activa si existe, si no el normal (§9). */
 function precioVigente(fila: ProductoCatalogo): { valor: number; enPromocion: boolean } {
-  const promo = fila.promociones?.[0];
+  const promo = promocionVigente(fila);
   if (promo && promo.precio_promocional < fila.precio_normal) {
     return { valor: promo.precio_promocional, enPromocion: true };
   }

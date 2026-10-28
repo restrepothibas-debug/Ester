@@ -395,3 +395,26 @@ a.rt-tarjeta-dato:hover {
     grid-template-columns: repeat(3, 1fr);
   }
 }
+
+/* Promociones (D-31 … D-34) */
+.rt-chip--vigente {
+  border-color: var(--rt-verde-bosque);
+  color: var(--rt-verde-bosque);
+}
+
+.rt-chip--programada {
+  border-color: var(--rt-dorado);
+  color: var(--rt-aviso);
+}
+
+.rt-chip--vencida,
+.rt-chip--terminada {
+  border-color: var(--rt-borde);
+  color: var(--rt-texto-suave);
+  text-decoration: line-through;
+}
+
+.rt-aviso {
+  font-size: var(--rt-texto-menor);
+  color: var(--rt-verde-bosque);
+}

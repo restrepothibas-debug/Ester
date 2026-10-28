@@ -42,6 +42,7 @@ Registro cronológico. Una fila por sesión de trabajo. La columna **Escrituras*
 | 28/10/2026 13:35 | Accio | Carga diferida del panel y corrección de dos textos de estado vacío | Chunk del panel separado (`Acceso-*.js` 200). Portada y rutas públicas verificadas tras el cambio | workspace local |
 | 28/10/2026 14:10 | Accio | Adoptado el método Gauntlet: documento del método, listón derivado del §18, registro de rondas y script de verificación | `00-docs/06-metodo/` + `scripts/verificar.sh`. El script detecta y luego descarta un falso positivo de `supabase-js` | workspace local |
 | 28/10/2026 14:15 | Accio | `AGENTS.md` y la skill `catalogo-calzado` (que vive en el directorio de agentes, **fuera** del repositorio) exigen declarar las cuatro cajas y registrar rondas | El método queda activo en cada intervención, no solo en las grandes | workspace local y directorio de agentes |
+| 28/10/2026 15:30 | Accio | Módulo de promociones: migración con reglas (una vigencia por producto, precio siempre menor), panel `/admin/promociones`, corrección de la vigencia en el catálogo y dos scripts de prueba | 12 casos SQL y 9 comprobaciones por API en 0 fallos; navegador real: crear, ver en catálogo, terminar y volver al precio normal. Dos defectos corregidos tras la prueba (bloqueo del precio por `step="100"` y catálogo que mostraba promociones terminadas). Datos de prueba eliminados | **Supabase: 1 migración aplicada y datos temporales borrados** |
 
 ## Notas de incidentes
 

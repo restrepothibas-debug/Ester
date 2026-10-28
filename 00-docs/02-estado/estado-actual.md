@@ -14,7 +14,7 @@
 | 3 — Diseño funcional: mapa de páginas, componentes, esquema de datos y flujos | ✅ **Documentada y en uso**: `05-diseno/esquema-datos.md` y `05-diseno/mapa-paginas.md`. El esquema está aplicado en la base y el código se construye contra él. La aprobación formal del propietario sigue pendiente |
 | 4 — Base de seguridad: auth, autorización, RLS, secretos, recuperación, 2FA | 🟨 **RLS aplicado y sesión real verificada**. Faltan 2FA, límite de intentos, cierre por inactividad y recuperación de contraseña |
 | 5 — Catálogo público | ✅ **Construido y verificado en navegador**. Sin datos reales ni despliegue |
-| 6 — Panel: productos, marcas, fotos, estados, inventario, precios y promociones | 🟨 **En curso**: marcas, productos con tallas, inventario con historial y registro de cambios de precio. Faltan fotos, promociones, destacados y solicitudes |
+| 6 — Panel: productos, marcas, fotos, estados, inventario, precios y promociones | 🟨 **En curso**: marcas, productos con tallas, inventario con historial, registro de cambios de precio y **promociones**. Faltan fotos, destacados/oferta de la semana y solicitudes |
 | 7 a 10 — WhatsApp/solicitudes · importaciones y copias · automatización de fotos · auditoría y lanzamiento | ⬜ **No iniciadas** |
 
 ## Qué existe hoy
@@ -25,15 +25,15 @@
 | `npm run build` | ✅ Termina en 0. Bundle principal 503 kB; el panel va en chunks aparte |
 | `npm run lint` | ✅ Sin errores; 5 avisos de hooks en consultas |
 | Catálogo público | ✅ 6 rutas (`/`, `/marcas`, `/marca/:slug`, `/buscar`, `/producto/:slug`, 404), 13 componentes, 12 páginas. Filtros y paginación en la URL, ventana rápida, selector de talla y mensaje de WhatsApp |
-| Panel privado | ✅ Acceso, resumen, marcas, productos (alta y edición con tallas) e inventario con historial. Guard por sesión **y** perfil de administrador |
+| Panel privado | ✅ Acceso, resumen, marcas, productos (alta y edición con tallas), inventario con historial y **promociones** (manuales y programadas, con vencimiento en Bogotá). Guard por sesión **y** perfil de administrador |
 | `src/App.tsx` | ✅ Enrutador real. Las rutas del panel se cargan de forma diferida |
-| `src/lib/` | `supabase.ts`, `consultas.ts` (lectura pública), `admin.ts` (lectura del panel), `mutaciones.ts` (escritura con historial), `auth.ts`, `formato.ts`, `whatsapp.ts` |
+| `src/lib/` | `supabase.ts`, `consultas.ts` (lectura pública), `admin.ts` (lectura del panel), `mutaciones.ts` (escritura con historial), `auth.ts`, `formato.ts`, `fechas.ts` (horas de Bogotá), `whatsapp.ts` |
 | Tipos del dominio | ✅ `src/types/domain.ts`, derivados de §6, §8 y §14 |
 | Estilos | `tokens.css` (propuesta sin aprobar), `global.css`, `catalogo.css`, `admin.css` |
 | `.env.local` | ✅ Permisos `600`, ignorado por git, con URL, clave `anon`, clave secreta y cadena de conexión |
 | `.env.example` | ✅ Nombres de variables, sin valores |
 | Repositorio git | ✅ `main` con remoto `origin` → `restrepothibas-debug/Ester` (público). **13 commits, 93 archivos**, sin secretos. Verificado por API |
-| Base de datos | ✅ **14 tablas** en `public` (13 de dominio + `migraciones_aplicadas`), RLS en todas, **28 políticas** (23 sobre tablas y 5 sobre `storage.objects`), 3 buckets, 5 filas de configuración. **5 migraciones** aplicadas |
+| Base de datos | ✅ **14 tablas** en `public` (13 de dominio + `migraciones_aplicadas`), RLS en todas, **28 políticas** (23 sobre tablas y 5 sobre `storage.objects`), 3 buckets, 5 filas de configuración. **6 migraciones** aplicadas. Reglas de promoción en la base: 1 restricción de exclusión y 2 disparadores |
 | Cuenta administradora | ✅ `epieyualex01@gmail.com`, correo confirmado, perfil creado por trigger. Contraseña inicial generada por Accio: **debe cambiarla el propietario** (D-27) |
 | Nombre de la tienda | ✅ **Dayara store** (D-13). Logotipo pendiente |
 | Documentación | ✅ `00-docs/` en 7 áreas, incluida `06-metodo/` con método, listón y rondas |
@@ -65,6 +65,8 @@
 - El bundle principal pesa 503 kB. Lo domina `supabase-js`, no el código propio.
 - Los precios dejan historial al editarse, pero **no hay pantalla para consultarlo**.
 - La búsqueda (B2 del listón) solo se probó con la base vacía: falta con datos reales.
+- **E8 sin probar:** no se verificó de extremo a extremo que un cambio de precio normal durante una promoción quede en `historial_precios`. El código lo hace; falta la prueba.
+- No hay pantalla de historial de precios ni aviso de promoción por vencer.
 - No hay copias de seguridad automáticas: el plan actual de Supabase no las incluye (§12 sin cumplir).
 
 ## Método de trabajo
@@ -73,12 +75,12 @@ Activo desde el 28/10/2026. Ver `06-metodo/gauntlet.md`, el listón en `06-metod
 
 ## Siguiente paso
 
-**Promociones.** El listón del módulo ya está escrito en `06-metodo/liston.md` (Listón E) con sus diez casillas y las cuatro decisiones que hay que resolver antes de escribir código: dos promociones vigentes a la vez, precio promocional mayor o igual al normal, zona horaria y la diferencia entre promoción y oferta de la semana.
+**Destacados y oferta de la semana** (tabla `selecciones`, D-33): elegir a mano qué productos aparecen como destacados y cuál es la oferta de la semana, sin precio propio. Después, **solicitudes de WhatsApp** (puntos 57–61).
 
 ## Qué NO está hecho
 
 - Fotografías de producto: subida, foto principal y orden (§6, §10).
-- Promociones, destacados y ofertas de la semana: la interfaz.
+- Destacados y oferta de la semana: la interfaz (la tabla existe; no es una promoción, D-33).
 - Solicitudes de WhatsApp: registro manual, estados y descuento con confirmación (§8).
 - Importación CSV/Excel y exportación (punto 49).
 - Alertas en el panel y por correo (punto 63).

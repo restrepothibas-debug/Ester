@@ -136,6 +136,7 @@ export interface OpcionProducto {
   id: string;
   etiqueta: string;
   existencias: number;
+  precioNormal: number;
   tallas: { talla: string; cantidad: number }[];
 }
 
@@ -143,7 +144,9 @@ export interface OpcionProducto {
 export async function opcionesProductos(): Promise<OpcionProducto[]> {
   const { data, error } = await cliente()
     .from("productos")
-    .select("id, codigo_interno, modelo, marcas ( nombre ), producto_tallas ( talla, cantidad )")
+    .select(
+      "id, codigo_interno, modelo, precio_normal, marcas ( nombre ), producto_tallas ( talla, cantidad )",
+    )
     .order("modelo", { ascending: true })
     .limit(300);
 
@@ -158,7 +161,83 @@ export async function opcionesProductos(): Promise<OpcionProducto[]> {
       id: p.id,
       etiqueta: `${p.codigo_interno} · ${p.modelo}${marca ? ` (${marca})` : ""}`,
       existencias: tallas.reduce((s, t) => s + t.cantidad, 0),
+      precioNormal: Number(p.precio_normal),
       tallas,
+    };
+  });
+}
+
+export type EstadoPromocion = "programada" | "vigente" | "vencida" | "terminada";
+
+export interface FilaPromocionAdmin {
+  id: string;
+  productoId: string;
+  producto: string;
+  precioNormal: number;
+  precioPromocional: number;
+  tipo: "manual" | "programada";
+  iniciaEn: string;
+  terminaEn: string | null;
+  activa: boolean;
+  estado: EstadoPromocion;
+}
+
+/**
+ * Estado de una promoción, sin depender del reloj del servidor de turno.
+ * «Terminada» es la que el administrador apagó; «vencida», la que llegó a su
+ * fecha final. Ninguna se borra (punto 45, Listón E4).
+ */
+export function estadoPromocion(p: {
+  activa: boolean;
+  iniciaEn: string;
+  terminaEn: string | null;
+}): EstadoPromocion {
+  if (!p.activa) return "terminada";
+  const ahora = Date.now();
+  if (new Date(p.iniciaEn).getTime() > ahora) return "programada";
+  if (p.terminaEn && new Date(p.terminaEn).getTime() <= ahora) return "vencida";
+  return "vigente";
+}
+
+/** Promociones para el panel: las vigentes, las programadas y el historial. */
+export async function listarPromocionesAdmin(): Promise<FilaPromocionAdmin[]> {
+  const { data, error } = await cliente()
+    .from("promociones")
+    .select(
+      `id, producto_id, precio_promocional, tipo, inicia_en, termina_en, activa,
+       productos ( codigo_interno, modelo, precio_normal, marcas ( nombre ) )`,
+    )
+    .order("inicia_en", { ascending: false })
+    .limit(200);
+
+  if (error) throw error;
+
+  return (data ?? []).map((p) => {
+    const producto = p.productos as unknown as {
+      codigo_interno: string;
+      modelo: string;
+      precio_normal: number;
+      marcas: { nombre: string } | null;
+    } | null;
+    const marca = producto?.marcas?.nombre;
+    const base = {
+      activa: p.activa,
+      iniciaEn: p.inicia_en,
+      terminaEn: p.termina_en,
+    };
+    return {
+      id: p.id,
+      productoId: p.producto_id,
+      producto: producto
+        ? `${producto.codigo_interno} · ${producto.modelo}${marca ? ` (${marca})` : ""}`
+        : "Producto eliminado",
+      precioNormal: Number(producto?.precio_normal ?? 0),
+      precioPromocional: Number(p.precio_promocional),
+      tipo: p.tipo as "manual" | "programada",
+      iniciaEn: p.inicia_en,
+      terminaEn: p.termina_en,
+      activa: p.activa,
+      estado: estadoPromocion(base),
     };
   });
 }

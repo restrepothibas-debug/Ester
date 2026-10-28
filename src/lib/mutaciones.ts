@@ -324,8 +324,121 @@ export async function listarMovimientos(productoId: string): Promise<MovimientoV
   }));
 }
 
+/* -------------------------------------------------------------------------- */
+/* Promociones                                                                 */
+/* -------------------------------------------------------------------------- */
+
+export interface EntradaPromocion {
+  productoId: string;
+  precioPromocional: number;
+  tipo: "manual" | "programada";
+  /** ISO en UTC. La interfaz lo construye desde la hora de Bogotá (D-34). */
+  iniciaEn: string;
+  terminaEn: string | null;
+}
+
+/**
+ * El precio promocional vive solo aquí, nunca en `productos` (punto 45, Listón E3).
+ * Las reglas duras —una sola vigente y siempre menor que el normal— las impone la
+ * base (D-31, D-32); aquí solo se evita enviar una petición que se sabe inválida.
+ */
+export async function crearPromocion(entrada: EntradaPromocion): Promise<void> {
+  if (!Number.isFinite(entrada.precioPromocional) || entrada.precioPromocional <= 0) {
+    throw new Error("El precio promocional debe ser un número mayor que cero.");
+  }
+  if (entrada.tipo === "programada" && !entrada.terminaEn) {
+    throw new Error("Una promoción programada necesita fecha final.");
+  }
+
+  const { data, error } = await cliente()
+    .from("promociones")
+    .insert({
+      producto_id: entrada.productoId,
+      precio_promocional: entrada.precioPromocional,
+      tipo: entrada.tipo,
+      inicia_en: entrada.iniciaEn,
+      termina_en: entrada.tipo === "programada" ? entrada.terminaEn : null,
+      creado_por: await usuarioActual(),
+    })
+    .select("id")
+    .single();
+
+  if (error) throw new Error(traducir(error.message));
+  await auditar("promocion.creada", "promociones", data.id, {
+    producto: entrada.productoId,
+    precio: entrada.precioPromocional,
+    tipo: entrada.tipo,
+    termina: entrada.terminaEn,
+  });
+}
+
+export async function actualizarPromocion(id: string, entrada: EntradaPromocion): Promise<void> {
+  if (!Number.isFinite(entrada.precioPromocional) || entrada.precioPromocional <= 0) {
+    throw new Error("El precio promocional debe ser un número mayor que cero.");
+  }
+  if (entrada.tipo === "programada" && !entrada.terminaEn) {
+    throw new Error("Una promoción programada necesita fecha final.");
+  }
+
+  const { error } = await cliente()
+    .from("promociones")
+    .update({
+      precio_promocional: entrada.precioPromocional,
+      tipo: entrada.tipo,
+      inicia_en: entrada.iniciaEn,
+      termina_en: entrada.terminaEn,
+    })
+    .eq("id", id);
+
+  if (error) throw new Error(traducir(error.message));
+  await auditar("promocion.actualizada", "promociones", id, {
+    precio: entrada.precioPromocional,
+    tipo: entrada.tipo,
+    inicia: entrada.iniciaEn,
+    termina: entrada.terminaEn,
+  });
+}
+
+/**
+ * Terminar no borra: apaga `activa` y conserva fechas y precio en la tabla
+ * (Listón E4). El momento de la decisión queda en auditoría.
+ */
+export async function finalizarPromocion(id: string): Promise<void> {
+  const { data, error } = await cliente()
+    .from("promociones")
+    .update({ activa: false })
+    .eq("id", id)
+    .select("id, producto_id, precio_promocional");
+
+  if (error) throw new Error(traducir(error.message));
+  if (!data || data.length === 0) throw new Error("La promoción ya no existe.");
+
+  await auditar("promocion.finalizada", "promociones", id, {
+    producto: data[0].producto_id,
+    precio: data[0].precio_promocional,
+  });
+}
+
 /** Mensajes de PostgreSQL traducidos a algo que el administrador entienda. */
 function traducir(mensaje: string): string {
+  if (/ex_promocion_sin_solape/i.test(mensaje)) {
+    return "Ese producto ya tiene una promoción que cubre esas fechas. Termínala o ponle fecha de fin antes de crear otra.";
+  }
+  if (/debe ser menor que el precio normal/i.test(mensaje)) {
+    return "El precio promocional debe ser menor que el precio normal del producto.";
+  }
+  if (/promocion programada necesita fecha final|programada_exige_fin/i.test(mensaje)) {
+    return "Una promoción programada necesita fecha final.";
+  }
+  if (/fin_posterior_a_inicio/i.test(mensaje)) {
+    return "La fecha final debe ser posterior a la fecha de inicio.";
+  }
+  if (/precio_promocional_check/i.test(mensaje)) {
+    return "El precio promocional no puede ser negativo.";
+  }
+  if (/promoción vigente a/i.test(mensaje)) {
+    return mensaje;
+  }
   if (/duplicate key.*codigo_interno/i.test(mensaje)) return "Ese código interno ya existe.";
   if (/duplicate key.*slug/i.test(mensaje)) return "Ya hay un producto con ese modelo y código.";
   if (/duplicate key.*nombre_normalizado/i.test(mensaje)) return "Ya existe una marca con ese nombre.";

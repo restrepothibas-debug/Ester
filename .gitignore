@@ -11,6 +11,7 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+.venv-libs
 
 # ---------------------------------------------------------------------------
 # SECRETOS — no tocar esta sección sin leer 00-docs/03-tecnico/variables-entorno.md

@@ -24,6 +24,9 @@ const MarcasAdmin = lazy(() =>
 const Inventario = lazy(() =>
   import("./pages/admin/Inventario").then((m) => ({ default: m.Inventario })),
 );
+const Promociones = lazy(() =>
+  import("./pages/admin/Promociones").then((m) => ({ default: m.Promociones })),
+);
 
 export default function App() {
   return (
@@ -98,6 +101,14 @@ export default function App() {
           element={
             <RutaPrivada>
               <Inventario />
+            </RutaPrivada>
+          }
+        />
+        <Route
+          path="/admin/promociones"
+          element={
+            <RutaPrivada>
+              <Promociones />
             </RutaPrivada>
           }
         />

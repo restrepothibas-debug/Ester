@@ -111,7 +111,7 @@ Lo que sigue no es aspiracional: es lo que está probado hoy, con la evidencia q
 | Panel · marcas | A1, A4, A5, A8, A10 ✔ | B10 (logo) |
 | Panel · productos | B7 ✔, B8 ✔, B9 ✔, B11 ✔, A9 ✔ (1 fila en `historial_precios`) | B10 |
 | Panel · inventario | B12 ✔, B13 ✔, A9 ✔ (4 movimientos) | B14 con producto real en catálogo |
-| Promociones | — | Todo: es el siguiente módulo |
+| Panel · promociones | E1–E7, E9, E10 ✔ (12 casos SQL, 9 comprobaciones por API con `anon`, recorrido real en navegador) · D-31, D-32 ✔ | **E8 ?** — un cambio de precio normal durante una promoción no se probó de extremo a extremo. Prueba pendiente: con promo vigente, subir el precio normal y verificar la fila en `historial_precios`. Falta además el aviso de promoción por vencer y la vista de historial de precios |
 | WhatsApp | B19 ✔ | B16–B18 con número real |
 | Solicitudes | B23 ✔ | B20–B22 |
 | Importación / copias | — | Todo |
@@ -119,6 +119,8 @@ Lo que sigue no es aspiracional: es lo que está probado hoy, con la evidencia q
 **Avisos de `lint` justificados:** los 5 avisos son `set-state-in-effect` en las consultas de datos, que es el patrón intencional de `useConsulta` (efecto con dependencias declaradas). No se silencian para no ocultar futuros avisos reales.
 
 **Pruebas ejecutadas y su evidencia:** build en 0, lint sin errores, RLS rechazando escritura anónima (`42501`), 6 restricciones de integridad rechazando datos inválidos, recorrido de extremo a extremo en navegador con 4 movimientos de inventario y 1 de precio, y cero errores de consola.
+
+**Promociones (28/10/2026):** `scripts/probar-reglas-promociones.py` → 12 casos contra la base, 0 fallos, sin dejar datos (`savepoint` + `rollback`). `scripts/probar-promociones-publico.py` → 9 comprobaciones por API con rol `anon`, 0 fallos, datos temporales borrados al final. Navegador real con sesión de administrador: crear, ver en el catálogo, terminar y comprobar que el catálogo vuelve al precio de lista. Dos defectos encontrados así —`step="100"` bloqueaba todo precio real y el catálogo no filtraba por vigencia— corregidos y re-probados.
 
 ---
 
@@ -150,14 +152,14 @@ Escrito antes de construir, para que el árbitro tenga contra qué comparar.
 - [ ] E9 · La promoción muestra fecha de inicio y fin en el panel, en zona `America/Bogota`.
 - [ ] E10 · `anon` no puede crear ni modificar promociones (prueba por API).
 
-**Decisiones que este módulo necesita antes de escribir código:**
+**Decisiones que este módulo necesitaba antes de escribir código — resueltas el 28/10/2026:**
 
-| Tema | Sin resolver |
+| Tema | Decisión |
 |---|---|
-| ¿Un producto puede tener dos promociones vigentes a la vez? | El esquema lo permite hoy. Hay que decidir si se bloquea |
-| ¿Precio promocional mayor o igual al normal? | Debe avisarse; falta decidir si se bloquea o solo se advierte |
-| Zona horaria del vencimiento | Provisional `America/Bogota` (D-17) |
-| ¿La oferta de la semana es una promoción o una selección? | Hoy son cosas distintas: `promociones` y `selecciones` |
+| ¿Un producto puede tener dos promociones vigentes a la vez? | **No.** Una sola vigencia por producto; el solapamiento lo rechaza la base (D-31) |
+| ¿Precio promocional mayor o igual al normal? | **Se bloquea**, no se advierte; también el igual, porque un descuento nulo no es una promoción (D-32) |
+| Zona horaria del vencimiento | **`America/Bogota`**, confirmada por el propietario (D-34) |
+| ¿La oferta de la semana es una promoción o una selección? | **Es una selección aparte**, no una promoción: módulo propio (D-33) |
 
 ---
 
