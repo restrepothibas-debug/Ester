@@ -26,6 +26,7 @@ Catálogo digital de calzado con estética de boutique premium, detalles navide�
 | `00-docs/02-estado/bitacora.md` | Historia cronológica de lo que se hizo y se verificó |
 | `00-docs/03-tecnico/` | Entorno, variables de entorno, reglas de secretos |
 | `00-docs/04-informes/` | Informes largos ya emitidos (auditoría, comparación, verificación) |
+| `00-docs/05-diseno/` | Esquema de datos y mapa de páginas (Fase 3), pendientes de aprobación |
 
 Regla: **el PDF manda.** Si el código hace algo que el PDF no autoriza, el código está mal.
 

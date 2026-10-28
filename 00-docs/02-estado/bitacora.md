@@ -19,6 +19,8 @@ Registro cronológico. Una fila por sesión de trabajo. La columna **Escrituras*
 | 28/10/2026 08:12 | Accio | Push de `main` a `restrepothibas-debug/Ester` con el PAT del propietario | 3 commits publicados; remoto verificado por API: 36 archivos, sin `.env.local` ni secretos | **GitHub: escritura** |
 | 28/10/2026 08:14 | Accio | Respuestas del propietario: destino = `Ester`, «Gijo» = GitHub, tienda = «Dayara store» | Registradas como D-05, D-13 y D-14 | ninguna |
 | 28/10/2026 08:30 | Accio | Recibidas la URL del proyecto Supabase y un valor de 16 caracteres sin etiqueta | URL verificada: proyecto vivo y **vacío** (0 tablas, 0 buckets). La clave secreta autentica. El valor de 16 caracteres quedó marcado como **sin identificar**, sin usarse | ninguna (solo lectura de API) |
+| 28/10/2026 08:45 | Accio | Recibida la clave publicable (`anon`); decodificado el JWT y probado el cliente | `role: anon`, `ref` correcto. Consulta real contra el proyecto: autentica y responde 404 por tabla inexistente, como corresponde | workspace local |
+| 28/10/2026 08:55 | Accio | Fase 3 entregada: esquema de datos (12 tablas, RLS, índices, Storage) y mapa de páginas | `05-diseno/esquema-datos.md` y `05-diseno/mapa-paginas.md`. **Nada creado en la base** | workspace local |
 
 ## Notas de incidentes
 

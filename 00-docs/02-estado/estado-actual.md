@@ -11,7 +11,7 @@
 |---|---|
 | 1 — Auditoría del repositorio, despliegue, Supabase, dependencias y seguridad | ✅ **Cerrada** (27/10). Conclusión: no había nada que auditar, el proyecto hay que crearlo |
 | 2 — Decisión de plataforma (React + Vite vs WordPress) | ✅ **Cerrada** a favor de React + Vite, con dos conflictos de plan gratuito sin resolver |
-| 3 — Diseño funcional: mapa de páginas, componentes, esquema de datos y flujos | ⬜ **No iniciada** |
+| 3 — Diseño funcional: mapa de páginas, componentes, esquema de datos y flujos | 🟨 **Entregada para revisión** (28/10): `05-diseno/esquema-datos.md` y `05-diseno/mapa-paginas.md`. Nada ejecutado en la base |
 | 4 — Base de seguridad: auth, autorización, RLS, secretos, recuperación, 2FA | ⬜ **No iniciada** |
 | 5 a 10 — Catálogo público · panel · WhatsApp/solicitudes · importaciones y copias · automatización de fotos · auditoría y lanzamiento | ⬜ **No iniciadas** |
 
