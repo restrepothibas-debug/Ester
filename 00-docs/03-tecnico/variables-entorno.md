@@ -64,8 +64,9 @@
 | Token de GitHub (PAT clásico) | `restrepothibas-debug` | `~/.accio/accounts/<cuenta>/secrets/github-restrepothibas-debug.token` (permisos `600`, directorio `700`, **fuera del workspace**) | ⚠️ Recibido 27/10/2026 |
 | Clave secreta de Supabase (`sb_secret_…`) | Nivel servicio: **salta RLS** | `.env.local` → variable `SUPABASE_SECRET_KEY` (permisos `600`, ignorado por git) | ✅ Recibida 28/10/2026 |
 | URL del proyecto Supabase | `https://pklqdjixkhpkmtrhtzsm.supabase.co` | `.env.local` → `VITE_SUPABASE_URL` | ✅ Recibida 28/10 y **verificada**: el proyecto responde (HTTP 401 sin clave, Postgres 14.18, GoTrue v2.197.0) |
-| Valor de 16 caracteres sin etiqueta | Desconocido | `.env.local` → `SUPABASE_VALOR_SIN_IDENTIFICAR` | ⚠️ **Sin identificar.** Su forma corresponde a una contraseña de base, pero no está confirmado ni se usa |
-| Clave publicable / `anon` | Pública, limitada por RLS | Pendiente | ❌ **Sin recibir.** Sin ella la app no puede consultar nada |
+| Contraseña de la base | `postgres.<ref>` | `.env.local` → dentro de `SUPABASE_DB_URL` | ✅ **Confirmada** el 28/10: la conexión al pooler autenticó correctamente |
+| Clave publicable / `anon` | Pública, limitada por RLS | `.env.local` → `VITE_SUPABASE_ANON_KEY` | ✅ Recibida y verificada (JWT `role: anon`, exp 2036) |
+| Conexión directa (DSN) | Pooler `aws-0-us-east-2` | `.env.local` → `SUPABASE_DB_URL` | ✅ Verificada. Es el único medio de ejecutar DDL en este entorno |
 
 **La clave `sb_secret_…` es el reemplazo de `service_role`: acceso total a la base.** No lleva prefijo `VITE_` y nunca debe llegar al navegador ni a una Edge Function que devuelva datos sin filtrar. En `.env.local` queda sin prefijo justamente para que Vite **no** la incruste en el bundle.
 

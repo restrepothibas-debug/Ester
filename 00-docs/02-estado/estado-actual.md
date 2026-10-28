@@ -12,7 +12,7 @@
 | 1 — Auditoría del repositorio, despliegue, Supabase, dependencias y seguridad | ✅ **Cerrada** (27/10). Conclusión: no había nada que auditar, el proyecto hay que crearlo |
 | 2 — Decisión de plataforma (React + Vite vs WordPress) | ✅ **Cerrada** a favor de React + Vite, con dos conflictos de plan gratuito sin resolver |
 | 3 — Diseño funcional: mapa de páginas, componentes, esquema de datos y flujos | 🟨 **Entregada para revisión** (28/10): `05-diseno/esquema-datos.md` y `05-diseno/mapa-paginas.md`. Nada ejecutado en la base |
-| 4 — Base de seguridad: auth, autorización, RLS, secretos, recuperación, 2FA | 🟨 **Preparada**: las políticas RLS ya están escritas y versionadas. Falta aplicarlas y crear la cuenta administradora |
+| 4 — Base de seguridad: auth, autorización, RLS, secretos, recuperación, 2FA | 🟨 **RLS aplicado y verificado** (28/10). Falta la cuenta administradora (requiere correo) y 2FA |
 | 5 a 10 — Catálogo público · panel · WhatsApp/solicitudes · importaciones y copias · automatización de fotos · auditoría y lanzamiento | ⬜ **No iniciadas** |
 
 ## Qué existe hoy en el repositorio local
@@ -31,7 +31,7 @@
 | Repositorio git | ✅ `main`, remoto `origin` → `restrepothibas-debug/Ester`. 3 commits subidos el 28/10. Verificado por API: 36 archivos, **sin `.env.local` ni secretos** |
 | Nombre de la tienda | ✅ **Dayara store** (D-13). Logotipo pendiente |
 | Metadatos del proyecto | ✅ Alineados: `dayara-store`, título `Dayara store`, `lang="es"` |
-| Migraciones SQL | 🟨 Escritas y versionadas en `supabase/migrations/` (esquema + RLS + Storage). **No aplicadas**: falta un medio de ejecutar DDL |
+| Migraciones SQL | ✅ **Aplicadas y verificadas** (28/10): 13 tablas, RLS en las 13, 23 políticas, 3 buckets. Base sin datos de prueba |
 | Documentación | ✅ Estructurada en `00-docs/` (contexto, decisiones, estado, técnico, informes) |
 
 ## Estado de los sistemas externos (verificado 27/10/2026)
@@ -40,7 +40,7 @@
 |---|---|
 | GitHub — `restrepothibas-debug/Ester` | Existe, **público**, **0 commits**. La cuenta `epieyu1` (CLI) solo tiene lectura, pero el propietario entregó un **PAT de `restrepothibas-debug` con permisos `admin`** verificado por API. Guardado fuera del repo (ver `03-tecnico/variables-entorno.md`) |
 | Vercel | CLI instalado, **sin sesión** (`~/.vercel` no existe). Sin proyecto conocido |
-| Supabase | Proyecto `pklqdjixkhpkmtrhtzsm` **verificado el 28/10**: responde en `https://pklqdjixkhpkmtrhtzsm.supabase.co`, Postgres 14.18, GoTrue v2.197.0. **0 tablas, 0 vistas, 0 buckets** — confirma que está vacío, como decía el PDF. La clave secreta autentica correctamente. CLI sigue sin sesión. **Falta la clave publicable/`anon`** para que el cliente consulte |
+| Supabase | Proyecto `pklqdjixkhpkmtrhtzsm` **verificado el 28/10**: responde en `https://pklqdjixkhpkmtrhtzsm.supabase.co`, Postgres 14.18, GoTrue v2.197.0. **0 tablas, 0 vistas, 0 buckets** — confirma que está vacío, como decía el PDF. La clave secreta autentica correctamente. CLI sigue sin sesión. Cliente conectado y probado. **13 tablas y 3 buckets creados** |
 | Entorno local | Node 22.23.2 · npm 10.9.8 · git 2.39.3 · gh 2.45.0 (`epieyu1`) · CLIs de Supabase y Vercel |
 
 ## Bloqueos abiertos, en orden

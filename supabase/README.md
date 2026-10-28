@@ -1,40 +1,57 @@
 # Migraciones de base de datos
 
 Proyecto Supabase: **`pklqdjixkhpkmtrhtzsm`** · `https://pklqdjixkhpkmtrhtzsm.supabase.co`
+Conexión directa: pooler **`aws-0-us-east-2.pooler.supabase.com:5432`** (usuario `postgres.<ref>`)
 
-## Estado
+## Estado — aplicadas y verificadas
 
-| Migración | Qué hace | Aplicada |
+| Migración | Qué hace | Estado |
 |---|---|---|
-| `20261028090000_esquema_inicial.sql` | Tipos, 13 tablas, índices, restricciones, valores de configuración | ❌ Pendiente |
-| `20261028090100_rls_politicas.sql` | RLS en todas las tablas, políticas por rol, buckets de Storage | ❌ Pendiente |
+| `20261028090000_esquema_inicial.sql` | Tipos, 13 tablas, índices, restricciones, configuración | ✅ Aplicada 28/10/2026 |
+| `20261028090100_rls_politicas.sql` | RLS en 13 tablas, 23 políticas, 3 buckets de Storage | ✅ Aplicada 28/10/2026 |
+| `20261028090200_control_migraciones.sql` | Tabla `migraciones_aplicadas` para ejecución idempotente | ✅ Aplicada 28/10/2026 |
 
-**Pendiente porque** este entorno no puede ejecutar DDL: no hay `psql`, no hay Docker, y el host directo `db.<ref>.supabase.co` no resuelve (Supabase exige el pooler para conexiones externas). La API REST del proyecto sirve para datos, no para `CREATE TABLE`.
+### Verificación posterior a la aplicación
 
-## Cómo se aplican
+| Comprobación | Resultado |
+|---|---|
+| Tablas en `public` | 13 |
+| Tablas con RLS activo | 13 de 13 |
+| Políticas creadas | 23 |
+| Buckets | `productos` (público), `marcas` (público), `copias` (privado) |
+| `anon` lee catálogo | 200, `[]` |
+| `anon` intenta insertar una solicitud | **rechazado** — `42501`, violación de RLS |
+| `anon` lee `solicitudes` | `[]`, sin filas visibles |
+| Clave de servidor lee `configuracion` | 200, 5 filas |
+| Imagen principal duplicada | rechazada por `uq_imagen_principal` |
+| Cantidad negativa | rechazada por `check` |
+| Promoción «programada» sin fecha final | rechazada por `check` |
+| Solicitud «cancelada» sin motivo | rechazada por `check` |
+| Ajuste de inventario sin motivo | rechazada por `check` |
+| Código interno duplicado | rechazado por índice único |
 
-### Opción A — token de acceso (recomendado)
+Las pruebas de restricciones se ejecutaron dentro de una transacción con `rollback`: **la base quedó sin datos de prueba** (`select count(*) from productos` → 0).
 
-Requiere un token `sbp_…` de **Account → Access Tokens**.
+## Cómo se aplican las migraciones nuevas
+
+```bash
+python3 -m pip install --target .venv-libs 'psycopg[binary]'
+PYTHONPATH=.venv-libs python3 scripts/aplicar-migraciones.py
+```
+
+La cadena de conexión se lee de `SUPABASE_DB_URL` (entorno o `.env.local`). El script consulta `migraciones_aplicadas` y solo ejecuta lo pendiente.
+
+Alternativa con token `sbp_` de la Management API:
 
 ```bash
 export SUPABASE_ACCESS_TOKEN=sbp_...
 ./scripts/aplicar-migraciones.sh
 ```
 
-El script envía cada archivo, en orden, al endpoint de consulta de la Management API. Es idempotente respecto al orden: si una migración falla, se detiene y no continúa.
-
-### Opción B — conexión directa
-
-Requiere la cadena de conexión del pooler (**Connect → Session pooler**), que incluye la región y la contraseña:
-
-```bash
-export SUPABASE_DB_URL='postgresql://postgres.pklqdjixkhpkmtrhtzsm:...@aws-0-<region>.pooler.supabase.com:5432/postgres'
-```
-
 ## Reglas
 
 1. **Nunca** aplicar en producción sin respaldo previo (§19).
-2. Las migraciones no se editan después de aplicadas: se añade una nueva.
-3. Antes de crear la cuenta administradora hacen falta el correo administrativo y el número de WhatsApp, que aún no están definidos.
-4. Después de aplicar, verificar: `select count(*) from productos;` debe fallar con RLS si se consulta como `anon`, y devolver 0 si se consulta como administrador.
+2. Una migración aplicada **no se edita**: se añade otra que la corrija.
+3. `productos`, `marcas` e imágenes comienzan vacíos a propósito: no se inventan datos de catálogo.
+4. La cuenta administradora requiere el correo administrativo, que **aún no está definido** (§16). Sin ese dato el panel no tiene puerta de entrada.
+5. Tras aplicar, repetir la verificación de la tabla de arriba antes de dar por bueno el entorno.

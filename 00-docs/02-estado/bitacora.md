@@ -23,6 +23,10 @@ Registro cronológico. Una fila por sesión de trabajo. La columna **Escrituras*
 | 28/10/2026 08:55 | Accio | Fase 3 entregada: esquema de datos (12 tablas, RLS, índices, Storage) y mapa de páginas | `05-diseno/esquema-datos.md` y `05-diseno/mapa-paginas.md`. **Nada creado en la base** | workspace local |
 | 28/10/2026 08:20 | Accio | Escritas las migraciones: esquema (13 tablas, enums, índices, `configuracion`) y RLS (políticas por rol + buckets) | `supabase/migrations/`. **No aplicadas**: sin `sbp_` ni conexión directa (el host `db.<ref>` no resuelve y no hay psql ni Docker) | workspace local |
 | 28/10/2026 08:25 | Accio | Alineación de metadatos con la marca y README del proyecto | `dayara-store`, título y `lang="es"`, README reescrito. `npm run build` OK | workspace local |
+| 28/10/2026 09:10 | Accio | Diagnosticada la vía de conexión: `db.<ref>` no resuelve; se probaron poolers por región hasta encontrar `aws-0-us-east-2`. El valor de 16 caracteres resultó ser la contraseña | Conexión Postgres establecida. Sin cambios en datos | ninguna |
+| 28/10/2026 09:15 | Accio | Aplicadas las dos migraciones: esquema y RLS | 13 tablas, 13 con RLS, 23 políticas, 3 buckets, 5 filas de configuración | **Supabase: esquema creado** |
+| 28/10/2026 09:20 | Accio | Verificación funcional: RLS como `anon`, lectura con clave de servidor y 6 restricciones de integridad en transacción con rollback | Todo conforme. Base sin datos de prueba | ninguna |
+| 28/10/2026 09:25 | Accio | Tercera migración de control y script idempotente en Python | `migraciones_aplicadas` operativa; segunda ejecución reporta 0 pendientes | **Supabase: esquema** |
 
 ## Notas de incidentes
 
