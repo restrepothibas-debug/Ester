@@ -44,7 +44,7 @@ Inicio (hero → marcas → ofertas de la semana → productos destacados) · Ma
 
 ## Dirección visual (§5)
 
-Boutique premium: limpia, cuidada, comercial, no genérica. Paleta de referencia marfil, tonos tierra, verde bosque y dorado discreto — **los valores exactos son una decisión pendiente**. Navidad sutil. Fotografía consistente, fondos neutros, sin alterar el color real del calzado. Mobile-first pero completo en tableta y escritorio. **Nombre y logotipo de la tienda aún no definidos** (el proyecto se llama `ester`; no confirmado como marca).
+Boutique premium: limpia, cuidada, comercial, no genérica. Paleta de referencia marfil, tonos tierra, verde bosque y dorado discreto — **los valores exactos son una decisión pendiente**. Navidad sutil. Fotografía consistente, fondos neutros, sin alterar el color real del calzado. Mobile-first pero completo en tableta y escritorio. **Nombre de la tienda definido el 28/10/2026: «Dayara store»** (D-13). El logotipo sigue pendiente.
 
 ## Datos del producto (§6)
 

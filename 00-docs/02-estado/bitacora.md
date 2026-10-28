@@ -16,6 +16,8 @@ Registro cronológico. Una fila por sesión de trabajo. La columna **Escrituras*
 | 27/10/2026 23:24 | Accio | Inicialización del repositorio git local (rama `main`) y primer commit | Commit `cc8a0a7`, 36 archivos, sin secretos ni `node_modules`/`dist` en el índice | workspace local |
 | 28/10/2026 08:05 | Accio | Recibida la clave secreta de Supabase (`sb_secret_…`). Guardada en `.env.local` sin prefijo `VITE_` | Archivo con permisos `600`; `git check-ignore` confirma que está ignorado y `git status` no lo ve | workspace local |
 | 28/10/2026 08:06 | Accio | El propietario acepta el riesgo del token de GitHub y pide usarlo sin rotarlo | Registrado como D-11, por decisión suya | ninguna |
+| 28/10/2026 08:12 | Accio | Push de `main` a `restrepothibas-debug/Ester` con el PAT del propietario | 3 commits publicados; remoto verificado por API: 36 archivos, sin `.env.local` ni secretos | **GitHub: escritura** |
+| 28/10/2026 08:14 | Accio | Respuestas del propietario: destino = `Ester`, «Gijo» = GitHub, tienda = «Dayara store» | Registradas como D-05, D-13 y D-14 | ninguna |
 
 ## Notas de incidentes
 

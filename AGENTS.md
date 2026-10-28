@@ -6,6 +6,8 @@
 
 ## 1. Qué es este proyecto
 
+**Tienda: «Dayara store»** (nombre definido el 28/10/2026; logotipo pendiente).
+
 Catálogo digital de calzado con estética de boutique premium, detalles navideños discretos y experiencia mobile-first. Dos caras:
 
 - **Catálogo público:** inicio, marcas, catálogo por marca, búsqueda, filtros, paginación, ventana rápida, ficha de producto y preparación de mensaje para WhatsApp.

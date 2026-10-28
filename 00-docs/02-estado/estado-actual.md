@@ -28,7 +28,9 @@
 | `src/styles/global.css` | ✅ Base tipográfica y de layout |
 | `.env` / `.env.local` | ❌ No existen. `SUPABASE` no está configurado |
 | `.env.example` | ✅ Creado 27/10 con nombres de variables, sin valores |
-| Repositorio git local | ✅ **Inicializado** 27/10/2026, rama `main`, primer commit `cc8a0a7` (36 archivos, sin secretos). Sin remoto configurado |
+| Repositorio git | ✅ `main`, remoto `origin` → `restrepothibas-debug/Ester`. 3 commits subidos el 28/10. Verificado por API: 36 archivos, **sin `.env.local` ni secretos** |
+| Nombre de la tienda | ✅ **Dayara store** (D-13). Logotipo pendiente |
+| Metadatos del proyecto | ⚠️ `package.json` sigue con `"name": "ester"` e `index.html` con `<title>ester</title>`; no coinciden con la marca ya definida |
 | Documentación | ✅ Estructurada en `00-docs/` (contexto, decisiones, estado, técnico, informes) |
 
 ## Estado de los sistemas externos (verificado 27/10/2026)
@@ -44,7 +46,7 @@
 
 | # | Bloqueo | Quién lo resuelve |
 |---|---|---|
-| 1 | **Referencia del proyecto Supabase + forma de acceso** (`VITE_SUPABASE_URL`, clave `anon`, contraseña de base, token de CLI) | Propietario |
+| 1 | **Referencia del proyecto Supabase** (`https://<ref>.supabase.co`) y **clave publicable/`anon`**. La clave secreta ya llegó, pero sola no permite conectar ni verificar nada | Propietario |
 | 2 | Cuenta/equipo de Vercel y plan (Hobby o Pro) + token si se despliega por CLI | Propietario |
 | 3 | Aclarar «Gijo» | Propietario |
 | 4 | Datos de marca y contacto: nombre, logo, WhatsApp, correo admin, zona horaria | Propietario |

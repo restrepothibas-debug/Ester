@@ -14,7 +14,7 @@ Estados: ✅ Aprobada · ⏳ Pendiente · ❓ Sin identificar · 🔁 Reemplazad
 | D-02 | 27/10/2026 | Despliegue en **Vercel** | ✅ | Propietario |
 | D-03 | 27/10/2026 | Base de datos **Supabase** | ✅ | Propietario + PDF p.1 |
 | D-04 | 27/10/2026 | Frontend **React + Vite** (en lugar de WordPress) | ✅ implícita al fijar TS + Vite + Vercel | Propietario |
-| D-05 | — | «**Gijo**» mencionado por el propietario | ❓ **Sin identificar.** No se asume que sea GitHub | Propietario |
+| D-05 | 28/10/2026 | «**Gijo**» significa **GitHub**. Queda cerrada la ambigüedad | ✅ | Propietario |
 | D-06 | 27/10/2026 | Cliente Supabase solo con clave `anon`; `service_role` fuera del frontend | ✅ | PDF §15 |
 | D-07 | — | Planes de Vercel y Supabase (Hobby/Free vs Pro) | ⏳ Pendiente | PDF §16 exige verificar costos |
 | D-08 | 27/10/2026 | Repositorio **`restrepothibas-debug/Ester`** y acceso de escritura resuelto con un PAT del propietario del repo (permisos `admin` verificados por API) | ✅ | Propietario |
@@ -22,6 +22,8 @@ Estados: ✅ Aprobada · ⏳ Pendiente · ❓ Sin identificar · 🔁 Reemplazad
 | D-10 | 27/10/2026 | Ramas y flujo de trabajo (main directo vs. ramas por módulo) | ⏳ Pendiente | — |
 | D-11 | 28/10/2026 | **El propietario acepta el riesgo** del token de GitHub temporal y pide usarlo sin rotarlo por ahora. Registrado por decisión suya, no por recomendación técnica | ✅ | Propietario |
 | D-12 | 28/10/2026 | La clave secreta de Supabase (`sb_secret_…`) se guarda en `.env.local` **sin** prefijo `VITE_` y no se usa en el cliente | ✅ | Accio, conforme a PDF §15 |
+| D-13 | 28/10/2026 | **Nombre de la tienda: «Dayara store»**. El logotipo sigue pendiente | ✅ | Propietario |
+| D-14 | 28/10/2026 | El proyecto se publica en `restrepothibas-debug/Ester`, que es **público**: el código y la especificación quedan visibles para cualquiera. Riesgo aceptado por el propietario | ✅ | Propietario |
 
 ## Decisiones de producto ya cerradas en la especificación
 
