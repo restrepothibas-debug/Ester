@@ -32,7 +32,7 @@
 | Estilos | `tokens.css` (propuesta sin aprobar), `global.css`, `catalogo.css`, `admin.css` |
 | `.env.local` | ✅ Permisos `600`, ignorado por git, con URL, clave `anon`, clave secreta y cadena de conexión |
 | `.env.example` | ✅ Nombres de variables, sin valores |
-| Repositorio git | ✅ `main` con remoto `origin` → `restrepothibas-debug/Ester` (público). **12 commits, 89 archivos**, sin secretos. Verificado por API |
+| Repositorio git | ✅ `main` con remoto `origin` → `restrepothibas-debug/Ester` (público). **13 commits, 93 archivos**, sin secretos. Verificado por API |
 | Base de datos | ✅ **14 tablas** en `public` (13 de dominio + `migraciones_aplicadas`), RLS en todas, **28 políticas** (23 sobre tablas y 5 sobre `storage.objects`), 3 buckets, 5 filas de configuración. **5 migraciones** aplicadas |
 | Cuenta administradora | ✅ `epieyualex01@gmail.com`, correo confirmado, perfil creado por trigger. Contraseña inicial generada por Accio: **debe cambiarla el propietario** (D-27) |
 | Nombre de la tienda | ✅ **Dayara store** (D-13). Logotipo pendiente |
