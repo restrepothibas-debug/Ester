@@ -33,7 +33,7 @@
 | Estilos | `tokens.css` (propuesta sin aprobar), `global.css`, `catalogo.css`, `admin.css` |
 | `.env.local` | ✅ Permisos `600`, ignorado por git, con URL, clave `anon`, clave secreta y cadena de conexión |
 | `.env.example` | ✅ Nombres de variables, sin valores |
-| Repositorio git | ✅ `main` con remoto `origin` → `restrepothibas-debug/Ester` (público). **13 commits, 93 archivos**, sin secretos. Verificado por API |
+| Repositorio git | ✅ `main` con remoto `origin` → `restrepothibas-debug/Ester` (público). **17 commits, 99 archivos**, sin secretos. Verificado por API |
 | Base de datos | ✅ **14 tablas** en `public` (13 de dominio + `migraciones_aplicadas`), RLS en todas, **28 políticas** (23 sobre tablas y 5 sobre `storage.objects`), 3 buckets, 5 filas de configuración. **7 migraciones** aplicadas. Reglas de promoción en la base: 1 restricción de exclusión y 2 disparadores |
 | Cuenta administradora | ✅ `epieyualex01@gmail.com`, correo confirmado, perfil creado por trigger. Contraseña inicial generada por Accio: **debe cambiarla el propietario** (D-27) |
 | Nombre de la tienda | ✅ **Dayara store** (D-13). Logotipo pendiente |
@@ -43,7 +43,7 @@
 
 | Sistema | Estado |
 |---|---|
-| GitHub — `restrepothibas-debug/Ester` | Público, 12 commits. PAT con permisos `admin` guardado fuera del repositorio (ver `03-tecnico/variables-entorno.md`) |
+| GitHub — `restrepothibas-debug/Ester` | Público, 17 commits. PAT con permisos `admin` guardado fuera del repositorio (ver `03-tecnico/variables-entorno.md`) |
 | Supabase | Proyecto `pklqdjixkhpkmtrhtzsm` · Postgres 14.18 · GoTrue v2.197.0 · pooler `aws-0-us-east-2`. Esquema aplicado. CLI sin sesión, pero no hace falta: la conexión directa funciona |
 | Vercel | CLI instalado, **sin sesión** y **sin proyecto**. Único servicio sin tocar |
 | Entorno local | Node 22.23.2 · npm 10.9.8 · git 2.39.3 · gh 2.45.0 (`epieyu1`) |
