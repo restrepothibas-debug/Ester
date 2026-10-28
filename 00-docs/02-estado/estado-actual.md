@@ -12,7 +12,7 @@
 | 1 — Auditoría del repositorio, despliegue, Supabase, dependencias y seguridad | ✅ **Cerrada** (27/10). Conclusión: no había nada que auditar, el proyecto hay que crearlo |
 | 2 — Decisión de plataforma (React + Vite vs WordPress) | ✅ **Cerrada** a favor de React + Vite, con dos conflictos de plan gratuito sin resolver |
 | 3 — Diseño funcional: mapa de páginas, componentes, esquema de datos y flujos | 🟨 **Entregada para revisión** (28/10): `05-diseno/esquema-datos.md` y `05-diseno/mapa-paginas.md`. Nada ejecutado en la base |
-| 4 — Base de seguridad: auth, autorización, RLS, secretos, recuperación, 2FA | ⬜ **No iniciada** |
+| 4 — Base de seguridad: auth, autorización, RLS, secretos, recuperación, 2FA | 🟨 **Preparada**: las políticas RLS ya están escritas y versionadas. Falta aplicarlas y crear la cuenta administradora |
 | 5 a 10 — Catálogo público · panel · WhatsApp/solicitudes · importaciones y copias · automatización de fotos · auditoría y lanzamiento | ⬜ **No iniciadas** |
 
 ## Qué existe hoy en el repositorio local
@@ -26,11 +26,12 @@
 | `src/lib/supabase.ts` | ✅ Cliente con solo clave `anon`; degrada a «modo sin datos» si faltan variables |
 | `src/styles/tokens.css` | ⚠️ **Propuesta** de tokens visuales, sin aprobar |
 | `src/styles/global.css` | ✅ Base tipográfica y de layout |
-| `.env` / `.env.local` | ❌ No existen. `SUPABASE` no está configurado |
+| `.env.local` | ✅ Creado (permisos `600`, ignorado por git) con URL, clave `anon` y clave secreta. **Cliente Supabase probado de extremo a extremo**: consulta autenticada contra el proyecto real |
 | `.env.example` | ✅ Creado 27/10 con nombres de variables, sin valores |
 | Repositorio git | ✅ `main`, remoto `origin` → `restrepothibas-debug/Ester`. 3 commits subidos el 28/10. Verificado por API: 36 archivos, **sin `.env.local` ni secretos** |
 | Nombre de la tienda | ✅ **Dayara store** (D-13). Logotipo pendiente |
-| Metadatos del proyecto | ⚠️ `package.json` sigue con `"name": "ester"` e `index.html` con `<title>ester</title>`; no coinciden con la marca ya definida |
+| Metadatos del proyecto | ✅ Alineados: `dayara-store`, título `Dayara store`, `lang="es"` |
+| Migraciones SQL | 🟨 Escritas y versionadas en `supabase/migrations/` (esquema + RLS + Storage). **No aplicadas**: falta un medio de ejecutar DDL |
 | Documentación | ✅ Estructurada en `00-docs/` (contexto, decisiones, estado, técnico, informes) |
 
 ## Estado de los sistemas externos (verificado 27/10/2026)

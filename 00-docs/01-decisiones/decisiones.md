@@ -24,6 +24,9 @@ Estados: ✅ Aprobada · ⏳ Pendiente · ❓ Sin identificar · 🔁 Reemplazad
 | D-12 | 28/10/2026 | La clave secreta de Supabase (`sb_secret_…`) se guarda en `.env.local` **sin** prefijo `VITE_` y no se usa en el cliente | ✅ | Accio, conforme a PDF §15 |
 | D-15 | 28/10/2026 | Proyecto Supabase identificado: `pklqdjixkhpkmtrhtzsm` (`https://pklqdjixkhpkmtrhtzsm.supabase.co`), verificado vacío | ✅ | Accio, verificado por API |
 | D-16 | 28/10/2026 | Clave publicable (`anon`) recibida y verificada (JWT `role: anon`, `ref` correcto, expira 2036-10-27). Cliente Supabase operativo | ✅ | Accio, verificado por API |
+| D-17 | 28/10/2026 | Valores operativos **provisionales**: moneda COP, zona `America/Bogota`, umbral de stock bajo 2, orden de tallas numérico, retención de auditoría 365 días. Viven en la tabla `configuracion`, no en el código, para cambiarlos sin desplegar | ⏳ Provisional | Accio, por delegación del propietario |
+| D-18 | 28/10/2026 | Se añade `devolucion` como cuarto tipo de movimiento de inventario | ⏳ Provisional | Accio, por delegación del propietario |
+| D-19 | 28/10/2026 | Metadatos alineados con la marca: `package.json` → `dayara-store`, `index.html` → `Dayara store` y `lang="es"` | ✅ | Accio |
 | D-13 | 28/10/2026 | **Nombre de la tienda: «Dayara store»**. El logotipo sigue pendiente | ✅ | Propietario |
 | D-14 | 28/10/2026 | El proyecto se publica en `restrepothibas-debug/Ester`, que es **público**: el código y la especificación quedan visibles para cualquiera. Riesgo aceptado por el propietario | ✅ | Propietario |
 

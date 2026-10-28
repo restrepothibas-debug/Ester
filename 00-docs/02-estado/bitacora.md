@@ -21,6 +21,8 @@ Registro cronológico. Una fila por sesión de trabajo. La columna **Escrituras*
 | 28/10/2026 08:30 | Accio | Recibidas la URL del proyecto Supabase y un valor de 16 caracteres sin etiqueta | URL verificada: proyecto vivo y **vacío** (0 tablas, 0 buckets). La clave secreta autentica. El valor de 16 caracteres quedó marcado como **sin identificar**, sin usarse | ninguna (solo lectura de API) |
 | 28/10/2026 08:45 | Accio | Recibida la clave publicable (`anon`); decodificado el JWT y probado el cliente | `role: anon`, `ref` correcto. Consulta real contra el proyecto: autentica y responde 404 por tabla inexistente, como corresponde | workspace local |
 | 28/10/2026 08:55 | Accio | Fase 3 entregada: esquema de datos (12 tablas, RLS, índices, Storage) y mapa de páginas | `05-diseno/esquema-datos.md` y `05-diseno/mapa-paginas.md`. **Nada creado en la base** | workspace local |
+| 28/10/2026 08:20 | Accio | Escritas las migraciones: esquema (13 tablas, enums, índices, `configuracion`) y RLS (políticas por rol + buckets) | `supabase/migrations/`. **No aplicadas**: sin `sbp_` ni conexión directa (el host `db.<ref>` no resuelve y no hay psql ni Docker) | workspace local |
+| 28/10/2026 08:25 | Accio | Alineación de metadatos con la marca y README del proyecto | `dayara-store`, título y `lang="es"`, README reescrito. `npm run build` OK | workspace local |
 
 ## Notas de incidentes
 
