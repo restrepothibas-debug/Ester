@@ -230,6 +230,40 @@ export async function listarSeleccion(
 }
 
 /** §4 — sugerencias mientras se escribe: modelo, referencia y color. */
+/**
+ * Cifras reales del catálogo para la sección de disponibilidad del inicio.
+ * No son métricas inventadas: cuentan lo que hay publicado ahora mismo.
+ */
+export async function contarCatalogo(): Promise<{
+  productos: number;
+  marcas: number;
+  tallas: number;
+}> {
+  if (!supabase) throw new ErrorSinConfigurar();
+  const cliente = supabase;
+
+  const [productos, marcas, tallas] = await Promise.all([
+    cliente
+      .from("productos")
+      .select("id", { count: "exact", head: true })
+      .in("estado", ["publicado", "agotado"]),
+    cliente.from("marcas").select("id", { count: "exact", head: true }).eq("activa", true),
+    cliente
+      .from("producto_tallas")
+      .select("id", { count: "exact", head: true })
+      .gt("cantidad", 0),
+  ]);
+
+  const error = productos.error ?? marcas.error ?? tallas.error;
+  if (error) throw error;
+
+  return {
+    productos: productos.count ?? 0,
+    marcas: marcas.count ?? 0,
+    tallas: tallas.count ?? 0,
+  };
+}
+
 export async function sugerencias(q: string, limite = 6): Promise<ProductoVista[]> {
   const texto = q.replace(/[%,()]/g, " ").trim();
   if (texto.length < 2) return [];

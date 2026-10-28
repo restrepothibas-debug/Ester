@@ -30,7 +30,7 @@
 | `src/lib/` | `supabase.ts`, `consultas.ts` (lectura pública), `admin.ts` (lectura del panel), `mutaciones.ts` (escritura con historial), `auth.ts`, `formato.ts`, `fechas.ts` (horas de Bogotá), `whatsapp.ts` |
 | Pruebas | `scripts/probar-reglas-promociones.py` (16 casos, `rollback`), `scripts/probar-promociones-publico.py` (9 comprobaciones con rol `anon`) `scripts/probar-destacados.py` (11 comprobaciones) y `scripts/probar-solicitudes.py` (24 comprobaciones: descuento, falta de existencias, cancelación con devolución, escrituras directas prohibidas y `anon`) |
 | Tipos del dominio | ✅ `src/types/domain.ts`, derivados de §6, §8 y §14 |
-| Estilos | `tokens.css` (propuesta sin aprobar), `global.css`, `catalogo.css`, `admin.css` |
+| Estilos | ✅ Reconstruidos sobre la referencia visual (D-41): `tokens.css` con la paleta y la escala nuevas, `global.css` con las primitivas, `catalogo.css` con cabecera, héroe, garantías, accesos por marca, relato, rejillas, ficha y pie; `admin.css` hereda la misma paleta y tipografía |
 | `.env.local` | ✅ Permisos `600`, ignorado por git, con URL, clave `anon`, clave secreta y cadena de conexión |
 | `.env.example` | ✅ Nombres de variables, sin valores |
 | Repositorio git | ✅ `main` con remoto `origin` → `restrepothibas-debug/Ester` (público), sin secretos. El historial completo está en `git log` |
@@ -74,6 +74,10 @@
 - La base acepta una promoción sobre un producto en borrador o pendiente (la interfaz ya no los ofrece). No es visible al público, pero la regla solo vive en la interfaz.
 - La fecha de inicio de una promoción programada se propone al abrir la página: si el panel queda abierto mucho rato, la hora sugerida envejece.
 - No hay copias de seguridad automáticas: el plan actual de Supabase no las incluye (§12 sin cumplir).
+
+## Diseño
+
+El catálogo sigue la referencia enviada por el propietario. Comprobado en navegador a 390, 768 y 1280 px: sin desbordes horizontales, 2 columnas de tarjetas en móvil, menú plegable, tipografías cargadas y 0 errores de consola. Las capturas de esa revisión están en `revision/` (fuera de git).
 
 ## Método de trabajo
 

@@ -50,20 +50,22 @@ export function ListadoCatalogo({ marca, q, mensajeVacio }: Props) {
     <section className="rt-listado">
       <Filtros tallas={tallas} />
 
-      <p className="rt-tenue rt-listado__conteo" aria-live="polite">
-        {cargando ? "Cargando…" : `${datos?.total ?? 0} productos`}
-      </p>
+      <div className="rt-listado__resultados">
+        <p className="rt-tenue rt-listado__conteo" aria-live="polite">
+          {cargando ? "Cargando…" : `${datos?.total ?? 0} productos`}
+        </p>
 
-      <CuadriculaProductos
-        productos={datos?.items ?? []}
-        cargando={cargando}
-        error={error}
-        mensajeVacio={mensajeVacio ?? "No hay productos que coincidan con estos filtros."}
-      />
+        <CuadriculaProductos
+          productos={datos?.items ?? []}
+          cargando={cargando}
+          error={error}
+          mensajeVacio={mensajeVacio ?? "No hay productos que coincidan con estos filtros."}
+        />
 
-      {datos && datos.total > 0 && (
-        <Paginacion pagina={filtros.pagina ?? 1} total={datos.total} porPagina={POR_PAGINA} />
-      )}
+        {datos && datos.total > 0 && (
+          <Paginacion pagina={filtros.pagina ?? 1} total={datos.total} porPagina={POR_PAGINA} />
+        )}
+      </div>
     </section>
   );
 }

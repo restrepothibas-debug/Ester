@@ -23,9 +23,8 @@ export function DisposicionAdmin({ children }: { children: React.ReactNode }) {
   return (
     <div className="rt-admin">
       <aside className="rt-admin__lateral">
-        <p className="rt-logo rt-logo--pie">
-          Dayara <span>store</span>
-        </p>
+        <span className="rt-logo rt-logo--panel">Dayara</span>
+        <span className="rt-logo__lema rt-logo__lema--panel">Catálogo de calzado</span>
         <p className="rt-etiqueta">Panel</p>
 
         <nav className="rt-admin__nav">

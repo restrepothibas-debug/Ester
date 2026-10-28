@@ -10,7 +10,7 @@
   width: 100%;
   max-width: 420px;
   background: #fff;
-  border: 1px solid var(--rt-borde);
+  border: 1px solid var(--rt-linea);
   border-radius: var(--rt-radio-suave);
   padding: var(--rt-esp-8) var(--rt-esp-6);
 }
@@ -28,18 +28,18 @@
   font-size: var(--rt-etiqueta);
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--rt-texto-suave);
+  color: var(--rt-gris);
 }
 
 .rt-formulario input,
 .rt-filtro-linea select {
   padding: 0.6rem 0.7rem;
-  border: 1px solid var(--rt-borde);
+  border: 1px solid var(--rt-linea);
   border-radius: var(--rt-radio);
   background: var(--rt-marfil-suave);
   font: inherit;
   font-size: var(--rt-texto-base);
-  color: var(--rt-texto);
+  color: var(--rt-tinta);
   text-transform: none;
   letter-spacing: normal;
 }
@@ -67,7 +67,7 @@
 
 .rt-admin__lateral {
   background: var(--rt-marfil);
-  border-bottom: 1px solid var(--rt-borde);
+  border-bottom: 1px solid var(--rt-linea);
   padding: var(--rt-esp-4);
   display: flex;
   flex-wrap: wrap;
@@ -92,7 +92,7 @@
 }
 
 .rt-admin__enlace--activo {
-  background: var(--rt-verde-bosque);
+  background: var(--rt-verde);
   color: #fff;
 }
 
@@ -120,7 +120,7 @@
 
 .rt-tarjeta-dato {
   background: #fff;
-  border: 1px solid var(--rt-borde);
+  border: 1px solid var(--rt-linea);
   border-radius: var(--rt-radio-suave);
   padding: var(--rt-esp-4);
   display: grid;
@@ -128,21 +128,34 @@
 }
 
 a.rt-tarjeta-dato:hover {
-  border-color: var(--rt-dorado);
+  border-color: var(--rt-aviso);
 }
 
 .rt-tarjetas-dato__valor {
-  font-family: var(--rt-font-titulo);
-  font-size: 2rem;
+  font-family: var(--rt-font-texto);
+  font-size: 1.75rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
   line-height: 1;
-  color: var(--rt-verde-bosque);
+  color: var(--rt-tinta);
+}
+
+.rt-logo--panel {
+  font-size: 1.15rem;
+  letter-spacing: 0.22em;
+}
+
+.rt-logo__lema--panel {
+  margin-top: 2px;
+  font-size: 0.4375rem;
+  letter-spacing: 0.3em;
 }
 
 .rt-tarjetas-dato__etiqueta {
   font-size: var(--rt-etiqueta);
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--rt-texto-suave);
+  color: var(--rt-gris);
 }
 
 /* ------------------------------------------------------------------- tabla */
@@ -156,7 +169,7 @@ a.rt-tarjeta-dato:hover {
 
 .rt-tabla-envoltura {
   overflow-x: auto;
-  border: 1px solid var(--rt-borde);
+  border: 1px solid var(--rt-linea);
   border-radius: var(--rt-radio-suave);
   background: #fff;
 }
@@ -172,7 +185,7 @@ a.rt-tarjeta-dato:hover {
 .rt-tabla td {
   padding: var(--rt-esp-3);
   text-align: left;
-  border-bottom: 1px solid var(--rt-borde);
+  border-bottom: 1px solid var(--rt-linea);
   vertical-align: middle;
 }
 
@@ -180,7 +193,7 @@ a.rt-tarjeta-dato:hover {
   font-size: var(--rt-etiqueta);
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--rt-texto-suave);
+  color: var(--rt-gris);
   background: var(--rt-marfil-suave);
   font-weight: 500;
 }
@@ -205,15 +218,15 @@ a.rt-tarjeta-dato:hover {
   border-radius: var(--rt-radio);
   font-size: var(--rt-etiqueta);
   letter-spacing: 0.04em;
-  border: 1px solid var(--rt-borde);
+  border: 1px solid var(--rt-linea);
   background: var(--rt-marfil-suave);
-  color: var(--rt-texto-suave);
+  color: var(--rt-gris);
   white-space: nowrap;
 }
 
 .rt-chip--publicado {
-  border-color: var(--rt-verde-bosque);
-  color: var(--rt-verde-bosque);
+  border-color: var(--rt-verde);
+  color: var(--rt-verde);
 }
 
 .rt-chip--agotado {
@@ -222,7 +235,7 @@ a.rt-tarjeta-dato:hover {
 }
 
 .rt-chip--pendiente_revision {
-  border-color: var(--rt-dorado);
+  border-color: var(--rt-aviso);
   color: var(--rt-aviso);
 }
 
@@ -248,7 +261,7 @@ a.rt-tarjeta-dato:hover {
     flex-direction: column;
     align-items: flex-start;
     border-bottom: 0;
-    border-right: 1px solid var(--rt-borde);
+    border-right: 1px solid var(--rt-linea);
     padding: var(--rt-esp-6) var(--rt-esp-4);
     gap: var(--rt-esp-4);
     min-height: 100vh;
@@ -289,7 +302,7 @@ a.rt-tarjeta-dato:hover {
 
 .rt-caja-formulario {
   background: #fff;
-  border: 1px solid var(--rt-borde);
+  border: 1px solid var(--rt-linea);
   border-radius: var(--rt-radio-suave);
   padding: var(--rt-esp-5);
   display: grid;
@@ -308,18 +321,18 @@ a.rt-tarjeta-dato:hover {
   font-size: var(--rt-etiqueta);
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--rt-texto-suave);
+  color: var(--rt-gris);
 }
 
 .rt-caja-formulario input,
 .rt-caja-formulario select {
   padding: 0.6rem 0.7rem;
-  border: 1px solid var(--rt-borde);
+  border: 1px solid var(--rt-linea);
   border-radius: var(--rt-radio);
   background: var(--rt-marfil-suave);
   font: inherit;
   font-size: var(--rt-texto-base);
-  color: var(--rt-texto);
+  color: var(--rt-tinta);
   text-transform: none;
   letter-spacing: normal;
 }
@@ -331,7 +344,7 @@ a.rt-tarjeta-dato:hover {
   text-transform: none !important;
   letter-spacing: normal !important;
   font-size: var(--rt-texto-menor);
-  color: var(--rt-texto);
+  color: var(--rt-tinta);
 }
 
 .rt-casilla input {
@@ -398,24 +411,24 @@ a.rt-tarjeta-dato:hover {
 
 /* Promociones (D-31 … D-34) */
 .rt-chip--vigente {
-  border-color: var(--rt-verde-bosque);
-  color: var(--rt-verde-bosque);
+  border-color: var(--rt-verde);
+  color: var(--rt-verde);
 }
 
 .rt-chip--programada {
-  border-color: var(--rt-dorado);
+  border-color: var(--rt-aviso);
   color: var(--rt-aviso);
 }
 
 .rt-chip--vencida,
 .rt-chip--terminada {
-  border-color: var(--rt-borde);
-  color: var(--rt-texto-suave);
+  border-color: var(--rt-linea);
+  color: var(--rt-gris);
 }
 
 .rt-aviso {
   font-size: var(--rt-texto-menor);
-  color: var(--rt-verde-bosque);
+  color: var(--rt-verde);
 }
 
 /* Destacados y oferta de la semana */
@@ -450,18 +463,18 @@ a.rt-tarjeta-dato:hover {
 
 /* Solicitudes */
 .rt-chip--pendiente {
-  border-color: var(--rt-dorado);
+  border-color: var(--rt-aviso);
   color: var(--rt-aviso);
 }
 
 .rt-chip--confirmada {
-  border-color: var(--rt-verde-bosque);
-  color: var(--rt-verde-bosque);
+  border-color: var(--rt-verde);
+  color: var(--rt-verde);
 }
 
 .rt-chip--cancelada {
-  border-color: var(--rt-borde);
-  color: var(--rt-texto-suave);
+  border-color: var(--rt-linea);
+  color: var(--rt-gris);
 }
 
 .rt-fila-formulario--filtro {

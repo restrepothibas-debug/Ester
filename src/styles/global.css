@@ -1,5 +1,9 @@
 @import "./tokens.css";
 
+/* Base y primitivas compartidas por el catálogo y el panel.
+ * La tipografía y la paleta vienen de la referencia visual; aquí solo se
+ * declaran las reglas comunes para que ninguna pantalla invente las suyas. */
+
 *,
 *::before,
 *::after {
@@ -8,26 +12,41 @@
 
 html {
   -webkit-text-size-adjust: 100%;
+  background: var(--rt-marfil);
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+#root > main {
+  flex: 1 0 auto;
 }
 
 body {
   margin: 0;
-  background: var(--rt-marfil-suave);
-  color: var(--rt-texto);
+  background: var(--rt-marfil);
+  color: var(--rt-tinta);
   font-family: var(--rt-font-texto);
   font-size: var(--rt-texto-base);
-  line-height: 1.55;
+  font-weight: 400;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 h1,
 h2,
-h3 {
+h3,
+h4 {
   font-family: var(--rt-font-titulo);
-  font-weight: 500;
-  line-height: 1.15;
-  letter-spacing: -0.01em;
+  font-weight: 400;
+  line-height: var(--rt-interlinea-titulo);
+  letter-spacing: 0;
   margin: 0 0 var(--rt-esp-3);
+  color: var(--rt-tinta);
 }
 
 h1 {
@@ -53,6 +72,7 @@ a {
 
 button {
   font: inherit;
+  color: inherit;
 }
 
 img {
@@ -61,39 +81,201 @@ img {
 }
 
 :focus-visible {
-  outline: 2px solid var(--rt-verde-bosque);
-  outline-offset: 2px;
+  outline: 2px solid var(--rt-verde);
+  outline-offset: 3px;
 }
+
+/* Contenedor y utilidades -------------------------------------------------- */
 
 .rt-contenedor {
   width: 100%;
   max-width: var(--rt-contenedor);
   margin: 0 auto;
-  padding: 0 var(--rt-esp-4);
+  padding-inline: var(--rt-margen-lateral);
 }
 
 .rt-etiqueta {
+  margin: 0;
+  font-family: var(--rt-font-texto);
   font-size: var(--rt-etiqueta);
-  letter-spacing: 0.12em;
+  font-weight: 500;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--rt-texto-suave);
+  color: var(--rt-gris);
 }
 
-/* Estado vacío honesto: no se inventan productos ni marcas. */
-.rt-vacio {
-  border: 1px dashed var(--rt-borde);
-  border-radius: var(--rt-radio-suave);
-  padding: var(--rt-esp-8) var(--rt-esp-4);
-  text-align: center;
-  color: var(--rt-texto-suave);
-  background: var(--rt-marfil);
+.rt-tenue {
+  color: var(--rt-gris);
+  font-size: var(--rt-texto-menor);
+}
+
+.rt-mono {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+.rt-num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.rt-solo-lectores {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Botones ------------------------------------------------------------------ */
+
+.rt-boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--rt-esp-2);
+  border: 1px solid transparent;
+  border-radius: var(--rt-radio);
+  padding: 0.72rem 1.4rem;
+  font-family: var(--rt-font-texto);
+  font-size: var(--rt-texto-menor);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease;
+}
+
+.rt-boton--primario {
+  background: var(--rt-verde);
+  color: #fff;
+}
+
+.rt-boton--primario:hover {
+  background: var(--rt-verde-oscuro);
+}
+
+.rt-boton--secundario {
+  background: transparent;
+  border-color: var(--rt-linea);
+  color: var(--rt-tinta);
+}
+
+.rt-boton--secundario:hover {
+  border-color: var(--rt-tinta);
+}
+
+.rt-boton[disabled] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.rt-enlace {
+  font-size: var(--rt-texto-menor);
+  letter-spacing: 0.02em;
+  color: var(--rt-tinta);
+  border-bottom: 1px solid var(--rt-linea);
+  padding-bottom: 2px;
+  transition: border-color 160ms ease, color 160ms ease;
+}
+
+.rt-enlace:hover {
+  border-color: var(--rt-tinta);
+}
+
+.rt-enlace-boton {
+  border: 0;
+  background: none;
+  padding: 0;
+  font-size: var(--rt-texto-menor);
+  color: var(--rt-tinta);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--rt-linea);
+  cursor: pointer;
+}
+
+.rt-enlace-boton:hover {
+  text-decoration-color: var(--rt-tinta);
+}
+
+.rt-enlace-boton[disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Mensajes y estados ------------------------------------------------------- */
+
+.rt-error {
+  margin: 0 0 var(--rt-esp-3);
+  font-size: var(--rt-texto-menor);
+  color: var(--rt-error);
+}
+
+.rt-aviso {
+  margin: 0 0 var(--rt-esp-3);
+  font-size: var(--rt-texto-menor);
+  color: var(--rt-verde);
 }
 
 .rt-aviso-config {
-  background: var(--rt-arena);
-  color: var(--rt-aviso);
-  border-bottom: 1px solid var(--rt-borde);
+  background: var(--rt-hueso);
+  color: var(--rt-tinta-suave);
+  border-bottom: 1px solid var(--rt-linea);
   padding: var(--rt-esp-2) var(--rt-esp-4);
   font-size: var(--rt-texto-menor);
   text-align: center;
+}
+
+.rt-vacio {
+  border: 1px dashed var(--rt-linea);
+  border-radius: var(--rt-radio);
+  padding: var(--rt-esp-10) var(--rt-esp-4);
+  text-align: center;
+  color: var(--rt-gris);
+  background: var(--rt-marfil-suave);
+  font-size: var(--rt-texto-menor);
+}
+
+.rt-esqueleto {
+  min-height: 220px;
+  border-radius: var(--rt-radio);
+  background: linear-gradient(100deg, var(--rt-hueso) 30%, #f5f2ec 50%, var(--rt-hueso) 70%);
+  background-size: 200% 100%;
+  animation: rt-brillo 1.4s ease-in-out infinite;
+}
+
+.rt-esqueleto--tabla {
+  min-height: 320px;
+}
+
+.rt-esqueleto--ficha {
+  min-height: 460px;
+}
+
+.rt-esqueleto--marca {
+  min-height: 120px;
+}
+
+.rt-esqueleto--titulo {
+  min-height: 40px;
+}
+
+@keyframes rt-brillo {
+  0% {
+    background-position: 180% 0;
+  }
+  100% {
+    background-position: -80% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rt-esqueleto {
+    animation: none;
+  }
 }
