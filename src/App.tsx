@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Encabezado } from "./components/Encabezado";
-import { PiePagina } from "./components/PiePagina";
+import { DisposicionPublica } from "./components/DisposicionPublica";
+import { RutaPrivada } from "./components/admin/RutaPrivada";
 import { supabaseConfigurado } from "./lib/supabase";
 import { Inicio } from "./pages/Inicio";
 import { Marcas } from "./pages/Marcas";
@@ -8,8 +8,10 @@ import { Marca } from "./pages/Marca";
 import { Buscar } from "./pages/Buscar";
 import { Producto } from "./pages/Producto";
 import { NoEncontrada } from "./pages/NoEncontrada";
+import { Acceso } from "./pages/admin/Acceso";
+import { Panel } from "./pages/admin/Panel";
+import { ProductosPanel } from "./pages/admin/Productos";
 
-/** Alcance de la primera versión (§2): catálogo público. El panel es Fase 6. */
 export default function App() {
   return (
     <BrowserRouter>
@@ -20,20 +22,36 @@ export default function App() {
         </p>
       )}
 
-      <Encabezado />
-
-      <main id="contenido">
-        <Routes>
+      <Routes>
+        <Route element={<DisposicionPublica />}>
           <Route path="/" element={<Inicio />} />
           <Route path="/marcas" element={<Marcas />} />
           <Route path="/marca/:slug" element={<Marca />} />
           <Route path="/buscar" element={<Buscar />} />
           <Route path="/producto/:slug" element={<Producto />} />
-          <Route path="*" element={<NoEncontrada />} />
-        </Routes>
-      </main>
+        </Route>
 
-      <PiePagina />
+        <Route path="/admin/login" element={<Acceso />} />
+
+        <Route
+          path="/admin"
+          element={
+            <RutaPrivada>
+              <Panel />
+            </RutaPrivada>
+          }
+        />
+        <Route
+          path="/admin/productos"
+          element={
+            <RutaPrivada>
+              <ProductosPanel />
+            </RutaPrivada>
+          }
+        />
+
+        <Route path="*" element={<NoEncontrada />} />
+      </Routes>
     </BrowserRouter>
   );
 }

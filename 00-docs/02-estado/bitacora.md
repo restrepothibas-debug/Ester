@@ -31,6 +31,9 @@ Registro cronológico. Una fila por sesión de trabajo. La columna **Escrituras*
 | 28/10/2026 10:40 | Accio | Catálogo público: capa de consultas, 11 componentes, 6 rutas y hoja de estilos | `npm run build` y `lint` sin errores; solo 2 avisos de hooks | workspace local |
 | 28/10/2026 10:50 | Accio | Verificación en navegador de las 4 rutas principales, en móvil y escritorio | Renderiza sin errores de consola ni de red. Estados vacíos correctos. Capturas revisadas | ninguna |
 | 28/10/2026 10:58 | Accio | Corrección de alineación del hero y de la cabecera; nueva verificación | Hero alineado con las secciones, sin desbordamiento en 390px ni en 1280px | workspace local |
+| 28/10/2026 11:20 | Accio | Quinta migración: trigger `perfil_al_crear_usuario` sobre `auth.users` + relleno de perfiles faltantes | Instalado y verificado. 0 usuarios y 0 perfiles: la cuenta aún no existe | **Supabase: esquema** |
+| 28/10/2026 11:45 | Accio | Panel: capa de auth, guard por perfil, acceso, resumen y listado de productos | `build` y `lint` sin errores. Bundle 507 kB (aviso de tamaño) | workspace local |
+| 28/10/2026 11:55 | Accio | Verificación en navegador del panel: redirección sin sesión, formulario, rechazo de credenciales, ausencia de registro | `/admin` y `/admin/productos` redirigen a `/admin/login`. Error mostrado: «Correo o contraseña incorrectos.» Sin errores de consola | ninguna |
 
 ## Notas de incidentes
 

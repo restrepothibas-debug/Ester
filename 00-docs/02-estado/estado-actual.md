@@ -14,7 +14,8 @@
 | 3 — Diseño funcional: mapa de páginas, componentes, esquema de datos y flujos | 🟨 **Entregada para revisión** (28/10): `05-diseno/esquema-datos.md` y `05-diseno/mapa-paginas.md`. Nada ejecutado en la base |
 | 4 — Base de seguridad: auth, autorización, RLS, secretos, recuperación, 2FA | 🟨 **RLS aplicado y verificado** (28/10). Falta la cuenta administradora (requiere correo) y 2FA |
 | 5 — Catálogo público | 🟨 **Construido y verificado en navegador** (28/10). Sin datos reales ni despliegue |
-| 6 a 10 — Panel · WhatsApp/solicitudes · importaciones y copias · automatización de fotos · auditoría y lanzamiento | ⬜ **No iniciadas** |
+| 6 — Panel: productos, marcas, fotos, estados, inventario, precios y promociones | 🟨 **Esqueleto y lectura** (28/10): acceso, guard por perfil, resumen y listado de productos. Sin formularios de alta/edición |
+| 7 a 10 — WhatsApp/solicitudes · importaciones y copias · automatización de fotos · auditoría y lanzamiento | ⬜ **No iniciadas** |
 
 ## Qué existe hoy en el repositorio local
 
@@ -32,6 +33,7 @@
 | Repositorio git | ✅ `main`, remoto `origin` → `restrepothibas-debug/Ester`. 3 commits subidos el 28/10. Verificado por API: 36 archivos, **sin `.env.local` ni secretos** |
 | Nombre de la tienda | ✅ **Dayara store** (D-13). Logotipo pendiente |
 | Metadatos del proyecto | ✅ Alineados: `dayara-store`, título `Dayara store`, `lang="es"` |
+| Panel privado | 🟨 `/admin/login`, `/admin` y `/admin/productos`. Guard por sesión + perfil; redirección verificada. **Sin cuenta creada todavía**: el propietario la creará a mano |
 | Catálogo público | ✅ 6 rutas (`/`, `/marcas`, `/marca/:slug`, `/buscar`, `/producto/:slug`, 404) y 11 componentes. Consultas con RLS, filtros y paginación en la URL, ventana rápida, selector de talla y mensaje de WhatsApp |
 | Migraciones SQL | ✅ **Aplicadas y verificadas** (28/10): 13 tablas, RLS en las 13, 23 políticas, 3 buckets. Base sin datos de prueba |
 | Documentación | ✅ Estructurada en `00-docs/` (contexto, decisiones, estado, técnico, informes) |
@@ -57,6 +59,11 @@
 | 6 | Decidir si se hace push a `Ester` (repo descrito como «portafolio de Ester») o se crea otro repositorio | Propietario |
 
 **Resuelto el 27/10/2026:** acceso de escritura a GitHub.
+
+## Limitaciones conocidas
+
+- El bundle del cliente pesa ~507 kB y Vite avisa por tamaño. El panel debe separarse con carga diferida antes de producción.
+- El listado del panel es de solo lectura: faltan los formularios de alta y edición.
 
 ## Siguiente paso
 

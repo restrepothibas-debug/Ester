@@ -10,6 +10,8 @@ Conexión directa: pooler **`aws-0-us-east-2.pooler.supabase.com:5432`** (usuari
 | `20261028090000_esquema_inicial.sql` | Tipos, 13 tablas, índices, restricciones, configuración | ✅ Aplicada 28/10/2026 |
 | `20261028090100_rls_politicas.sql` | RLS en 13 tablas, 23 políticas, 3 buckets de Storage | ✅ Aplicada 28/10/2026 |
 | `20261028090200_control_migraciones.sql` | Tabla `migraciones_aplicadas` para ejecución idempotente | ✅ Aplicada 28/10/2026 |
+| `20261028090300_slugs_automaticos.sql` | Normalización de texto y slugs deterministas de marca y producto | ✅ Aplicada 28/10/2026 |
+| `20261028090400_perfil_automatico.sql` | Trigger en `auth.users` que crea el perfil de administrador | ✅ Aplicada 28/10/2026 |
 
 ### Verificación posterior a la aplicación
 
@@ -53,5 +55,6 @@ export SUPABASE_ACCESS_TOKEN=sbp_...
 1. **Nunca** aplicar en producción sin respaldo previo (§19).
 2. Una migración aplicada **no se edita**: se añade otra que la corrija.
 3. `productos`, `marcas` e imágenes comienzan vacíos a propósito: no se inventan datos de catálogo.
-4. La cuenta administradora requiere el correo administrativo, que **aún no está definido** (§16). Sin ese dato el panel no tiene puerta de entrada.
-5. Tras aplicar, repetir la verificación de la tabla de arriba antes de dar por bueno el entorno.
+4. La cuenta administradora **la crea el propietario a mano** en Authentication → Users. Al insertarse el usuario, el trigger `trg_perfil_al_crear_usuario` crea su fila en `perfiles` con rol `administrador`; sin esa fila `es_admin()` devuelve false y todas las políticas niegan el acceso.
+5. El correo administrativo queda pendiente por decisión del propietario (D-22).
+6. Tras aplicar, repetir la verificación de la tabla de arriba antes de dar por bueno el entorno.
