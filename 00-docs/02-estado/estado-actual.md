@@ -39,7 +39,7 @@
 |---|---|
 | GitHub — `restrepothibas-debug/Ester` | Existe, **público**, **0 commits**. La cuenta `epieyu1` (CLI) solo tiene lectura, pero el propietario entregó un **PAT de `restrepothibas-debug` con permisos `admin`** verificado por API. Guardado fuera del repo (ver `03-tecnico/variables-entorno.md`) |
 | Vercel | CLI instalado, **sin sesión** (`~/.vercel` no existe). Sin proyecto conocido |
-| Supabase | CLI instalado, **sin sesión** (`~/.supabase/access-token` no existe). **Sin referencia de proyecto** → no verificable |
+| Supabase | Proyecto `pklqdjixkhpkmtrhtzsm` **verificado el 28/10**: responde en `https://pklqdjixkhpkmtrhtzsm.supabase.co`, Postgres 14.18, GoTrue v2.197.0. **0 tablas, 0 vistas, 0 buckets** — confirma que está vacío, como decía el PDF. La clave secreta autentica correctamente. CLI sigue sin sesión. **Falta la clave publicable/`anon`** para que el cliente consulte |
 | Entorno local | Node 22.23.2 · npm 10.9.8 · git 2.39.3 · gh 2.45.0 (`epieyu1`) · CLIs de Supabase y Vercel |
 
 ## Bloqueos abiertos, en orden

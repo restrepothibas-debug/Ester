@@ -22,6 +22,7 @@ Estados: ✅ Aprobada · ⏳ Pendiente · ❓ Sin identificar · 🔁 Reemplazad
 | D-10 | 27/10/2026 | Ramas y flujo de trabajo (main directo vs. ramas por módulo) | ⏳ Pendiente | — |
 | D-11 | 28/10/2026 | **El propietario acepta el riesgo** del token de GitHub temporal y pide usarlo sin rotarlo por ahora. Registrado por decisión suya, no por recomendación técnica | ✅ | Propietario |
 | D-12 | 28/10/2026 | La clave secreta de Supabase (`sb_secret_…`) se guarda en `.env.local` **sin** prefijo `VITE_` y no se usa en el cliente | ✅ | Accio, conforme a PDF §15 |
+| D-15 | 28/10/2026 | Proyecto Supabase identificado: `pklqdjixkhpkmtrhtzsm` (`https://pklqdjixkhpkmtrhtzsm.supabase.co`), verificado vacío | ✅ | Accio, verificado por API |
 | D-13 | 28/10/2026 | **Nombre de la tienda: «Dayara store»**. El logotipo sigue pendiente | ✅ | Propietario |
 | D-14 | 28/10/2026 | El proyecto se publica en `restrepothibas-debug/Ester`, que es **público**: el código y la especificación quedan visibles para cualquiera. Riesgo aceptado por el propietario | ✅ | Propietario |
 
