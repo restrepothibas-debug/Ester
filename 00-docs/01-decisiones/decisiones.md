@@ -20,6 +20,8 @@ Estados: ✅ Aprobada · ⏳ Pendiente · ❓ Sin identificar · 🔁 Reemplazad
 | D-08 | 27/10/2026 | Repositorio **`restrepothibas-debug/Ester`** y acceso de escritura resuelto con un PAT del propietario del repo (permisos `admin` verificados por API) | ✅ | Propietario |
 | D-09 | 27/10/2026 | Repositorio git **inicializado en local** (rama `main`), primer commit `cc8a0a7` | ✅ | Accio, sin push |
 | D-10 | 27/10/2026 | Ramas y flujo de trabajo (main directo vs. ramas por módulo) | ⏳ Pendiente | — |
+| D-11 | 28/10/2026 | **El propietario acepta el riesgo** del token de GitHub temporal y pide usarlo sin rotarlo por ahora. Registrado por decisión suya, no por recomendación técnica | ✅ | Propietario |
+| D-12 | 28/10/2026 | La clave secreta de Supabase (`sb_secret_…`) se guarda en `.env.local` **sin** prefijo `VITE_` y no se usa en el cliente | ✅ | Accio, conforme a PDF §15 |
 
 ## Decisiones de producto ya cerradas en la especificación
 
