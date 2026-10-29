@@ -91,6 +91,28 @@ else
   aviso "psycopg no está disponible: se omiten las pruebas de base"
 fi
 
+echo "A1e · Interpretador de publicaciones"
+if node --experimental-strip-types scripts/probar-interpretador.ts >/tmp/verificar-interpretador.log 2>&1; then
+  ok "$(tail -2 /tmp/verificar-interpretador.log | head -1)"
+else
+  mal "el interpretador no pasa sus pruebas"
+  tail -12 /tmp/verificar-interpretador.log
+fi
+
+echo "A1f · Bandeja de entrada de WhatsApp"
+if PYTHONPATH=.venv-libs python3 -c "import psycopg" >/dev/null 2>&1; then
+  if PYTHONPATH=.venv-libs python3 scripts/probar-ingesta.py >/tmp/verificar-ingesta.log 2>&1; then
+    ok "bandeja en verde ($(grep -c '✔' /tmp/verificar-ingesta.log) comprobaciones)"
+  elif grep -qE "OperationalError|could not receive data|Connection refused|timeout expired" /tmp/verificar-ingesta.log; then
+    aviso "sin conexión con la base; se omite la prueba de la bandeja"
+  else
+    mal "la bandeja de entrada falla"
+    tail -10 /tmp/verificar-ingesta.log
+  fi
+else
+  aviso "psycopg no está disponible; se omite la prueba de la bandeja"
+fi
+
 echo "A3 · Secretos en archivos versionados"
 # Regex extendida: macOS usa BSD grep, que no entiende \| en modo básico.
 patrones='(sb_secret_|sbp_|ghp_)[A-Za-z0-9_-]{15,}|eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{30,}'

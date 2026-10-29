@@ -30,7 +30,7 @@
 | `src/lib/` | `supabase.ts`, `consultas.ts` (lectura pública), `admin.ts` (lectura del panel), `mutaciones.ts` (escritura con historial), `auth.ts`, `formato.ts`, `fechas.ts` (horas de Bogotá), `whatsapp.ts` |
 | Ingesta de fotos | ✅ `scripts/procesar-fotos.py`: procesa una exportación de WhatsApp (`.zip` o carpeta), deduplica por SHA-256, clasifica (pendiente / revisar / descartada / no_soportado), exporta WebP 1600 px + miniatura 480 px y lleva índice SQLite. Probado con exportación sintética: **30 comprobaciones** en `scripts/probar-procesar-fotos.py`. Salida en `fotos/`, fuera de git |
 | Fotos de producto | ✅ `/admin/fotos`: subida con reducción en el navegador, bandeja de sin asignar, asignación a producto, principal y orden. Base: migración 12 con `fotos_sin_asignar` y seis funciones; escrituras directas bloqueadas. Probado: 20 comprobaciones en `scripts/probar-fotos.py` y navegador real (duplicado, asignación, principal, orden y ficha con foto) |
-| Automatización del catálogo desde WhatsApp | 🟨 **Analizada, bloqueada por decisión del propietario.** Se puede automatizar todo el proceso excepto la lectura de la comunidad, que no existe como API (D-49). Falta elegir canal: grupo propio ≤8, mensajes 1:1 o exportación manual |
+| Automatización del catálogo | 🟨 **En construcción** (D-50). Hecho: bandeja `ingesta_whatsapp` con funciones, interpretador de textos (30 comprobaciones) y los módulos de imagen y publicación. Falta: endpoint público, creación conjunta y pantalla de revisión |
 | Pruebas | `scripts/probar-reglas-promociones.py` (16 casos, `rollback`), `scripts/probar-promociones-publico.py` (9 comprobaciones con rol `anon`) `scripts/probar-destacados.py` (11 comprobaciones) y `scripts/probar-solicitudes.py` (24 comprobaciones: descuento, falta de existencias, cancelación con devolución, escrituras directas prohibidas y `anon`) |
 | Tipos del dominio | ✅ `src/types/domain.ts`, derivados de §6, §8 y §14 |
 | Estilos | ✅ Reconstruidos sobre la referencia visual (D-41): `tokens.css` con la paleta y la escala nuevas, `global.css` con las primitivas, `catalogo.css` con cabecera, héroe, garantías, accesos por marca, relato, rejillas, ficha y pie; `admin.css` hereda la misma paleta y tipografía |
@@ -89,7 +89,7 @@ Activo desde el 28/10/2026. Ver `06-metodo/gauntlet.md`, el listón en `06-metod
 
 ## Siguiente paso
 
-**Decisión sobre el canal de entrada** (grupo propio, 1:1 o exportación manual) para montar la ingesta automática; y **importación CSV/Excel** (punto 49). La ingesta de fotos ya está cerrada de punta a punta: procesador local para lotes y pantalla de asignación en el panel.
+**Piezas 4 y 5 de la automatización** (crear el producto desde la bandeja y pantalla de revisión) y **decisión del canal de entrada**. Después, **importación CSV/Excel** (punto 49). La ingesta de fotos ya está cerrada de punta a punta: procesador local para lotes y pantalla de asignación en el panel.
 
 ## Qué NO está hecho
 
