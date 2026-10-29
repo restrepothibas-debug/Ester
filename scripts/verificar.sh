@@ -113,6 +113,14 @@ else
   aviso "psycopg no está disponible; se omite la prueba de la bandeja"
 fi
 
+echo "A1g · Lector de exportaciones"
+if node --experimental-strip-types scripts/probar-exportacion.ts >/tmp/verificar-exportacion.log 2>&1; then
+  ok "$(tail -2 /tmp/verificar-exportacion.log | head -1)"
+else
+  mal "el lector de exportaciones no pasa sus pruebas"
+  tail -10 /tmp/verificar-exportacion.log
+fi
+
 echo "A3 · Secretos en archivos versionados"
 # Regex extendida: macOS usa BSD grep, que no entiende \| en modo básico.
 patrones='(sb_secret_|sbp_|ghp_)[A-Za-z0-9_-]{15,}|eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{30,}'
