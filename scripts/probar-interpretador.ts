@@ -127,5 +127,35 @@ console.log("\nPublicaciones reales de un catálogo de zapatos\n");
   comprobar("color sin tilde", r.colores.includes("café"), true);
 }
 
+// 14 · Publicación real de una comunidad de mayoristas (28/10/2026).
+{
+  const r = interpretarPublicacion(
+    "¡ NIKE SB LOW DISRUPT2 DAMA 💰 $95.000 EURO 36 A 39 EURO JR\n( Cod 766 D )",
+    ["Nike"],
+  );
+  comprobar("modelo sin precio ni emoji", r.modelo, "NIKE SB LOW DISRUPT2 DAMA");
+  comprobar("marca Nike", r.marca, "Nike");
+  comprobar("código «Cod 766 D»", r.codigo, "766 D");
+  comprobar("precio de 95.000", r.precio, 95000);
+  comprobar("tallas EURO 36 a 39", r.tallas, [36, 37, 38, 39]);
+  comprobar("un rango de tallas no es un rango de precios", r.precioDudoso, false);
+  comprobar("no falta nada", r.faltantes, []);
+  comprobar("confianza alta", r.confianza, "alta");
+}
+
+// 15 · Tallas EURO sin la palabra «talla».
+{
+  const r = interpretarPublicacion("Bota caballero $180.000 EURO 40 A 44", []);
+  comprobar("EURO da contexto de tallas", r.tallas, [40, 41, 42, 43, 44]);
+}
+
+// 16 · El precio sigue mandando cuando no hay tallas.
+{
+  const r = interpretarPublicacion("Sandalia $120.000", []);
+  comprobar("precio sin tallas", r.precio, 120000);
+  comprobar("«Sandalia» sirve como modelo", r.modelo, "Sandalia");
+  comprobar("y se piden tallas y marca", r.faltantes, ["tallas", "marca"]);
+}
+
 console.log(`\n${falladas === 0 ? "Todo en verde" : "Hay fallos"}: ${pasadas} comprobaciones, ${falladas} fallidas.\n`);
 process.exit(falladas === 0 ? 0 : 1);

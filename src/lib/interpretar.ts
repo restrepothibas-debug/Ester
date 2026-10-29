@@ -49,7 +49,10 @@ function limpiar(linea: string): string {
 function leerPrecio(texto: string): { valor: number | null; dudoso: boolean; nota?: string } {
   // Las tallas se escriben igual que un precio («36,37,38»): se quitan antes de
   // buscar cifras para que no se confundan con 363.738 pesos.
-  const plano = plegar(texto).replace(/\b\d{2}(?:\s*[,/-]\s*\d{2})+\b/g, " ");
+  const plano = plegar(texto)
+    // «36 A 39» y «36,37,38» son tallas, no precios: se quitan antes de buscar.
+    .replace(/\b(3\d|4[0-6])\s*(?:a|al|-|hasta)\s*(3\d|4[0-6])\b/g, " ")
+    .replace(/\b\d{2}(?:\s*[,/-]\s*\d{2})+\b/g, " ");
 
   // "docena", "par", "las dos" cambian la unidad: no es el precio del par.
   const porMayor = /\bdocena\b|\bx\s?12\b|\bpor mayor\b/.test(plano);
@@ -90,7 +93,7 @@ function leerPrecio(texto: string): { valor: number | null; dudoso: boolean; not
 /** Tallas numéricas colombianas, solo cuando el texto habla de tallas. */
 function leerTallas(texto: string): number[] {
   const plano = plegar(texto);
-  const hablaDeTallas = /talla|tallas|numeros|numeros|medidas|\bdel\s+\d+\s+al\b/.test(plano);
+  const hablaDeTallas = /talla|tallas|numeros|medidas|calzad|\beuro?\b|\beu\b/.test(plano);
   if (!hablaDeTallas) return [];
 
   const encontradas = new Set<number>();
@@ -168,7 +171,13 @@ export function interpretarPublicacion(texto: string, marcasConocidas: string[] 
         .map(limpiar)
         .find((l) => l.length > 0 && l.length <= 60 && !l.includes(":") && /\p{L}{3,}/u.test(l));
       if (candidata) {
-        const sinPrecio = candidata.replace(/\s*[-–|]\s*\$?\s*\d[\d.,]*.*$/, "").trim();
+        const sinPrecio = candidata
+          .split(/[💰€|]/)[0]
+          .split(/\s*\$\s*/)[0]
+          .replace(/\s*[-–—]\s*\$?\s*\d[\d.,]*.*$/, "")
+          .replace(/^[¡!*•·\-\s]+/, "")
+          .replace(/[\s\-–—|:]+$/, "")
+          .trim();
         if (sinPrecio) {
           modelo = sinPrecio;
           notas.push("el modelo se tomó de la primera línea del aviso");
@@ -180,7 +189,11 @@ export function interpretarPublicacion(texto: string, marcasConocidas: string[] 
   if (precio.nota) notas.push(precio.nota);
 
   const codigoTexto = leerEtiquetado(lineas, ["codigo", "código", "referencia", "ref"]);
-  const codigo = (codigoTexto ?? texto).match(/\b[A-Z]{2,4}-?\d{2,4}\b/)?.[0] ?? null;
+  const codigo =
+    (codigoTexto ?? "").match(/\b[A-Z]{2,4}-?\d{2,4}\b/)?.[0] ??
+    texto.match(/\b[A-Z]{2,4}-?\d{2,4}\b/)?.[0] ??
+    texto.match(/\bcod\.?\s*(\d{1,5})\s*([A-Za-z])?/i)?.slice(1).filter(Boolean).join(" ").toUpperCase() ??
+    null;
 
   const colores = leerColores(texto);
   const marca = leerMarca(texto, marcasConocidas);
